@@ -1,0 +1,13 @@
+button{
+    background-color: hsl(34, 98%, 53%);;
+    border-radius: 15px;
+    color: #000000;
+    height: 50px;
+    width: 30%;
+};
+
+button:hover{
+    background-color: hwb(34 36% 36%);;
+    border-radius: 5px;
+    color: #151414;
+};
