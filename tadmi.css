@@ -25,7 +25,7 @@ body {
     text-align: center;
 }
 .navbar img{
-    width: 100px;
+    width: 90px;
 }
 
 .nav-links {
@@ -35,12 +35,12 @@ body {
 
 .nav-links li {
    
-    margin-left: 100px;
+    margin-left: 130px;
 }
 .nav-links li :hover{
     background-color: #cecdcd;
     border-radius: 10px;
-    color: #363636;
+    color: hsl(34, 98%, 53%);
 
 }
 
