@@ -1,0 +1,59 @@
+*{
+    font-family: "Nuito", sans-serif;
+}
+
+h2 {
+    margin-top: 5%;
+    text-align: center;
+    color: #000000;
+    background-color: #abb8c3;
+}
+
+table {
+    margin-top: 5%;
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    background-color: white;
+}
+
+table th, table td {
+    padding: 12px;
+    border: 1px solid #ddd;
+    text-align: center;
+}
+
+table th {
+    background-color: #d2d4dd;
+    color: #333;
+}
+
+.user {
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+}
+
+.user1 {
+    background-color: #4a66ac;
+}
+
+.user2 {
+    background-color: #d64545;
+}
+
+.status {
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+}
+
+.avanzado {
+    background-color: #f37e35;
+}
+
+.listo {
+    background-color: #46a046;
+}
