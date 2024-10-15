@@ -39,7 +39,7 @@ body {
 }
 .nav-links li :hover{
     background-color: #cecdcd;
-    border-radius: 10px;
+  
     color: hsl(34, 98%, 53%);
 
 }
