@@ -1,11 +1,43 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Gestión de Usuarios</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="GestionUsuarios.css">
 </head>
 <body>
-    kdjjldkpik.
+    <div class="user-management-container">
+        <h2>Administra usuarios. También se puede otorgar permisos.</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th><i class="fa fa-user"></i> Usuario</th>
+                    <th><i class="fa fa-user-cog"></i> Rol</th>
+                    <th><i class="fa fa-folder"></i> Tareas</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><i class="fa fa-user-circle" style="color: #4a6bf1;"></i> Usuario 1</td>
+                    <td>Administrador</td>
+                    <td>Prototipo</td>
+                    <td><i class="fa fa-cog"></i></td>
+                </tr>
+                <tr>
+                    <td><i class="fa fa-user-circle" style="color: #ff4a4a;"></i> Usuario 2</td>
+                    <td>Empleado</td>
+                    <td>Números</td>
+                    <td><i class="fa fa-cog"></i></td>
+                </tr>
+            </tbody>
+        </table>
+        <div class="add-user">
+            <a href="#">+ Añadir usuario</a>
+        </div>
+    </div>
 </body>
 </html>
+
