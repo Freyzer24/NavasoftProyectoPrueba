@@ -55,9 +55,18 @@
             background-color: #fff;
         }
 
+        .button-container {
+            display: flex;
+            justify-content: center; /* Centra los botones horizontalmente */
+            gap: 10px; /* Espaciado entre botones */
+            margin-top: 20px; /* Espaciado opcional arriba */
+        }
+        
+
        
 
         button {
+            justify-content: center;
             padding: 12px 18px;
             border: none;
             border-radius: 6px;
