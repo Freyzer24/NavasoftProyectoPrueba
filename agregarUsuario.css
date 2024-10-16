@@ -57,7 +57,9 @@
 
         .buttons {
             display: flex;
-            justify-content: space-between;
+            justify-content: center;
+            gap: 10px; /* Ajusta el espacio entre los botones */
+            margin-top: 20px;
         }
 
         button {
@@ -106,35 +108,18 @@
 
           
         .separar {
-            margin-top: 0%;
+            margin-top: 5%;
             display: flex;
-            gap: 14px;
-            width: 100vw;
-          }
-        a{
-            font-family: "Lilita One", sans-serif;
-            font-size: 35px;
-            color: rgb(0, 0, 0);
-            text-decoration: none;
-            background-color: #ff914d;
+            gap: 20px; /* Espacio entre las columnas */
+            width: 99vw;
+            justify-content: center;
+            align-items: center;
+        }
         
-        }
-        li{
-            list-style: none;
-            text-align: center;
-        }
-        li :hover{
-            background-color: #d8d8d8;
-          
-            color: #ff914d;
-        }
-         
-          
-          .columna {
-            
+        .columna {
             display: flex;
             flex-direction: column;
             justify-content: center;
-            align-items:center;
-            flex: 1;
-          }
+            align-items: center;
+            flex: 2;
+        }
