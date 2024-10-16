@@ -101,3 +101,38 @@
                 gap: 10px;
             }
         }
+
+          
+        .separar {
+            margin-top: 0%;
+            display: flex;
+            gap: 15px;
+            width: 100vw;
+          }
+        a{
+            font-family: "Lilita One", sans-serif;
+            font-size: 35px;
+            color: rgb(0, 0, 0);
+            text-decoration: none;
+            background-color: #ff914d;
+        
+        }
+        li{
+            list-style: none;
+            text-align: center;
+        }
+        li :hover{
+            background-color: #d8d8d8;
+          
+            color: #ff914d;
+        }
+         
+          
+          .columna {
+            
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items:center;
+            flex: 1;
+          }

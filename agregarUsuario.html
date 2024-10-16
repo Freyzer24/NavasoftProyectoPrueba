@@ -54,32 +54,35 @@
 
     <h2>Formulario de Registro</h2>
 
+    <div>
+        <form id="registroForm">
+            <label for="nombre">Nombre:</label>
+            <input type="text" id="nombre" name="nombre" required>
 
-    <form id="registroForm">
-        <label for="nombre">Nombre:</label>
-        <input type="text" id="nombre" name="nombre" required>
+            <label for="telefono">Teléfono:</label>
+            <input type="tel" id="telefono" name="telefono" required>
 
-        <label for="telefono">Teléfono:</label>
-        <input type="tel" id="telefono" name="telefono" required>
+            <label for="correo">Correo electrónico:</label>
+            <input type="email" id="correo" name="correo" required>
+        </form>
+    </div>    
 
-        <label for="correo">Correo electrónico:</label>
-        <input type="email" id="correo" name="correo" required>
+    <div>
+        <form id="registroForm">
+            <label for="usuario">Usuario:</label>
+            <input type="text" id="usuario" name="usuario" required>
 
-        <label for="usuario">Usuario:</label>
-        <input type="text" id="usuario" name="usuario" required>
+            <label for="rol">Rol:</label>
+            <input type="text" id="rol" name="rol" required>
 
-        <label for="rol">Rol:</label>
-        <input type="text" id="rol" name="rol" required>
+            <label for="password">Contraseña:</label>
+            <input type="password" id="password" name="password" required>
+        </form>
+    </div>
 
-        <label for="password">Contraseña:</label>
-        <input type="password" id="password" name="password" required>
-
-        <div class="buttons">
-            <button type="button" class="btn-clear" onclick="document.getElementById('registroForm').reset();">Borrar</button>
-            <button type="button" class="btn-edit">Editar</button>
-            <button type="submit" class="btn-save">Guardar</button>
-        </div>
-    </form>
+        <button type="button" class="btn-clear" onclick="document.getElementById('registroForm').reset();">Borrar</button>
+          <button type="button" class="btn-edit">Editar</button>
+          <button type="submit" class="btn-save">Guardar</button> 
 
 </body>
 </html>
