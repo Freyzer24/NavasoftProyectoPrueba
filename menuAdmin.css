@@ -1,13 +1,43 @@
-button{
-    background-color: hsl(34, 98%, 53%);;
-    border-radius: 15px;
-    color: #000000;
-    height: 50px;
-    width: 30%;
-};
 
-button:hover{
-    background-color: hwb(34 36% 36%);;
-    border-radius: 5px;
-    color: #151414;
-};
+/* General styles */
+body {
+    font-family: 'Nunito', sans-serif;
+    margin: 0px;
+    padding: 0;
+    background-color: #ffffff;
+    
+}
+
+.separar {
+    margin-top: 2%;
+    display: flex;
+    gap: 15px;
+    width: 100vw;
+  }
+a{
+    font-family: "Lilita One", sans-serif;
+    font-size: 35px;
+    color: rgb(0, 0, 0);
+    text-decoration: none;
+    background-color: #ff914d;
+
+}
+li{
+    list-style: none;
+    text-align: center;
+}
+li :hover{
+    background-color: #d8d8d8;
+  
+    color: #ff914d;
+}
+ 
+  
+  .columna {
+    
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items:center;
+    flex: 1;
+  }
