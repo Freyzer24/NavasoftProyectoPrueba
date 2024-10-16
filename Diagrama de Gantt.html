@@ -3,57 +3,42 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Diagrama de Gantt</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-        }
-        #gantt_chart {
-            width: 100%;
-            height: 500px;
-        }
-    </style>
+    <title>Diagrama de Gantt Interactivo</title>
+    <link rel="stylesheet" href="diagramaDeGantt.css">
     <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
-    <script type="text/javascript">
-        // Cargar la librería de Google Charts
-        google.charts.load('current', {'packages':['gantt']});
-        google.charts.setOnLoadCallback(drawChart);
-
-        function drawChart() {
-            var data = new google.visualization.DataTable();
-            data.addColumn('string', 'ID de la tarea');
-            data.addColumn('string', 'Nombre de la tarea');
-            data.addColumn('string', 'Recurso');
-            data.addColumn('date', 'Inicio');
-            data.addColumn('date', 'Fin');
-            data.addColumn('number', 'Duración');
-            data.addColumn('number', 'Porcentaje completado');
-            data.addColumn('string', 'Dependencia');
-
-            // Agregar las tareas al gráfico
-            data.addRows([
-                ['1', 'Tarea 1', 'Grupo 1', new Date(2024, 9, 1), new Date(2024, 9, 5), null, 100, null],
-                ['2', 'Tarea 2', 'Grupo 1', new Date(2024, 9, 6), new Date(2024, 9, 12), null, 50, '1'],
-                ['3', 'Tarea 3', 'Grupo 2', new Date(2024, 9, 13), new Date(2024, 9, 17), null, 0, '2'],
-                ['4', 'Tarea 4', 'Grupo 2', new Date(2024, 9, 18), new Date(2024, 9, 22), null, 0, '3']
-            ]);
-
-            var options = {
-                height: 400,
-                gantt: {
-                    trackHeight: 30
-                }
-            };
-
-            var chart = new google.visualization.Gantt(document.getElementById('gantt_chart'));
-
-            chart.draw(data, options);
-        }
-    </script>
+    <script type="text/javascript" src="diagramaDeGantt.js" defer></script>
 </head>
 <body>
     <center>
-        <h1>Diagrama de Gantt</h1>
+        <h1>Diagrama de Gantt Interactivo</h1>
+
+        <!-- Formulario para agregar tareas -->
+        <form id="task_form">
+            <div>
+                <label for="task_name">Nombre de la tarea:</label>
+                <input type="text" id="task_name" required>
+            </div>
+        
+            <div>
+                <label for="task_start">Fecha de inicio:</label>
+                <input type="date" id="task_start" required>
+            </div>
+        
+            <div>
+                <label for="task_end">Fecha de fin:</label>
+                <input type="date" id="task_end" required>
+            </div>
+        
+            <div>
+                <label for="task_completion">Porcentaje completado (%):</label>
+                <input type="number" id="task_completion" min="0" max="100" required>
+            </div>
+        
+            <button type="submit">Agregar Tarea</button>
+        </form>
+        
+
+        <!-- Área donde se generará el diagrama de Gantt -->
         <div id="gantt_chart"></div>
     </center>
 </body>
