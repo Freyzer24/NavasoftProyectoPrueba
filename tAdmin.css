@@ -11,7 +11,7 @@ body {
     color: #ffffff;
 }
 .logo{
-    margin-left: 25px;
+    margin-left: 20px;
     width: 20px;
 }
 
@@ -39,13 +39,13 @@ body {
 
 .nav-links li {
    
-    margin-left: 100px;
+    margin-left: 95px;
+    transition: background-color 0.8s ease, color 0.8s ease;
 }
 .nav-links li :hover{
-    background-color: #cecdcd;
-   
+  
     color: hsl(34, 98%, 53%);
-
+    border-radius: 10px;
 }
 
 .nav-links a {
