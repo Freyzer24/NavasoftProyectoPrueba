@@ -5,21 +5,30 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
 <link rel="stylesheet" href="./Perfil.css">
+
 </head>
 <body>
+   <h1>Editar perfil</h1>
     <div class="profile-card">
         <div class="profile-left">
-            <img src="./Perfill.png" alt="Profile Image">
-            <h2>Paola Pérez</h2>
-           
-            <div class="admin-badge">Admin</div>
             
+    <form method="post" action="#" enctype="multipart/form-data">
+      <div>
+        <img src="./imagenes/logo 1.jpeg" alt="avatar" id="img" />
+        <input type="file" name="foto" id="foto" accept="image/*" />
+        <label for="foto">Cambiar foto</label>
+      </div>
+    </form>
+  </main>
+            <h2>Paola Pérez</h2>
+            <div class="admin-badge">Admin</div>
         </div>
         <div class="profile-right">
-            <div><i class="fas fa-envelope"></i>Correo electrónico: valeriapaolap49@gmail.com</div>
-            <div><i class="fas fa-phone"></i>Teléfono: 8376973967</div>
-
+            <div><i class="fas fa-envelope"></i> Correo electrónico: valeriapaolap49@gmail.com</div>
+            <div><i class="fas fa-phone"></i> Teléfono: 8376973967</div>
         </div>
     </div>
+    
 </body>
+<script src="./Perfil.js"></script>
 </html>
