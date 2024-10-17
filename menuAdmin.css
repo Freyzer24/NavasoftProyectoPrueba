@@ -18,17 +18,17 @@ a{
     font-size: 35px;
     color: rgb(0, 0, 0);
     text-decoration: none;
-    background-color: #ff914d;
+    background-color:#ff914d;
+    align-items: center;
+    padding: 12px;
+    border-radius: 20px;
+    
+    
 }
-li{
-    list-style: none;
-    text-align: center;
+a :hover{
+  background-color: #a03d00;
 }
-li :hover{
-    background-color: #d8d8d8;
-  
-    color: #ff914d;
-}
+
   .columna {
     
     display: flex;
@@ -37,14 +37,5 @@ li :hover{
     align-items:center;
     flex: 1;
   }
-button {
-    width: 100%;
-    padding: 12px;
-    background-color: #ff914d; 
-    color: white;
-    border: none;
-    border-radius: 20px;
-    font-size: 16px;
-    cursor: pointer;
-    margin-top: 30px;
-}
+
+
