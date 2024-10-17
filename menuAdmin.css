@@ -41,3 +41,18 @@ li :hover{
     align-items:center;
     flex: 1;
   }
+  button {
+    justify-content: center;
+    padding: 12px 18px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 18px;
+    font-weight: bold;
+    transition: background-color 0.3s ease;
+}
+
+.btn-clear {
+    background-color: #ff9945;
+    color: white;
+}
