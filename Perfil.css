@@ -1,0 +1,60 @@
+.profile-card {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 80%;
+    background-color: #1C2333;
+    padding: 20px;
+    border-radius: 8px;
+    margin: 50px auto;
+}
+
+.profile-left {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.profile-left img {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    background-color: #666;
+}
+
+.profile-left h2 {
+    margin: 10px 0;
+}
+
+.profile-left .title {
+    color: #888;
+    margin-bottom: 15px;
+}
+
+.profile-left .admin-badge {
+    background-color: #1976d2;
+    color: white;
+    padding: 5px 10px;
+    border-radius: 4px;
+    margin-bottom: 20px;
+}
+
+.profile-left .account-schedule {
+    background-color: #1565c0;
+    color: white;
+    padding: 5px 10px;
+    border-radius: 4px;
+}
+
+.profile-right {
+    display: flex;
+    flex-direction: column;
+}
+
+.profile-right div {
+    margin-bottom: 10px;
+}
+
+.profile-right i {
+    margin-right: 10px;
+}

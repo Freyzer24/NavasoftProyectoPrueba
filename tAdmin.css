@@ -11,23 +11,27 @@ body {
     color: #ffffff;
 }
 .logo{
-    margin-left: 130px;
+    margin-left: 25px;
     width: 20px;
 }
+
 
 /* Barra de navegación */
 .navbar {
     background-color: #abb8c3;
     color: #000000;
-    padding: 15px;
+    padding: 10px;
     display: flex;
     align-items: center;
     text-align: center;
 }
 .navbar img{
     width: 95px;
+    transition: transform 0.3s ease; 
 }
-
+.navbar img:hover {
+    transform: scale(1.2); /* Aumenta el tamaño al 120% */
+}
 .nav-links {
     list-style: none;
     display: flex;
@@ -35,11 +39,11 @@ body {
 
 .nav-links li {
    
-    margin-left: 130px;
+    margin-left: 100px;
 }
 .nav-links li :hover{
     background-color: #cecdcd;
-  
+   
     color: hsl(34, 98%, 53%);
 
 }
@@ -50,4 +54,3 @@ body {
     color: rgb(0, 0, 0);
     text-decoration: none;
 }
-
