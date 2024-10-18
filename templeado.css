@@ -44,7 +44,6 @@ body {
     transition: background-color 0.8s ease, color 0.8s ease;
 }
 .nav-links li :hover{
-    background-color: #cecdcd;
     color: hsl(34, 98%, 53%);
     border-radius: 10px;
 }
