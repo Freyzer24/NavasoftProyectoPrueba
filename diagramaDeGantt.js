@@ -49,3 +49,43 @@ document.getElementById('task_form').addEventListener('submit', function (event)
     // Limpiar el formulario
     document.getElementById('task_form').reset();
 });
+const form = document.getElementById("task_form");
+const confirmationModal = document.getElementById("confirmation_modal");
+const closeModal = document.querySelector(".close");
+let isConfirmed = false;
+
+// Mostrar el modal cuando se intenta enviar el formulario
+form.addEventListener("submit", function(event) {
+    if (!isConfirmed) {
+        event.preventDefault();
+        confirmationModal.style.display = "block"; // Mostrar el modal
+    }
+});
+
+// Confirmar la acción
+document.querySelector(".confirm").addEventListener("click", function() {
+    isConfirmed = true;
+    confirmationModal.style.display = "none";
+    form.submit(); // Enviar el formulario
+});
+
+// Cancelar la acción
+document.querySelector(".cancel").addEventListener("click", function() {
+    confirmationModal.style.display = "none";
+    isConfirmed = false; // Cancelar la confirmación
+});
+
+// Cerrar el modal al hacer clic en la "X"
+closeModal.addEventListener("click", function() {
+    confirmationModal.style.display = "none";
+    isConfirmed = false;
+});
+
+// Cerrar el modal si se hace clic fuera del contenido del modal
+window.addEventListener("click", function(event) {
+    if (event.target === confirmationModal) {
+        confirmationModal.style.display = "none";
+        isConfirmed = false;
+    }
+});
+

@@ -11,9 +11,23 @@
 <body>
     <center>
         <h1>Diagrama de Gantt Interactivo</h1>
+        <!-- Modal de confirmación -->
+<div id="confirmation_modal" class="modal">
+    <div class="modal_content">
+        <span class="close">&times;</span>
+        <p>¿Está seguro de que desea agregar esta tarea?</p>
+        <div class="confirm_buttons">
+            <button type="button" class="confirm">Cancelar</button>
+            <button type="button" class="cancel">Confirmar</button>
+        </div>
+    </div>
+</div>
+
 
         <!-- Formulario para agregar tareas -->
         <form id="task_form">
+            
+              
             <div>
                 <label for="task_name">Nombre de la tarea:</label>
                 <input type="text" id="task_name" required>
@@ -36,10 +50,11 @@
         
             <button type="submit">Agregar Tarea</button>
         </form>
-        
-
+     
+      
         <!-- Área donde se generará el diagrama de Gantt -->
-        <div id="gantt_chart"></div>
+        <div id="gantt_chart"></div> 
     </center>
+    
 </body>
 </html>
