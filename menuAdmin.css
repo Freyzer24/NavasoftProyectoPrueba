@@ -4,7 +4,7 @@ body {
     font-family: 'Nunito', sans-serif;
     margin: 0px;
     padding: 0;
-    background-color: #ffffff;
+    background: linear-gradient(to bottom, #5c7e98,#aeb9c2, #bec2ae ,#fdd173);
     
 }
 .separar {
@@ -18,15 +18,12 @@ a{
     font-size: 35px;
     color: rgb(0, 0, 0);
     text-decoration: none;
-    background-color:#ff914d;
+    background-color:#bd4900;
     align-items: center;
     padding: 12px;
     border-radius: 20px;
     
     
-}
-a :hover{
-  background-color: #a03d00;
 }
 
   .columna {

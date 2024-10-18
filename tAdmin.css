@@ -7,7 +7,7 @@
 
 body {
     font-family: Arial, sans-serif;
-    background-color: #f4f4f4;
+    background-color: #5c7e98;
     color: #ffffff;
 }
 .logo{
@@ -19,7 +19,7 @@ body {
 
 /* Barra de navegación */
 .navbar {
-    background-color: #abb8c3;
+    background-color: #5c7e98;
     color: #000000;
     padding: 10px;
     display: flex;
@@ -53,6 +53,6 @@ body {
 .nav-links a {
     font-family: "Lilita One", sans-serif;
     font-size: 35px;
-    color: rgb(0, 0, 0);
+    color: rgb(255, 255, 255);
     text-decoration: none;
 }
