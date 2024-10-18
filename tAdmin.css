@@ -18,8 +18,8 @@ body {
 
 /* Barra de navegación */
 .navbar {
-    background-color: #ffffff;
-    color: #000000;
+    background-color: #5c7e98;
+    color: #ffffff;
     padding: 10px;
     display: flex;
     align-items: center;
@@ -52,6 +52,6 @@ body {
 .nav-links a {
     font-family: "Lilita One", sans-serif;
     font-size: 35px;
-    color: #5c7e98;
+    color: #ffffff;
     text-decoration: none;
 }

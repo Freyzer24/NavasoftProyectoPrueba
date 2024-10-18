@@ -2,23 +2,24 @@
 /* General styles */
 body {
     font-family: 'Nunito', sans-serif;
-    margin: 0px;
+   
+   margin-top: 5%;
     padding: 0;
-    background: linear-gradient(to bottom, #ffffff,#aeb9c2, #aeb9c2 ,#5c7e98);
+    background-color: #a0b7ca;
     
 }
 .separar {
     margin-top: 2%;
     display: flex;
     gap: 15px;
-    width: 100vw;
+    width: 97vw;
   }
 a{
     font-family: "Lilita One", sans-serif;
     font-size: 35px;
-    color: rgb(0, 0, 0);
+    color: rgb(255, 255, 255);
     text-decoration: none;
-    background-color:#bd4900;
+    background-color:#0a2438;
     align-items: center;
     padding: 12px;
     border-radius: 20px;
@@ -48,13 +49,7 @@ a{
             transition-timing-function: ease;
   }
   
-  html,
-  body {
-    -moz-box-sizing: border-box;
-         box-sizing: border-box;
-    height: 100%;
-    width: 100%;
-  }
+  
 
   
   .buttons {
@@ -163,3 +158,33 @@ a{
     top: 0;
     width: 70%;
   }
+  .columna h4 {
+    margin: 0 5px; /* Márgenes laterales para que el texto no esté pegado a los bordes */
+    text-align: justify; /* Alinear el texto de forma justificada */
+    font-size: 18px; /* Tamaño de fuente ajustado para mejor legibilidad */
+    line-height: 1.0; /* Espaciado entre líneas para mejor lectura */
+}
+/* Barra fija al final */
+.barra-final {
+  
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  background-color: #0a2438; /* Color de fondo */
+  color: white; /* Color del texto */
+  text-align: center;
+  padding: 10px ;
+  font-size: 16px;
+  font-family: 'Nunito', sans-serif;
+  box-shadow: 0px -2px 10px rgba(0, 0, 0, 0.2); /* Sombra para dar profundidad */
+  z-index: 100; /* Asegurar que esté por encima de otros elementos */
+}
+
+/* Contenido de la barra final */
+.footer-content p {
+  margin: 5px 0; /* Márgenes entre los textos */
+}
+
+
+
+ 
