@@ -18,17 +18,17 @@ a{
     font-size: 35px;
     color: rgb(0, 0, 0);
     text-decoration: none;
-    background-color: #ff914d;
+    background-color:#ff914d;
+    align-items: center;
+    padding: 12px;
+    border-radius: 20px;
+    
+    
 }
-li{
-    list-style: none;
-    text-align: center;
+a :hover{
+  background-color: #a03d00;
 }
-li :hover{
-    background-color: #d8d8d8;
-  
-    color: #ff914d;
-}
+
   .columna {
     
     display: flex;
@@ -37,14 +37,132 @@ li :hover{
     align-items:center;
     flex: 1;
   }
-button {
+
+
+  @import url(https://fonts.googleapis.com/css?family=Roboto:400,100,900);
+  * {
+    -moz-box-sizing: inherit;
+         box-sizing: inherit;
+    -webkit-transition-property: all;
+            transition-property: all;
+    -webkit-transition-duration: .6s;
+            transition-duration: .6s;
+    -webkit-transition-timing-function: ease;
+            transition-timing-function: ease;
+  }
+  
+  html,
+  body {
+    -moz-box-sizing: border-box;
+         box-sizing: border-box;
+    height: 100%;
     width: 100%;
-    padding: 12px;
-    background-color: #ff914d; 
-    color: white;
-    border: none;
-    border-radius: 20px;
-    font-size: 16px;
+  }
+
+  
+  .buttons {
+    display: table;
+    height: 100%;
+    width: 100%;
+  }
+  
+  .container {
+    display: table-cell;
+    padding: 1em;
+    text-align: center;
+    vertical-align: middle;
+  }
+  
+  h1.heading {
+    color: #fff;
+    font-size: 1.25em;
+    font-weight: 900;
+    margin: 0 0 0.5em;
+  }
+  @media (min-width: 450px) {
+    h1.heading {
+      font-size: 1.75em;
+    }
+  }
+  @media (min-width: 760px) {
+    h1.heading {
+      font-size: 3.25em;
+    }
+  }
+  @media (min-width: 900px) {
+    h1.heading {
+      font-size: 4.25em;
+      margin: 0 0 0.5em;
+    }
+  }
+   
+  .btnfos {
+    color: #fff;
     cursor: pointer;
-    margin-top: 30px;
-}
+    display: block;
+    font-size: 12px;
+    font-weight: 400;
+    line-height: 45px;
+    max-width: 50%;
+    margin: 0 auto 2em;
+    position: relative;
+    text-transform: uppercase;
+    width: 100%;
+  }
+  @media (min-width: 400px) {
+    .btnfos {
+      display: inline-block;
+      margin-right: 2.5em;
+    }
+    .btnfos:nth-of-type(even) {
+      margin-right: 0;
+    }
+  }
+  @media (min-width: 600px) {
+    .btnfos:nth-of-type(even) {
+      margin-right: 2.5em;
+    }
+    .btnfos:nth-of-type(5) {
+      margin-right: 0;
+    }
+  }
+  
+  .btnfos-2 {
+    letter-spacing: 0;
+  }
+  
+  .btnfos-2:hover,
+  .btnfos-2:active {
+    letter-spacing: 5px;
+  }
+  
+  .btnfos-2:after,
+  .btnfos-2:before {
+    -webkit-backface-visibility: hidden;
+            backface-visibility: hidden;
+    border: 1px solid rgba(255, 255, 255, 0);
+    bottom: 0px;
+    content: " ";
+    display: block;
+    margin: 0 auto;
+    position: relative;
+    -webkit-transition: all 280ms ease-in-out;
+            transition: all 280ms ease-in-out;
+    width: 0;
+  }
+  
+  .btnfos-2:hover:after,
+  .btnfos-2:hover:before {
+    -webkit-backface-visibility: hidden;
+            backface-visibility: hidden;
+    border-color: #fff;
+    -webkit-transition: width 350ms ease-in-out;
+            transition: width 350ms ease-in-out;
+    width: 70%;
+  }
+  
+  .btnfos-2:hover:before {
+    bottom: auto;
+    top: 0;
+    width: 70%;
+  }

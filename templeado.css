@@ -30,6 +30,7 @@ body {
 }
 .navbar img:hover {
     transform: scale(1.2); /* Aumenta el tamaño al 120% */
+    filter: brightness(10) saturate(90%) invert(62%) sepia(96%) saturate(593%) hue-rotate(1deg) brightness(95%) contrast(101%);
 }
 
 .nav-links {
@@ -43,7 +44,6 @@ body {
     transition: background-color 0.8s ease, color 0.8s ease;
 }
 .nav-links li :hover{
-    background-color: #cecdcd;
     color: hsl(34, 98%, 53%);
     border-radius: 10px;
 }

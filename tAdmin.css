@@ -16,6 +16,7 @@ body {
 }
 
 
+
 /* Barra de navegación */
 .navbar {
     background-color: #abb8c3;
@@ -31,6 +32,7 @@ body {
 }
 .navbar img:hover {
     transform: scale(1.2); /* Aumenta el tamaño al 120% */
+    filter: brightness(10) saturate(90%) invert(62%) sepia(96%) saturate(593%) hue-rotate(1deg) brightness(95%) contrast(101%);
 }
 .nav-links {
     list-style: none;

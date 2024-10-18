@@ -3,6 +3,10 @@ body {
     background-color: #12172B;
     color: white;
 }
+h1{
+    align-items: center;
+    text-align: center;
+}
 
 .profile-card {
     display: flex;
@@ -26,15 +30,11 @@ body {
     height: 120px;
     border-radius: 50%;
     background-color: #666;
+    object-fit: cover;
 }
 
 .profile-left h2 {
     margin: 10px 0;
-}
-
-.profile-left .title {
-    color: #888;
-    margin-bottom: 15px;
 }
 
 .profile-left .admin-badge {
@@ -64,3 +64,85 @@ body {
 .profile-right i {
     margin-right: 10px;
 }
+
+.file-input {
+    margin-top: 10px;
+}
+.profile-container {
+    text-align: center;
+    margin: 20px;
+}
+.profile-image {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    object-fit: cover;
+    display: block;
+    margin: 0 auto;
+}
+.file-input {
+    margin-top: 10px;
+}
+#fileInput {
+    display: none;
+}
+
+  
+  main{
+    width: 30%;
+    margin: auto;
+    padding: 1em 8vw;
+    background: white;
+    box-shadow:  0 0 20px #ddd;
+  }
+  
+  h1{
+    text-align: center;
+    color: #1F5F74;
+    border-bottom: 1px solid #C4CBCE;
+    padding-bottom: .2em;
+  }
+  
+  form > div{
+    margin-bottom: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+  }
+  
+  form img{
+    width: 200px;
+    border-radius: 50%;
+    border: 6px solid #AAA;
+  }
+  
+  form div:first-child{
+    align-items: center;
+  }
+  
+  form div:first-child input{
+    display: none;
+  }
+  
+  form div:first-child label{
+    background: #1F5F74;
+    color: white;
+    padding: 6px 20px;
+    cursor: pointer;
+    border-radius: 3px;
+  }
+  
+  form input{
+    padding: 8px 20px;
+    border: 1px solid #AAA;
+    border-radius: 3px;
+  }
+  
+  form button{
+    padding: 8px 20px;
+    border: 1px solid darkgreen;
+    width: 50%;
+    background: #36551F;
+    color: white;
+    border-radius: 3px;
+  }
