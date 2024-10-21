@@ -54,13 +54,13 @@ document.getElementById('task_form').addEventListener('submit', function (event)
 document.getElementById('downloadBtn').addEventListener('click', function() {
     const formattedTasks = tasks.map(task => {
         return [
-            task[0], // ID
-            task[1], // Nombre
-            task[2], // Recurso
-            task[3].toISOString().split('T')[0], // Inicio
-            task[4].toISOString().split('T')[0], // Fin
-            task[6] // Porcentaje completado
-        ].join(',');
+            `ID: "${task[0]}"`, // ID
+            `Nombre: "${task[1]}"`, // Nombre
+            `Recurso: "${task[2]}"`, // Recurso
+            `Fecha de inicio: "${task[3].toISOString().split('T')[0]}"`, // Inicio
+            `Fecha de fin: "${task[4].toISOString().split('T')[0]}"`, // Fin
+            `Porcentaje completado: "${task[6]}"` // Porcentaje completado
+        ].join(', ');
     }).join('\n');
 
     // Crear un blob con el texto
@@ -86,4 +86,3 @@ window.addEventListener("click", function(event) {
         isConfirmed = false;
     }
 });
-
