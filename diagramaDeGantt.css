@@ -1,140 +1,157 @@
 body {
-    font-family: 'Arial', sans-serif;
-    margin: 20px;
-    background: linear-gradient(to bottom, #d0e8f6, #868686);
-    color: #333;
+    font-family: 'Nunito', sans-serif; /* Define la fuente principal */
+    margin: 20px; /* Margen alrededor del contenido */
+    background-color: #e4e3e3da;/* Fondo con degradado */
+    color: #333; /* Color del texto */
 }
 
 h1 {
-    text-align: center;
-    color: #444;
-    font-size: 2.5rem;
-    margin-bottom: 20px;
+    font-family: "Lilita One", sans-serif;
+    text-align: center; /* Centra el título */
+    color: #444; /* Color del título */
+    font-size: 2.5rem; /* Tamaño del título */
+    margin-bottom: 20px; /* Espacio debajo del título */
 }
 
 form {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 20px;
-    margin-bottom: 30px;
-    background-color: #f0f4f8;
-    padding: 20px;
-    border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    display: grid; /* Utiliza grid para el diseño del formulario */
+    grid-template-columns: 1fr 1fr; /* Dos columnas de igual ancho */
+    gap: 20px; /* Espacio entre columnas */
+    margin-bottom: 30px; /* Margen inferior del formulario */
+    background-color: #ffffff; /* Color de fondo del formulario */
+    padding: 20px; /* Espacio interno del formulario */
+    border-radius: 10px; /* Bordes redondeados */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Sombra del formulario */
 }
 
+/* Estilo de las etiquetas */
 label {
-    font-weight: bold;
-    margin-bottom: 8px;
-    color: #555;
+    font-weight: bold; /* Texto en negrita */
+    margin-bottom: 8px; /* Espacio debajo de la etiqueta */
+    color: #555; /* Color del texto de la etiqueta */
 }
 
+/* Estilo para los campos de entrada */
 input {
-    width: 100%;
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    box-sizing: border-box;
-    font-size: 1rem;
+    width: 100%; /* Ancho completo */
+    padding: 10px; /* Espacio interior */
+    border: 1px solid #ccc; /* Borde del input */
+    border-radius: 5px; /* Bordes redondeados */
+    box-sizing: border-box; /* Incluye padding y border en el ancho total */
+    font-size: 1rem; /* Tamaño de fuente en los inputs */
 }
 
+/* Estilo para los botones */
 button {
-    grid-column: span 2;
-    padding: 12px;
-    background-color: #1F5F74;
-    color: #ffffff;
-    border: none;
-    border-radius: 5px;
-    font-size: 1.2rem;
-    cursor: pointer;
-    transition: background-color 0.3s ease, transform 0.3s ease, font-size 0.3s ease;
-   
+    grid-column: span 2; /* Ocupa ambas columnas del formulario */
+    padding: 12px; /* Espacio interior del botón */
+    background-color: #1F5F74; /* Color de fondo del botón */
+    color: #ffffff; /* Color del texto del botón */
+    border: none; /* Sin borde */
+    border-radius: 5px; /* Bordes redondeados */
+    font-size: 1.2rem; /* Tamaño de fuente del botón */
+    cursor: pointer; /* Cambia el cursor al pasar el ratón */
+    transition: background-color 0.3s ease, transform 0.3s ease, font-size 0.3s ease; /* Transiciones suaves */
 }
 
+/* Efecto hover para el botón */
 button:hover {
-    background-color: #0f4557;
+    background-color: #0f4557; /* Cambia el color al pasar el ratón */
     transform: scale(1.05); /* Aumenta el tamaño del botón */
-    font-size: 1.3rem;
+    font-size: 1.3rem; /* Aumenta el tamaño de la fuente al pasar el ratón */
 }
 
+/* Estilos para el gráfico Gantt */
 #gantt_chart {
-    width: 100%;
-    height: 500px;
-    background-color: #fcfcfc;
-    border: 2px solid #ccc;
-    border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+
+    width: 100%; /* Ancho completo */
+    height: 500px; /* Altura del gráfico */
+    background-color: #fcfcfc; /* Color de fondo del gráfico */
+    border: 2px solid #ffffff; /* Borde del gráfico */
+    border-radius: 10px; /* Bordes redondeados */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Sombra del gráfico */
 }
 
 /* Estilos del modal */
 .modal {
     display: none; /* Oculto por defecto */
-    position: fixed;
-    z-index: 1000;
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.5);
+    position: fixed; /* Posición fija para cubrir toda la pantalla */
+    z-index: 1000; /* Asegura que esté por encima de otros elementos */
+    left: 0; /* Alineado a la izquierda */
+    top: 0; /* Alineado arriba */
+    width: 100%; /* Ancho completo */
+    height: 100%; /* Altura completa */
+    background-color: rgba(0, 0, 0, 0.5); /* Fondo semi-transparente */
 }
 
+/* Estilos del contenido del modal */
 .modal_content {
-    background-color: #fff;
-    margin: 15% auto;
-    padding: 20px;
-    border: 1px solid #888;
-    width: 400px;
-    border-radius: 10px;
-    text-align: center;
+    background-color: #fff; /* Color de fondo del modal */
+    margin: 15% auto; /* Margen superior e inferior */
+    padding: 20px; /* Espacio interior del modal */
+    border: 1px solid #ffffff; /* Borde del modal */
+    width: 400px; /* Ancho del modal */
+    border-radius: 10px; /* Bordes redondeados */
+    text-align: center; /* Centra el texto dentro del modal */
 }
 
+/* Estilo para el botón de cerrar el modal */
 .close {
-    color: #aaa;
-    float: right;
-    font-size: 28px;
-    font-weight: bold;
-    cursor: pointer;
+    color: #aaa; /* Color del icono de cerrar */
+    float: right; /* Alinea a la derecha */
+    font-size: 28px; /* Tamaño de fuente del icono */
+    font-weight: bold; /* Negrita */
+    cursor: pointer; /* Cambia el cursor al pasar el ratón */
 }
 
+/* Efecto hover para el botón de cerrar */
 .close:hover,
 .close:focus {
-    color: #000;
-    text-decoration: none;
-    cursor: pointer;
+    color: #000; /* Cambia el color al pasar el ratón */
+    text-decoration: none; /* Sin subrayado */
+    cursor: pointer; /* Cambia el cursor al pasar el ratón */
 }
 
+/* Estilos para los botones de confirmación en el modal */
 .confirm_buttons {
-    display: flex;
-    justify-content: center;
-    gap: 20px;
-    margin-top: 20px;
+    display: flex; /* Usa flexbox para los botones */
+    justify-content: center; /* Centra los botones horizontalmente */
+    gap: 20px; /* Espacio entre botones */
+    margin-top: 20px; /* Margen superior de los botones */
 }
 
+/* Estilos para los botones de confirmación en el modal */
 .confirm_buttons button {
-    padding: 10px 20px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
+    padding: 10px 20px; /* Espacio interior de los botones */
+    border: none; /* Sin borde */
+    border-radius: 5px; /* Bordes redondeados */
+    cursor: pointer; /* Cambia el cursor al pasar el ratón */
+    transition: background-color 0.3s ease; /* Transición suave en el cambio de color */
 }
 
+/* Estilo del botón de confirmar */
 .confirm_buttons .confirm {
-    background-color: #ff3730;
-    color: white;
+    background-color: #ff3730; /* Color de fondo */
+    color: white; /* Color del texto */
 }
 
+/* Estilo del botón de cancelar */
 .confirm_buttons .cancel {
-    background-color: #076b04;
-    color: white;
+    background-color: #076b04; /* Color de fondo */
+    color: white; /* Color del texto */
 }
 
+/* Efecto hover para el botón de confirmar */
 .confirm_buttons .confirm:hover {
-    background-color: #c82333;
+    background-color: #c82333; /* Cambia el color al pasar el ratón */
 }
 
+/* Efecto hover para el botón de cancelar */
 .confirm_buttons .cancel:hover {
-    background-color: #1f5827;
+    background-color: #1f5827; /* Cambia el color al pasar el ratón */
 }
+
+/* Estilos responsive */
 @media (max-width: 768px) {
     form {
         grid-template-columns: 1fr; /* Cambia el formulario a una columna en pantallas pequeñas */
@@ -168,7 +185,7 @@ button:hover {
     }
 
     button {
-        padding: 10px;
+        padding: 10px; /* Ajusta el padding del botón */
         font-size: 1rem; /* Ajusta el tamaño de los botones */
     }
 }

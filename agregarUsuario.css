@@ -1,166 +1,166 @@
-/* Estilos generales */
-        * {
-            box-sizing: border-box;
-            margin: 0.1;
-            padding: 0;
-        }
+/* Estilos generales para todos los elementos */
+* {
+    box-sizing: border-box; /* Asegura que el padding y el border se incluyan en las dimensiones del elemento */
+    margin: 0; /* Elimina el margen por defecto */
+    padding: 0; /* Elimina el padding por defecto */
+}
 
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #ebebeb;
-            
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-        }
+body {
+    font-family: 'Nunito', sans-serif;/* Fuente para el cuerpo */
+    background-color: #e4e3e3da; /* Color de fondo */
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
 
-        h1 {
-            
-            text-align: center;
-            margin-bottom: 20px;
-            color: #000000;
-        }
+h1 {
+    font-family: "Lilita One", sans-serif;
+    text-align: center; /* Centra el título */
+    margin-bottom: 20px; /* Espacio debajo del título */
+    color: #333; /* Color del texto */
+    margin-top: 1%;
+}
 
-        form {
-            background-color: #b1b1b1;
-            padding: 70px;
-            border-radius: 8px;
-            box-shadow: 0 4px 7px rgba(0, 0, 0, 0.1);
-            width: 100%;
-            max-width: 550px;
-            align-items: center;
-            text-align: center;
-        }
+form {
+    background-color: white; /* Fondo del formulario */
+    padding: 70px; /* Relleno interior */
+    border-radius: 8px; /* Bordes redondeados */
+    box-shadow: 0 4px 7px rgba(0, 0, 0, 0.1); /* Sombra ligera */
+    width: 100%; /* Ancho completo */
+    max-width: 550px; /* Ancho máximo del formulario */
+    text-align: center; /* Centra el contenido del formulario */
+}
 
-        label {
-            margin-bottom: 8px;
-            font-weight: bold;
-            color: #424242;
-        }
+label {
+    margin-bottom: 8px; /* Espacio debajo de las etiquetas */
+    font-weight: bold; /* Texto en negrita */
+    color: #424242; /* Color del texto */
+}
 
-        input[type="text"], input[type="email"], input[type="password"], input[type="tel"] {
-            width: 100%;
-            padding: 10px;
-            margin-bottom: 20px;
-            border: 1px solid #ddd;
-            border-radius: 6px;
-            font-size: 16px;
-            background-color: #fafafa;
-            transition: all 0.3s ease;
-        }
+input[type="text"], input[type="email"], input[type="password"], input[type="tel"] {
+    width: 100%; /* Ancho completo del input */
+    padding: 10px; /* Espacio interior del input */
+    margin-bottom: 20px; /* Espacio debajo de cada input */
+    border: 1px solid #ddd; /* Borde del input */
+    border-radius: 80px; /* Bordes redondeados */
+    font-size: 16px; /* Tamaño de fuente */
+    background-color: #fafafa; /* Color de fondo del input */
+    transition: all 0.3s ease; /* Transición suave al enfocar */
+}
 
-        input[type="text"]:focus, input[type="email"]:focus, input[type="password"]:focus, input[type="tel"]:focus {
-            border-color: #007BFF;
-            box-shadow: 0 0 8px rgba(0, 123, 255, 0.2);
-            background-color: #fff;
-        }
+/* Efecto al enfocar los inputs */
+input:focus {
+    border-color: #007BFF; /* Cambia el color del borde al enfocar */
+    box-shadow: 0 0 8px rgba(0, 123, 255, 0.2); /* Añade sombra al enfocar */
+    background-color: #fff; /* Cambia el fondo al blanco al enfocar */
+}
 
-        .button-container {
-            display: flex;
-            justify-content: center; /* Centra los botones horizontalmente */
-            gap: 10px; /* Espaciado entre botones */
-            margin-top: 20px; /* Espaciado opcional arriba */
-        }
-        
+.button-container {
+    display: flex; /* Usa flexbox para los botones */
+    justify-content: center; /* Centra los botones horizontalmente */
+    gap: 10px; /* Espacio entre botones */
+    margin-top: 10px; /* Espacio arriba de los botones */
+}
 
-       
+button {
+    font-family: 'Nunito', sans-serif;
+    padding: 12px 18px; /* Espaciado interno del botón */
+    border: none; /* Sin borde */
+    border-radius: 80px; /* Bordes redondeados */
+    cursor: pointer; /* Muestra cursor de mano */
+    font-size: 18px; /* Tamaño de la fuente */
+    font-weight: bold; /* Negrita para el texto */
+    transition: background-color 0.8s ease; /* Transición suave en el cambio de color */
+}
 
-        button {
-            justify-content: center;
-            padding: 12px 18px;
-            border: none;
-            border-radius: 6px;
-            cursor: pointer;
-            font-size: 18px;
-            font-weight: bold;
-            transition: background-color 0.3s ease;
-        }
+/* Estilo del botón "Limpiar" */
+.btn-clear {
+    background-color: #ff2b1c; /* Fondo del botón */
+    color: rgb(95, 0, 0); /* Color del texto */
+}
 
-        .btn-clear {
-            background-color: #ff2b1c;
-            color: rgb(95, 0, 0);
-        }
+/* Efecto hover para el botón "Limpiar" */
+.btn-clear:hover {
+    background-color: #d32f2f; /* Cambia el fondo al pasar el ratón */
+}
 
-        .btn-clear:hover {
-            background-color: #d32f2f;
-        }
+/* Estilo del botón "Editar" */
+.btn-edit {
+    background-color: #ff9800; /* Fondo del botón */
+    color: #723601; /* Color del texto */
+}
 
-        .btn-edit {
-            background-color: #ff9800;
-            color: #723601;
-        }
+/* Efecto hover para el botón "Editar" */
+.btn-edit:hover {
+    background-color: #e67e22; /* Cambia el fondo al pasar el ratón */
+}
 
-        .btn-edit:hover {
-            background-color: #e67e22;
-        }
+/* Estilo del botón "Guardar" */
+.btn-save {
+    background-color: #4CAF50; /* Fondo del botón */
+    color: rgb(32, 100, 14); /* Color del texto */
+}
 
-        .btn-save {
-            background-color: #4CAF50;
-            color: rgb(32, 100, 14);
-        }
+/* Efecto hover para el botón "Guardar" */
+.btn-save:hover {
+    background-color: #45a049; /* Cambia el fondo al pasar el ratón */
+}
 
-        .btn-save:hover {
-            background-color: #45a049;
-        }
+/* Diseño responsive para pantallas pequeñas (máximo 600px) */
+@media (max-width: 600px) {
+    .buttons {
+        flex-direction: column; /* Apila los botones verticalmente */
+        gap: 10px; /* Espaciado entre los botones */
+    }
+}
 
-        @media (max-width: 600px) {
-            .buttons {
-                flex-direction: column;
-                gap: 10px;
-            }
-        }
+.separar {
+    margin-top: 1%; /* Margen superior pequeño */
+    display: flex; /* Usa flexbox para dividir en columnas */
+    justify-content: center; /* Centra las columnas horizontalmente */
+    align-items: center; /* Centra las columnas verticalmente */
+}
 
-          
-        .separar {
-            margin-top: 1%;
-            display: flex;
-            gap: 20px; /* Espacio entre las columnas */
-            width: 99vw;
-            justify-content: center;
-            align-items: center;
-        }
-        
-        .columna {
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            flex: 2;
-        }
+.columna {
+    display: flex; /* Usa flexbox dentro de la columna */
+    flex-direction: column; /* Elementos uno debajo del otro */
+    justify-content: center; /* Centra el contenido verticalmente */
+    align-items: center; /* Centra el contenido horizontalmente */
+    flex: 9; /* Flexibilidad para ajustar el ancho */
+}
 
+/* Estilo del select (menú desplegable) */
+select {
+    width: 100%; /* Ancho completo del select */
+    padding: 10px; /* Espaciado interno */
+    margin-top: 8px; /* Margen superior */
+    border: 2px solid #ccc; /* Borde del select */
+    border-radius: 80px; /* Bordes redondeados */
+    background-color: #f9f9f9; /* Fondo del select */
+    font-family: 'Nunito', sans-serif;
+    font-size: 16px; /* Tamaño de la fuente */
+    color: #333; /* Color del texto */
+    box-shadow: inset 0 1px 3px rgba(0,0,0,0.1); /* Sombra interna */
+    appearance: none; /* Oculta la flecha predeterminada */
+    cursor: pointer; /* Muestra cursor de mano */
+    transition: border-color 0.3s, box-shadow 0.3s; /* Transición suave */
+}
 
-        select {
-            width: 100%;
-            padding: 10px;
-            margin-top: 8px;
-            border: 2px solid #ccc;
-            border-radius: 5px;
-            background-color: #f9f9f9;
-            font-family: "Nunito", sans-serif;
-            font-size: 16px;
-            color: #333;
-            box-shadow: inset 0 1px 3px rgba(0,0,0,0.1);
-            appearance:initial; /* Oculta la flecha predeterminada */
-            -webkit-appearance: none;
-            -moz-appearance: none;
-            cursor: pointer;
-            transition: border-color 0.3s, box-shadow 0.3s;
-        }
-        
-        select:hover {
-            border-color: hsl(236, 98%, 53%);
-            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
-        }
-        
-        select:focus {
-            border-color: hsl(236, 98%, 53%);
-            box-shadow: 0 0 5px hsl(236, 98%, 53%);
-            outline: none;
-        }
-        
-        .select-container {
-            position: relative;
-            width: 100%;
-        }
-        
-        
+/* Efecto hover para el select */
+select:hover {
+    border-color: hsl(236, 98%, 53%); /* Cambia el color del borde */
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1); /* Añade sombra interna */
+}
+
+/* Efecto focus para el select */
+select:focus {
+    border-color: hsl(236, 98%, 53%); /* Cambia el borde al enfocar */
+    box-shadow: 0 0 5px hsl(236, 98%, 53%); /* Sombra en foco */
+    outline: none; /* Elimina el contorno predeterminado */
+}
+
+/* Contenedor del select */
+.select-container {
+    position: relative; /* Posición relativa para personalizar select */
+    width: 100%; /* Ancho completo */
+}
