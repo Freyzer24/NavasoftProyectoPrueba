@@ -3,7 +3,7 @@ let tasks = [
 ];
 
 // Cargar la librería de Google Charts
-google.charts.load('current', {'packages': ['gantt']});
+google.charts.load('current', { 'packages': ['gantt'] });
 google.charts.setOnLoadCallback(drawChart);
 
 // Función para dibujar el gráfico
@@ -49,36 +49,34 @@ document.getElementById('task_form').addEventListener('submit', function (event)
     // Limpiar el formulario
     document.getElementById('task_form').reset();
 });
-const form = document.getElementById("task_form");
-const confirmationModal = document.getElementById("confirmation_modal");
-const closeModal = document.querySelector(".close");
-let isConfirmed = false;
 
-// Mostrar el modal cuando se intenta enviar el formulario
-form.addEventListener("submit", function(event) {
-    if (!isConfirmed) {
-        event.preventDefault();
-        confirmationModal.style.display = "block"; // Mostrar el modal
-    }
-});
+// Función para descargar las tareas
+document.getElementById('downloadBtn').addEventListener('click', function() {
+    const formattedTasks = tasks.map(task => {
+        return [
+            task[0], // ID
+            task[1], // Nombre
+            task[2], // Recurso
+            task[3].toISOString().split('T')[0], // Inicio
+            task[4].toISOString().split('T')[0], // Fin
+            task[6] // Porcentaje completado
+        ].join(',');
+    }).join('\n');
 
-// Confirmar la acción
-document.querySelector(".confirm").addEventListener("click", function() {
-    isConfirmed = true;
-    confirmationModal.style.display = "none";
-    form.submit(); // Enviar el formulario
-});
+    // Crear un blob con el texto
+    const blob = new Blob([formattedTasks], { type: 'text/csv' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'tareas.csv'; // Nombre del archivo
 
-// Cancelar la acción
-document.querySelector(".cancel").addEventListener("click", function() {
-    confirmationModal.style.display = "none";
-    isConfirmed = false; // Cancelar la confirmación
-});
+    // Simular clic en el enlace
+    document.body.appendChild(a);
+    a.click();
 
-// Cerrar el modal al hacer clic en la "X"
-closeModal.addEventListener("click", function() {
-    confirmationModal.style.display = "none";
-    isConfirmed = false;
+    // Limpiar
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
 });
 
 // Cerrar el modal si se hace clic fuera del contenido del modal
