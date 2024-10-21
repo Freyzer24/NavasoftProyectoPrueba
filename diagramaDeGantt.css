@@ -135,3 +135,40 @@ button:hover {
 .confirm_buttons .cancel:hover {
     background-color: #1f5827;
 }
+@media (max-width: 768px) {
+    form {
+        grid-template-columns: 1fr; /* Cambia el formulario a una columna en pantallas pequeñas */
+    }
+
+    button {
+        grid-column: span 1; /* Asegura que el botón ocupe toda la fila en pantallas pequeñas */
+        font-size: 1rem; /* Ajusta el tamaño de la fuente en el botón */
+    }
+
+    h1 {
+        font-size: 2rem; /* Reduce el tamaño del título en pantallas más pequeñas */
+    }
+}
+
+@media (max-width: 480px) {
+    body {
+        margin: 10px; /* Ajusta el margen en pantallas más pequeñas */
+    }
+
+    .modal_content {
+        width: 90%; /* Asegura que el modal sea más pequeño en pantallas móviles */
+    }
+
+    h1 {
+        font-size: 1.8rem; /* Reduce aún más el tamaño del título en pantallas muy pequeñas */
+    }
+
+    input {
+        font-size: 0.9rem; /* Ajusta el tamaño del texto en los inputs */
+    }
+
+    button {
+        padding: 10px;
+        font-size: 1rem; /* Ajusta el tamaño de los botones */
+    }
+}
