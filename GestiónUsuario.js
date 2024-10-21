@@ -1,8 +1,13 @@
 function showModal(user, role, task) {
     var modal = document.getElementById("userModal");
     var content = document.getElementById("modalContent");
-    content.innerHTML = `<strong>Usuario:</strong> ${user} <br> <strong>Rol:</strong> ${role} <br> <strong>Tareas:</strong> ${task}`;
-    modal.style.display = "flex"; // Mostrar el modal
+    content.innerHTML = `
+    <p><strong>Usuario:</strong> ${user}</p>
+    <p><strong>Rol:</strong> ${role}</p>
+    <p><strong>Tareas:</p></strong> ${task}</p>
+`;
+
+     modal.style.display = "flex"; // Mostrar el modal
 }
 
 function closeModal() {
