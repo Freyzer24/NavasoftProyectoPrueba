@@ -88,4 +88,13 @@ window.addEventListener("click", function(event) {
         isConfirmed = false;
     }
 });
-
+function descargarArchivo() {
+    // Aquí puedes especificar la URL del archivo que quieres descargar
+    const url = 'ruta/a/tu/archivo.pdf'; // Reemplaza con la ruta correcta
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = 'Diagrama de Gantt.pdf'; // Nombre con el que se guardará el archivo
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  }
