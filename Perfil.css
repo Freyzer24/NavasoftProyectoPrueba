@@ -1,6 +1,6 @@
 body {
     font-family: Arial, sans-serif;
-    background-color: #12172B;
+    background-color: #a0b7ca;
     color: white;
 }
 h1{
@@ -13,7 +13,7 @@ h1{
     align-items: center;
     justify-content: space-between;
     width: 80%;
-    background-color: #1C2333;
+    background-color: #3e5075;
     padding: 20px;
     border-radius: 8px;
     margin: 50px auto;
@@ -98,7 +98,7 @@ h1{
   
   h1{
     text-align: center;
-    color: #1F5F74;
+    color: #3e5075;
     border-bottom: 1px solid #C4CBCE;
     padding-bottom: .2em;
   }
