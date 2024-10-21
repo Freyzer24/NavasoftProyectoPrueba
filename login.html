@@ -5,12 +5,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Formulario de Inicio de Sesión</title>
     <link rel="stylesheet" href="login.css">
+    <script src="./prueba.js"></script>
 </head>
 <body>
 
     <div class="login-container">
         <h2>BIENVENIDOS</h2>
-        <form action="/login" method="post">
+        <form onsubmit="processLogin(event)">
             <div class="input-container">
                 <label for="username">Usuario</label>
                 <div class="input-with-icon">
@@ -28,5 +29,6 @@
             <button type="submit">INGRESAR</button>
         </form>
     </div>
+    
 </body>
 </html>

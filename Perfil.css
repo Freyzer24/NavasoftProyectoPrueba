@@ -1,6 +1,6 @@
 body {
     font-family: Arial, sans-serif;
-    background-color: #c8dff2;
+    background-color: #a0b7ca;
     color: white;
 }
 h1{
@@ -99,7 +99,7 @@ h1{
   
   h1{
     text-align: center;
-    color: #5c7e98;
+    color: #333; /* Color del texto */
     border-bottom: 1px solid #C4CBCE;
     padding-bottom: .2em;
   }

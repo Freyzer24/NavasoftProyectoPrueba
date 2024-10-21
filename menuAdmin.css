@@ -75,6 +75,7 @@ a{
     font-size: 1.25em;
     font-weight: 900;
     margin: 0 0 0.5em;
+    
   }
   @media (min-width: 450px) {
     h1.heading {
@@ -215,6 +216,8 @@ body {
 }
 
 .carrusel h1 {
+  border-bottom: 1px solid #C4CBCE;
+    padding-bottom: .2em;
   text-align: center;
   color: #fff; /* White text for title */
   font-size: 36px;
@@ -247,7 +250,7 @@ body {
 }
 
 .slide p {
-  color: #fff;
+  color: #000000;
   font-size: 18px;
   margin-top: 10px;
   font-family: 'Nunito', sans-serif;

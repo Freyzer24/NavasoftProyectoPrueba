@@ -6,11 +6,12 @@ body {
 }
 
 h1 {
-    font-family: "Lilita One", sans-serif;
+    font-family: "Nunito", sans-serif;
     text-align: center; /* Centra el título */
     color: #444; /* Color del título */
     font-size: 2.5rem; /* Tamaño del título */
     margin-bottom: 20px; /* Espacio debajo del título */
+    
 }
 
 form {
@@ -149,6 +150,10 @@ button:hover {
 /* Efecto hover para el botón de cancelar */
 .confirm_buttons .cancel:hover {
     background-color: #1f5827; /* Cambia el color al pasar el ratón */
+}
+.documento{
+    margin-top: 2%;
+     font-family: 'Nunito', sans-serif;
 }
 
 /* Estilos responsive */
