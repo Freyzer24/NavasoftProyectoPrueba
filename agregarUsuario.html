@@ -5,17 +5,17 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Formulario</title>
     <link rel="stylesheet" href="/agregarUsuario.css">
-    <link rel="stylesheet" href="/AgregarUsuario.js">
+    <script src="./AgregarUsuario.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Lilita+One&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700&display=swap" rel="stylesheet">
 
 </head>
 <body>
 
-    <h1 >FORMULARIO DE REGISTRO</h1>
-    <div class="separar">
-        <div class="columna"> 
-        <form id="registroForm">
+    <h1>FORMULARIO DE REGISTRO</h1>
+<div class="separar">
+    <div class="columna"> 
+        <form id="registroForm1">
             <label for="nombre">Nombre:</label>
             <input type="text" id="nombre" name="nombre" required>
 
@@ -27,32 +27,31 @@
         </form>
     </div>   
 
-
-<div class="columna"> 
-        <form id="registroForm">
+    <div class="columna"> 
+        <form id="registroForm2">
             <label for="usuario">Usuario:</label>
             <input type="text" id="usuario" name="usuario" required>
 
             <label for="rol">Rol:</label> <br>
             <select id="rol" name="rol">
-            <option value="super_administrador" selected>Super Administrador</option>
-            <option value="administrador">Administrador</option>
-            <option value="visualizar">Visualizador</option>
-            <option value="empleado">Empleado</option>
+                <option value="super_administrador" selected>Super Administrador</option>
+                <option value="administrador">Administrador</option>
+                <option value="visualizar">Visualizador</option>
+                <option value="empleado">Empleado</option>
             </select> <br> <br>
 
             <label for="password">Contraseña:</label>
             <input type="password" id="password" name="password" required>
         </form>
     </div>
-</div>
 </div>   
 
-        <div class="button-container">
-        <button type="button" class="btn-clear" onclick="document.getElementById('registroForm').reset();">Borrar</button>
-          <button type="button" class="btn-edit">Editar</button>
-          <button type="submit" class="btn-save">Guardar</button> 
-        </div>
+<div class="button-container">
+    <button type="button" class="btn-clear" onclick="resetForm()">Borrar</button>
+    <button type="button" class="btn-edit" onclick="editarDatos()">Editar</button>
+    <button type="button" class="btn-save" onclick="guardarDatos()">Guardar</button> 
+</div>
+<div id="listContainer"></div>
 
 </body>
 </html>

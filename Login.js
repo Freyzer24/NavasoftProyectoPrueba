@@ -60,6 +60,7 @@ function processLogin(event) {
     else if (username === supadministrador.username && password === supadministrador.password) {
         window.location.href = "indexempleado.html"; // Redirigir a la página de Super Admin
     } 
+   
     // Si no coincide, mostrar los errores
     else {
         if (username !== admin.username && username !== empleado.username && username !== visualizador.username && username !== supadministrador.username) {
