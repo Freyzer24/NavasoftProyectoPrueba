@@ -114,3 +114,17 @@ button:hover {
         font-size: 14px;
     }
 }
+/* Estilo para los mensajes de error */
+.error-message {
+    color: red;
+    font-size: 12px;
+    display: none; /* Oculto por defecto */
+}
+
+/* Estilo para los campos con error */
+.input-with-icon input.error {
+    border: 2px solid red;
+    background-color: #ffcccc; /* Fondo rojo claro */
+    color: red;
+}
+
