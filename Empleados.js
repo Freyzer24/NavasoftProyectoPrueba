@@ -404,3 +404,41 @@ window.onclick = function(event) {
         modal.style.display = "none";
     }
 }
+
+// Función para mostrar u ocultar secciones según el rol del usuario
+function mostrarSeccionesPorRol(rol) {
+    const adminSection = document.getElementById('adminSection');
+    const userSection = document.getElementById('userSection');
+
+    if (rol === 'admin') {
+        adminSection.style.display = 'block';  // Muestra la sección de administradores
+        userSection.style.display = 'none';    // Oculta la sección de usuarios estándar (si es necesario)
+    } else if (rol === 'usuario') {
+        adminSection.style.display = 'none';   // Oculta la sección de administradores
+        userSection.style.display = 'block';   // Muestra la sección de usuarios
+    } else {
+        // Caso de manejo de otros roles o usuarios no autenticados
+        adminSection.style.display = 'none';
+        userSection.style.display = 'block';
+    }
+}
+
+// Ejemplo: al cargar la página, detectamos el rol
+window.onload = function() {
+    // Simulación: obtener el rol del usuario (podría venir del backend o localStorage)
+    const rolUsuario = 'admin';  // Ejemplo: 'admin' o 'usuario'
+    mostrarSeccionesPorRol(rolUsuario);
+};
+
+function iniciarAplicacion() {
+    const registro = listaEnlazada.buscarPorNombre('NombreUsuario');
+    if (registro) {
+        mostrarSeccionesPorRol(registro.data.rol);
+    }
+}
+
+// Cargar la configuración al iniciar la página
+window.onload = function() {
+    listaEnlazada.cargarDesdeLocalStorage();
+    iniciarAplicacion();
+};
