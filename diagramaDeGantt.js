@@ -78,14 +78,6 @@ document.getElementById('downloadBtn').addEventListener('click', function() {
     document.body.removeChild(a);
     URL.revokeObjectURL(url);
 });
-//Descargar como Excel
-function GenerarExcel(){  
-    var usuario  = $("select#selUsuario option:selected").attr('value');		 
-    var fini     = $("#dtpFechaInicio").val();
-    var ffin     = $("#dtpFechaFin").val(); 		  
-    var url   = 'Excel.php?id='+usuario+'&fi='+fini+'&ff='+ffin;
-    window.open(url, '_blank');		  
-   }
 // Cerrar el modal si se hace clic fuera del contenido del modal
 window.addEventListener("click", function(event) {
     if (event.target === confirmationModal) {
