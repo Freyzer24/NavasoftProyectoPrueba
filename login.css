@@ -1,130 +1,141 @@
 
+/* Estilos globales para todos los elementos */
 * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family: Arial, sans-serif;
+    margin: 0; /* Elimina el margen predeterminado de todos los elementos */
+    padding: 0; /* Elimina el relleno predeterminado de todos los elementos */
+    box-sizing: border-box; /* Incluye el padding y el borde en el cálculo del ancho y alto */
+    font-family: Arial, sans-serif; /* Establece la fuente predeterminada a Arial, con sans-serif como respaldo */
 }
 
+/* Estilos del cuerpo de la página */
 body {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    background-color: #a6b8c8; /* Fondo similar al de la imagen */
+    display: flex; /* Usa flexbox para centrar el contenido */
+    justify-content: center; /* Centra el contenido horizontalmente */
+    align-items: center; /* Centra el contenido verticalmente */
+    height: 100vh; /* Establece la altura del cuerpo al 100% de la ventana del navegador */
+    background-color: #a6b8c8; /* Establece un fondo similar al de la imagen */
     padding: 20px; /* Agrega un padding para pantallas pequeñas */
 }
 
+/* Contenedor del formulario de inicio de sesión */
 .login-container {
-    background-color: #e0e0e0; 
-    padding: 30px;
-    border-radius: 20px;
-    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
-    max-width: 350px;
-    width: 100%;
-    text-align: center;
+    background-color: #e0e0e0; /* Establece el color de fondo del contenedor */
+    padding: 30px; /* Añade relleno interno */
+    border-radius: 20px; /* Bordes redondeados */
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1); /* Añade una sombra sutil */
+    max-width: 350px; /* Establece un ancho máximo */
+    width: 100%; /* Hace que el contenedor sea responsivo */
+    text-align: center; /* Centra el texto dentro del contenedor */
 }
 
+/* Estilos para el encabezado h2 */
 h2 {
-    margin-bottom: 30px;
-    color: #333;
-    font-size: 24px;
+    margin-bottom: 30px; /* Margen inferior de 30px */
+    color: #333; /* Color del texto a gris oscuro */
+    font-size: 24px; /* Tamaño de fuente del encabezado */
 }
 
+/* Contenedor para los campos de entrada */
 .input-container {
-    margin-bottom: 20px;
-    text-align: left;
+    margin-bottom: 20px; /* Margen inferior de 20px */
+    text-align: left; /* Alinea el texto a la izquierda */
 }
 
+/* Estilos para las etiquetas de los campos de entrada */
 .input-container label {
-    font-size: 14px;
-    color: #333;
-    margin-bottom: 8px;
-    display: block;
+    font-size: 14px; /* Tamaño de fuente de la etiqueta */
+    color: #333; /* Color del texto de la etiqueta */
+    margin-bottom: 8px; /* Margen inferior de 8px */
+    display: block; /* Hace que la etiqueta ocupe toda la línea */
 }
 
+/* Contenedor para campos de entrada con íconos */
 .input-with-icon {
-    position: relative;
+    position: relative; /* Permite posicionar el ícono en relación al input */
 }
 
+/* Estilos para el campo de entrada */
 .input-with-icon input {
-    width: 100%;
-    padding: 10px 40px 10px 15px;
-    font-size: 16px;
-    border: none;
-    border-radius: 10px;
-    background-color: #c6c6c6; 
-    color: #333;
+    width: 100%; /* Ancho completo del contenedor */
+    padding: 10px 40px 10px 15px; /* Relleno para el campo de entrada */
+    font-size: 16px; /* Tamaño de fuente del texto dentro del input */
+    border: none; /* Sin borde predeterminado */
+    border-radius: 10px; /* Bordes redondeados */
+    background-color: #c6c6c6; /* Color de fondo del input */
+    color: #333; /* Color del texto dentro del input */
 }
 
+/* Estilos para los íconos dentro de los campos de entrada */
 .input-with-icon i {
-    position: absolute;
-    top: 50%;
-    right: 15px;
-    transform: translateY(-50%);
-    font-size: 18px;
-    color: #555;
+    position: absolute; /* Permite posicionar el ícono de forma absoluta */
+    top: 50%; /* Centra verticalmente el ícono */
+    right: 15px; /* Posiciona el ícono a la derecha */
+    transform: translateY(-50%); /* Ajusta la posición del ícono para centrarlo */
+    font-size: 18px; /* Tamaño del ícono */
+    color: #555; /* Color del ícono */
 }
 
+/* Estilos para los botones */
 button {
-    width: 100%;
-    padding: 12px;
-    background-color: #ff914d; 
-    color: white;
-    border: none;
-    border-radius: 20px;
-    font-size: 16px;
-    cursor: pointer;
-    margin-top: 20px;
+    width: 100%; /* Ancho completo del contenedor */
+    padding: 12px; /* Relleno interno del botón */
+    background-color: #ff914d; /* Color de fondo del botón */
+    color: white; /* Color del texto del botón */
+    border: none; /* Sin borde */
+    border-radius: 20px; /* Bordes redondeados */
+    font-size: 16px; /* Tamaño de fuente del texto del botón */
+    cursor: pointer; /* Cambia el cursor al pasar sobre el botón */
+    margin-top: 20px; /* Margen superior de 20px */
 }
 
+/* Efecto hover para el botón */
 button:hover {
-    background-color: #e67c2a;
+    background-color: #e67c2a; /* Cambia el color de fondo al pasar el cursor */
 }
 
-/* Fuente de los íconos (agregar Font Awesome para los iconos) */
+/* Importación de la fuente de los íconos (Font Awesome) */
 @import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css');
 
-/* Media Queries para pantallas pequeñas */
+/* Media Queries para adaptar el diseño a pantallas pequeñas */
 @media (max-width: 600px) {
     body {
-        padding: 10px;
+        padding: 10px; /* Ajusta el padding del cuerpo */
     }
 
     .login-container {
-        padding: 20px;
+        padding: 20px; /* Ajusta el padding del contenedor */
     }
 
     h2 {
-        font-size: 20px;
-        margin-bottom: 20px;
+        font-size: 20px; /* Reduce el tamaño de fuente del encabezado */
+        margin-bottom: 20px; /* Ajusta el margen inferior del encabezado */
     }
 
     .input-container label {
-        font-size: 12px;
+        font-size: 12px; /* Reduce el tamaño de fuente de la etiqueta */
     }
 
     .input-with-icon input {
-        font-size: 14px;
-        padding: 8px 35px 8px 10px;
+        font-size: 14px; /* Reduce el tamaño de fuente del input */
+        padding: 8px 35px 8px 10px; /* Ajusta el padding del input */
     }
 
     button {
-        padding: 10px;
-        font-size: 14px;
+        padding: 10px; /* Ajusta el padding del botón */
+        font-size: 14px; /* Reduce el tamaño de fuente del botón */
     }
 }
+
 /* Estilo para los mensajes de error */
 .error-message {
-    color: red;
-    font-size: 12px;
+    color: red; /* Establece el color del mensaje de error a rojo */
+    font-size: 12px; /* Tamaño de fuente del mensaje de error */
     display: none; /* Oculto por defecto */
 }
 
-/* Estilo para los campos con error */
+/* Estilo para los campos de entrada con error */
 .input-with-icon input.error {
-    border: 2px solid red;
-    background-color: #ffcccc; /* Fondo rojo claro */
-    color: red;
+    border: 2px solid red; /* Establece un borde rojo para indicar error */
+    background-color: #ffcccc; /* Establece un fondo rojo claro para el campo de entrada */
+    color: red; /* Cambia el color del texto a rojo */
 }
-

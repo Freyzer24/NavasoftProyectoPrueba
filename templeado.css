@@ -1,63 +1,66 @@
 @font-face {
-    font-family: 'Averta';
-    src: url('./AvertaDemoPE-ExtraboldItalic.otf') format('opentype');
-    font-weight: bold;
-    font-style: italic;
+    font-family: 'Averta'; /* Nombre de la fuente */
+    src: url('./AvertaDemoPE-ExtraboldItalic.otf') format('opentype'); /* Ruta y formato de la fuente */
+    font-weight: bold; /* Grosor de la fuente */
+    font-style: italic; /* Estilo de la fuente */
 }
+
+
 * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
+    margin: 0; /* Elimina los márgenes predeterminados */
+    padding: 0; /* Elimina el espaciado interno predeterminado */
+    box-sizing: border-box; /* Incluye el padding y el borde en el ancho y alto total de los elementos */
 }
 
 body {
-    font-family: 'Averta', sans-serif;
-    background-color: #5c7e98;
-    color: #ffffff;
+    font-family: 'Averta', sans-serif; /* Aplica la fuente personalizada al cuerpo */
+    background-color: #5c7e98; /* Color de fondo de la página */
+    color: #ffffff; /* Color del texto */
 }
-.logo{
-    margin-left: 130px;
-    width: 20px;
+.logo {
+    margin-left: 130px; /* Espacio a la izquierda del logo */
+    width: 20px; /* Ancho del logo */
 }
+
 
 /* Barra de navegación */
 .navbar {
-    background-color: #5c7e98;
-    color: #ffffff;
-    padding: 15px;
-    display: flex;
-    align-items: center;
-    text-align: center;
+    background-color: #5c7e98; /* Color de fondo de la barra de navegación */
+    color: #ffffff; /* Color del texto */
+    padding: 15px; /* Espaciado interno */
+    display: flex; /* Utiliza un contenedor flex para alineación */
+    align-items: center; /* Alinea los elementos verticalmente */
+    text-align: center; /* Alinea el texto al centro */
 }
-.navbar img{
-    width: 95px;
-    transition: transform 0.3s ease; 
+
+.navbar img {
+    width: 95px; /* Ancho de la imagen del logo */
+    transition: transform 0.3s ease; /* Transición suave para el efecto de escalado */
 }
+
 .navbar img:hover {
-    transform: scale(1.2); /* Aumenta el tamaño al 120% */
-    filter: brightness(10) saturate(90%) invert(62%) sepia(96%) saturate(593%) hue-rotate(1deg) brightness(95%) contrast(101%);
+    transform: scale(1.2); /* Aumenta el tamaño de la imagen al 120% al pasar el cursor */
+    filter: brightness(10) saturate(90%) invert(62%) sepia(96%) saturate(593%) hue-rotate(1deg) brightness(95%) contrast(101%); /* Efectos de filtro aplicados al pasar el cursor */
 }
 
 .nav-links {
-    list-style: none;
-    display: flex;
+    list-style: none; /* Elimina los puntos de la lista */
+    display: flex; /* Utiliza un contenedor flex para los elementos de la lista */
 }
 
 .nav-links li {
-   
-    margin-left: 130px;
-    transition: background-color 0.8s ease, color 0.8s ease;
-}
-.nav-links li :hover{
-    color: hsl(34, 98%, 53%);
-    border-radius: 10px;
+    margin-left: 130px; /* Espacio a la izquierda de cada enlace */
+    transition: background-color 0.8s ease, color 0.8s ease; /* Transición suave para cambios de color de fondo y texto */
 }
 
+.nav-links li:hover {
+    color: hsl(34, 98%, 53%); /* Color del texto al pasar el cursor */
+    border-radius: 10px; /* Bordes redondeados al pasar el cursor */
+}
 
 .nav-links a {
-    font-family: 'Averta', sans-serif;
-    font-size: 35px;
-    color: rgb(255, 255, 255);
-    text-decoration: none;
+    font-family: 'Averta', sans-serif; /* Aplica la fuente personalizada a los enlaces */
+    font-size: 35px; /* Tamaño de fuente de los enlaces */
+    color: rgb(255, 255, 255); /* Color del texto de los enlaces */
+    text-decoration: none; /* Sin subrayado en los enlaces */
 }
-
