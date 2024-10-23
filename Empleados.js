@@ -96,7 +96,7 @@ window.onload = function() {
     listaEnlazada.cargarDesdeLocalStorage();
 };
 
-function guardarDatos() {
+/*function guardarDatos() {
     // Capturamos los valores del formulario
     const nombre = document.getElementById('nombre').value;
     const telefono = document.getElementById('telefono').value;
@@ -105,7 +105,45 @@ function guardarDatos() {
     const rol = document.getElementById('rol').value;
     const password = document.getElementById('password').value;
     
+    
     // Creamos el objeto con los valores capturados
+    const registro = {
+        nombre: nombre,
+        telefono: telefono,
+        correo: correo,
+        usuario: usuario,
+        rol: rol,
+        password: password
+    };
+
+    if (nodoAEditar) {
+        // Si estamos editando un registro existente, actualizamos el nodo
+        nodoAEditar.data = registro;
+        nodoAEditar = null;  // Reiniciamos la variable después de editar
+        // Guardamos los cambios en localStorage
+        listaEnlazada.guardarEnLocalStorage();
+    } else {
+        // Si no estamos editando, agregamos un nuevo nodo a la lista
+        listaEnlazada.agregar(registro);
+    }
+
+    // Mostramos la lista enlazada en la página
+    listaEnlazada.mostrar();
+
+    // Limpiamos el formulario
+    resetForm();
+}*/
+
+function guardarDatos() {
+    // Capturamos los valores del formulario
+    const nombre = 'Nombre Predeterminado';
+    const telefono = '123456789';
+    const correo = 'default@example.com';
+    const usuario ='usuarioPredeterminado';
+    const rol =  'usuario';  // Puede ser 'admin' o 'usuario'
+    const password = 'contraseña123';
+
+    // Creamos el objeto con los valores capturados o predeterminados
     const registro = {
         nombre: nombre,
         telefono: telefono,
@@ -232,7 +270,7 @@ const supadministrador = {
 
 // Función para procesar el login
 function processLogin(event) {
-    event.preventDefault(); // Evitar que el formulario se envíe
+    event.preventDefault(); // Evitar que el formulario se envíe automáticamente
 
     // Obtener los valores ingresados
     const username = document.getElementById('username').value;
@@ -252,38 +290,45 @@ function processLogin(event) {
 
     let hasError = false; // Bandera para saber si hay algún error
 
-    // Verificar si es Admin
-    if (username === admin.username && password === admin.password) {
-        window.location.href = "indexadmin.html"; // Redirigir a la página de Admin
-    }
-    // Verificar si es Empleado
-    else if (username === empleado.username && password === empleado.password) {
-        window.location.href = "indexempleado.html"; // Redirigir a la página de Empleado
-    }
-    // Verificar si es Visualizador
-    else if (username === visualizador.username && password === visualizador.password) {
-        window.location.href = "indexempleado.html"; // Redirigir a la página de Visualizador
-    }
-    // Verificar si es Super Administrador
-    else if (username === supadministrador.username && password === supadministrador.password) {
-        window.location.href = "indexempleado.html"; // Redirigir a la página de Super Admin
-    } 
-   
-    // Si no coincide, mostrar los errores
-    else {
-        if (username !== admin.username && username !== empleado.username && username !== visualizador.username && username !== supadministrador.username) {
+    // Buscamos el nodo correspondiente al usuario ingresado
+    const nodoEncontrado = listaEnlazada.buscarPorNombre(username);
+
+    // Verificar si el usuario fue encontrado y la contraseña coincide
+    if (nodoEncontrado && nodoEncontrado.data.password === password) {
+        const rol = nodoEncontrado.data.rol; // Obtenemos el rol del usuario
+
+        // Redirigir según el rol
+        if (rol === 'admin') {
+            window.location.href = "indexadmin.html"; // Redirigir a la página de Admin
+        } else if (rol === 'empleado') {
+            window.location.href = "indexempleado.html"; // Redirigir a la página de Empleado
+        } else if (rol === 'visualizador') {
+            window.location.href = "indexvisualizador.html"; // Redirigir a la página de Visualizador
+        } else if (rol === 'supadmin') {
+            window.location.href = "indexsuperadmin.html"; // Redirigir a la página de Super Admin
+        } else {
+            window.location.href = "indexusuario.html"; // Redirigir a la página de usuario normal
+        }
+    } else {
+        // Si no coincide, mostrar los errores
+        if (!nodoEncontrado) {
             usernameInput.classList.add('error');
             usernameError.style.display = 'block';
             hasError = true;
         }
 
-        if (password !== admin.password && password !== empleado.password && password !== visualizador.password && password !== supadministrador.password) {
+        if (nodoEncontrado && nodoEncontrado.data.password !== password) {
             passwordInput.classList.add('error');
             passwordError.style.display = 'block';
             hasError = true;
         }
+
+        if (hasError) {
+            alert('Usuario o contraseña incorrectos.');
+        }
     }
 }
+
 
 
 

@@ -62,49 +62,60 @@ input:focus {
     margin-top: 10px; /* Espacio arriba de los botones */
 }
 
-button {
-    font-family: 'Nunito', sans-serif;
-    padding: 12px 18px; /* Espaciado interno del botón */
-    border: none; /* Sin borde */
-    border-radius: 80px; /* Bordes redondeados */
-    cursor: pointer; /* Muestra cursor de mano */
-    font-size: 18px; /* Tamaño de la fuente */
-    font-weight: bold; /* Negrita para el texto */
-    transition: background-color 0.8s ease; /* Transición suave en el cambio de color */
-}
+.button {
+    width: 150px;
+    height: 60px;
+    border: 3px solid #9a0000;
+    border-radius: 45px;
+    transition: all 0.3s;
+    cursor: pointer;
+    background: white;
+    font-size: 1.2em;
+    font-weight: 550;
+  }
+  
+  .button:hover {
+    background: #870000;
+    color: white;
+    font-size: 1.5em;
+  }
 
-/* Estilo del botón "Limpiar" */
-.btn-clear {
-    background-color: #ff2b1c; /* Fondo del botón */
-    color: rgb(95, 0, 0); /* Color del texto */
-}
+  .buttonDos {
+    width: 150px;
+    height: 60px;
+    border: 3px solid #9b9902;
+    border-radius: 45px;
+    transition: all 0.3s;
+    cursor: pointer;
+    background: white;
+    font-size: 1.2em;
+    font-weight: 550;
+  }
+  
+  .buttonDos:hover {
+    background: #8d8a00;
+    color: white;
+    font-size: 1.5em;
+  }
 
-/* Efecto hover para el botón "Limpiar" */
-.btn-clear:hover {
-    background-color: #d32f2f; /* Cambia el fondo al pasar el ratón */
-}
 
-/* Estilo del botón "Editar" */
-.btn-edit {
-    background-color: #ff9800; /* Fondo del botón */
-    color: #723601; /* Color del texto */
-}
-
-/* Efecto hover para el botón "Editar" */
-.btn-edit:hover {
-    background-color: #e67e22; /* Cambia el fondo al pasar el ratón */
-}
-
-/* Estilo del botón "Guardar" */
-.btn-save {
-    background-color: #4CAF50; /* Fondo del botón */
-    color: rgb(32, 100, 14); /* Color del texto */
-}
-
-/* Efecto hover para el botón "Guardar" */
-.btn-save:hover {
-    background-color: #45a049; /* Cambia el fondo al pasar el ratón */
-}
+  .buttonTres {
+    width: 150px;
+    height: 60px;
+    border: 3px solid #006803;
+    border-radius: 45px;
+    transition: all 0.3s;
+    cursor: pointer;
+    background: rgb(255, 255, 255);
+    font-size: 1.2em;
+    font-weight: 550;
+  }
+  
+  .buttonTres:hover {
+    background: #006803;
+    color: white;
+    font-size: 1.5em;
+  }
 
 /* Diseño responsive para pantallas pequeñas (máximo 600px) */
 @media (max-width: 600px) {
