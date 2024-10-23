@@ -1,3 +1,10 @@
+@font-face {
+    font-family: 'Averta';
+    src: url('./fonts/AvertaDemoPE-ExtraboldItalic.otf') format('opentype');
+    font-weight: bold;
+    font-style: italic;
+}
+
 body {
     font-family: 'Nunito', sans-serif; /* Define la fuente principal */
     margin: 20px; /* Margen alrededor del contenido */
@@ -6,7 +13,7 @@ body {
 }
 
 h1 {
-    font-family: "Nunito", sans-serif;
+    font-family: "Averta", sans-serif;
     text-align: center; /* Centra el título */
     color: #444; /* Color del título */
     font-size: 2.5rem; /* Tamaño del título */

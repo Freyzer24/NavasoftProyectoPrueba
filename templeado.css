@@ -1,4 +1,9 @@
-
+@font-face {
+    font-family: 'Averta';
+    src: url('./AvertaDemoPE-ExtraboldItalic.otf') format('opentype');
+    font-weight: bold;
+    font-style: italic;
+}
 * {
     margin: 0;
     padding: 0;
@@ -6,7 +11,7 @@
 }
 
 body {
-    font-family: Arial, sans-serif;
+    font-family: 'Averta', sans-serif;
     background-color: #5c7e98;
     color: #ffffff;
 }
@@ -50,7 +55,7 @@ body {
 
 
 .nav-links a {
-    font-family: "Lilita One", sans-serif;
+    font-family: 'Averta', sans-serif;
     font-size: 35px;
     color: rgb(255, 255, 255);
     text-decoration: none;

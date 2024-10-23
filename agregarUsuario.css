@@ -1,4 +1,12 @@
 /* Estilos generales para todos los elementos */
+@font-face {
+    font-family: 'Averta';
+    src: url('./fonts/AvertaDemoPE-ExtraboldItalic.otf') format('opentype');
+    font-weight: bold;
+    font-style: italic;
+}
+
+
 * {
     box-sizing: border-box; /* Asegura que el padding y el border se incluyan en las dimensiones del elemento */
     margin: 0; /* Elimina el margen por defecto */
@@ -14,7 +22,7 @@ body {
 }
 
 h1 {
-    font-family: "Lilita One", sans-serif;
+    font-family: "Averta", sans-serif;
     text-align: center; /* Centra el título */
     margin-bottom: 20px; /* Espacio debajo del título */
     color: #333; /* Color del texto */
