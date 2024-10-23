@@ -247,25 +247,30 @@ function cambiarFoto(input, imgElementId) {
   // Crear objeto Admin
 const admin = {
     username: "admin",
-    password: "admin123"
+    password: "admin123",
+    role: "admin"
+    
 };
 
 // Crear objeto Empleado
 const empleado = {
     username: "empleado",
-    password: "empleado123"
+    password: "empleado123",
+    role: "empleado"
 };
 
 // Crear objeto Visualizador
 const visualizador = {
     username: "visualizador",
-    password: "visualizador123"
+    password: "visualizador123",
+    role: "visualizador"
 };
 
 // Crear objeto Super Administrador
 const supadministrador = {
     username: "supadministrador",
-    password: "supadministrador"
+    password: "supadministrador",
+    role: "supadministrador"
 };
 
 // Función para procesar el login
@@ -327,6 +332,12 @@ function processLogin(event) {
             alert('Usuario o contraseña incorrectos.');
         }
     }
+
+if (!userFound) {
+    document.getElementById('usernameError').style.display = 'block';
+} else if (!correctPassword) {
+    document.getElementById('passwordError').style.display = 'block';
+}
 }
 
 
@@ -370,8 +381,19 @@ function drawChart() {
 }
 
 // Función para agregar nuevas tareas
+
+let currentUser = visualizador; // Cambia esto según el usuario actual
+
+// Función para agregar nuevas tareas
 document.getElementById('task_form').addEventListener('submit', function (event) {
     event.preventDefault(); // Evitar recargar la página
+
+    // Verificar si el usuario tiene permiso para agregar tareas
+    if (currentUser.role === 'visualizador') {
+        alert("No tienes permisos para agregar tareas.");
+        return; // Salir de la función si el usuario es un visualizador
+    }
+
     let taskName = document.getElementById('task_name').value;
     let taskStart = new Date(document.getElementById('task_start').value);
     let taskEnd = new Date(document.getElementById('task_end').value);
@@ -385,35 +407,6 @@ document.getElementById('task_form').addEventListener('submit', function (event)
 
     // Limpiar el formulario
     document.getElementById('task_form').reset();
-});
-
-// Función para descargar las tareas
-document.getElementById('downloadBtn').addEventListener('click', function() {
-    const formattedTasks = tasks.map(task => {
-        return [
-            `ID: "${task[0]}"`, // ID
-            `Nombre: "${task[1]}"`, // Nombre
-            `Recurso: "${task[2]}"`, // Recurso
-            `Fecha de inicio: "${task[3].toISOString().split('T')[0]}"`, // Inicio
-            `Fecha de fin: "${task[4].toISOString().split('T')[0]}"`, // Fin
-            `Porcentaje completado: "${task[6]}"` // Porcentaje completado
-        ].join(', ');
-    }).join('\n');
-
-    // Crear un blob con el texto
-    const blob = new Blob([formattedTasks], { type: 'text/csv' });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = 'tareas.csv'; // Nombre del archivo
-
-    // Simular clic en el enlace
-    document.body.appendChild(a);
-    a.click();
-
-    // Limpiar
-    document.body.removeChild(a);
-    URL.revokeObjectURL(url);
 });
 
 // Cerrar el modal si se hace clic fuera del contenido del modal
