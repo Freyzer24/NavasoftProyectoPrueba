@@ -6,6 +6,7 @@
     <title>Diagrama de Gantt Interactivo</title>
     <link rel="stylesheet" href="diagramaDeGantt.css">
     <link rel="stylesheet" href="diagramaDeGantt.js">
+    <link rel="stylesheet" href="Excel.php">
     <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
     <script type="text/javascript" defer></script>
     <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700&display=swap" rel="stylesheet">
@@ -58,8 +59,9 @@
         <!-- Área donde se generará el diagrama de Gantt -->
         <div id="gantt_chart"></div> 
         <div class="documento">
-        <button id="downloadBtn">Descarga con formato XLSX</button>
-        <button id="downloadBtn">Descarga con formato PDF</button></div>
+            <button type="button" onClick="GenerarExcel()" id="imp" class="btn btn-warning waves-effect waves-light">
+                <i class="glyphicon glyphicon-save"></i>
+                    Descarga con formato XLSX</button>
     </center>
     
 </body>
