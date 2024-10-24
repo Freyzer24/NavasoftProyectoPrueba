@@ -78,6 +78,20 @@ document.getElementById('downloadBtn').addEventListener('click', function() {
     document.body.removeChild(a);
     URL.revokeObjectURL(url);
 });
+
+function GenerarExcel() {  
+    var usuario  = $("select#selUsuario option:selected").attr('value');		 
+    var fini     = $("#dtpFechaInicio").val();
+    var ffin     = $("#dtpFechaFin").val(); 
+    var proyecto  = $("#proyectoNombre").val(); // Asumiendo que tienes un campo para el nombre del proyecto
+    var porcentaje = $("#proyectoPorcentaje").val(); // Asumiendo que tienes un campo para el porcentaje del proyecto
+
+    // Agrega los parámetros del proyecto y porcentaje a la URL
+    var url = 'Excel.php?id=' + usuario + '&fi=' + fini + '&ff=' + ffin + '&proyecto=' + encodeURIComponent(proyecto) + '&porcentaje=' + encodeURIComponent(porcentaje);
+    
+    window.open(url, '_blank');		  
+}
+
 // Cerrar el modal si se hace clic fuera del contenido del modal
 window.addEventListener("click", function(event) {
     if (event.target === confirmationModal) {
