@@ -96,7 +96,7 @@ window.onload = function() {
     listaEnlazada.cargarDesdeLocalStorage();
 };
 
-/*function guardarDatos() {
+function guardarDatos() {
     // Capturamos los valores del formulario
     const nombre = document.getElementById('nombre').value;
     const telefono = document.getElementById('telefono').value;
@@ -132,7 +132,7 @@ window.onload = function() {
 
     // Limpiamos el formulario
     resetForm();
-}*/
+}
 
 function guardarDatos() {
     // Capturamos los valores del formulario
