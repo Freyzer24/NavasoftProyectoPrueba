@@ -8,9 +8,8 @@ def index():
 
 @app.route('/procesar', methods=['POST'])
 def procesar():
-    # Obtén los datos del formulario HTML usando request.form
     nombre = request.form.get('nombre')
-    mensaje = f"Hola, {nombre}!"
+    mensaje = f"Hola, {nombre}! Gracias por enviar el formulario."
     return render_template('index.html', mensaje=mensaje)
 
 if __name__ == '__main__':
