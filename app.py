@@ -14,3 +14,7 @@ def procesar():
 
 if __name__ == '__main__':
     app.run(debug=True)
+
+import mysql.connector
+conexion= mysql.connector.connect(user='root', password='valuapop', host='localhost', database='navasoft', port='3306' )
+print(conexion)
