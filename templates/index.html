@@ -1,90 +1,47 @@
 <!DOCTYPE html>
 <html lang="es">
   <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>formulario de registro</title>
+    <meta charset="UTF-8">
+    <title>Gestión de Registros</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/estilo.css') }}">
+</head>
+<body>
+    <h1>Formulario de Registro</h1>
+    <form action="{{ url_for('guardar') }}" method="POST">
+        <label for="nombre">Nombre:</label>
+        <input type="text" id="nombre" name="nombre" required><br>
+        
+        <label for="telefono">Teléfono:</label>
+        <input type="tel" id="telefono" name="telefono" required><br>
+        
+        <label for="correo">Correo electrónico:</label>
+        <input type="email" id="correo" name="correo" required><br>
+        
+        <label for="usuario">Usuario:</label>
+        <input type="text" id="usuario" name="usuario" required><br>
+        
+        <label for="rol">Rol:</label>
+        <select id="rol" name="rol">
+            <option value="super_administrador">Super Administrador</option>
+            <option value="administrador">Administrador</option>
+            <option value="visualizar">Visualizador</option>
+            <option value="empleado">Empleado</option>
+        </select><br>
+        
+        <label for="password">Contraseña:</label>
+        <input type="password" id="password" name="password" required><br>
 
-    <style>
-      body {
-        background-color: #87ccc1;
-        margin: 0;
-        padding: 0;
-      }
-      h1 {
-        text-align: center;
-        width: 50%;
-        margin: auto;
-        margin-top: 30px;
-      }
-      table {
-        border: 3px solid #cca633;
-        padding: 20px 50px;
-        margin-top: 20px;
-        border-radius: 5px;
-        background-color: #edf797;
-      }
-    </style>
-  </head>
-  <body>
-    <h1>Formulario de registro</h1>
-    <form action="registro.php" name="" method="POST">
-      <table border="0" align="center">
-        <tr>
-          <td>
-            Nombre y Apellido:
-          </td>
-          <td>
-            <label for="name"></label>
-            <input type="text" name="nombre" id="name" required  />
-          </td>
-        </tr>
-        <tr>
-          <td>
-            Nombre de Usuario:
-          </td>
-          <td>
-            <label for="user"></label>
-            <input type="text" name="usuario" id="user" required  />
-          </td>
-        </tr>
-        <tr>
-          <td>
-            Contraseña:
-          </td>
-          <td>
-            <label for="password"></label>
-            <input type="password" name="contraseña" id="password"  required />
-          </td>
-        </tr>
-        <!--<tr>
-          <td>
-            Repetir contraseña:
-          </td>
-          <td>
-            <label for="rep_pasword"></label>
-            <input type="pasword" name="rep_contraseña" id="rep_pasword"  required />
-          </td>
-        </tr>-->
-        <tr>
-          <td>&nbsp;</td>
-          <td>&nbsp;</td>
-        </tr>
-        <tr>
-          <td align="center">
-            <input
-              type="submit"
-              name="enviar"
-              id="enviar"
-              value="Registrarse"
-            />
-          </td>
-          <td align="center">
-            <input type="reset" name="borrar" id="borrar" value="Restablecer" />
-          </td>
-        </tr>
-      </table>
-    </form>
-  </body>
-</html>
-
+        <button type="submit">Guardar</button>
+        <h2>Registros Guardados</h2>
+        <ul>
+            {% for registro in registros %}
+                <li>{{ registro.nombre }} - {{ registro.telefono }} - {{ registro.correo }}
+                    <form action="{{ url_for('editar', id=registro.id) }}" method="POST" style="display:inline;">
+                        <button type="submit">Editar</button>
+                    </form>
+                    <a href="{{ url_for('eliminar', id=registro.id) }}">Eliminar</a>
+                </li>
+            {% endfor %}
+        </ul>
+    </body>
+    </html>
