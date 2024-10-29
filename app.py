@@ -1,13 +1,12 @@
-from flask import Flask, render_template, request, redirect, url_for, flash;
-from flask_sqlalchemy import SQLAlchemy;
+from flask import Flask, render_template, request, redirect, url_for, flash
+from flask_sqlalchemy import SQLAlchemy
 
 app = Flask(__name__)
 app.secret_key = 'super_secret_key'  # Cambia esto en producción
 
 # Configuración de la conexión a MySQL
-app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+mysqlconnector://practicantes:Ora$sys1@u1268360.onlinehome-server.com/navasoftsoluciones'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+mysqlconnector://root:24012006@localhost/navasoft'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-
 db = SQLAlchemy(app)
 
 # Modelo para los registros
@@ -24,8 +23,34 @@ class Registro(db.Model):
         return f'<Registro {self.nombre}>'
 
 # Crear la base de datos y las tablas
+def insertar_usuarios_prueba():
+    # Lista de usuarios de prueba
+    usuarios_prueba = [
+        {'nombre': 'Admin User', 'telefono': '1234567890', 'correo': 'admin@example.com', 'usuario': 'admin', 'rol': 'admin', 'password': 'admin123'},
+        {'nombre': 'Empleado User', 'telefono': '0987654321', 'correo': 'empleado@example.com', 'usuario': 'empleado', 'rol': 'empleado', 'password': 'empleado123'},
+        {'nombre': 'Viewer User', 'telefono': '5555555555', 'correo': 'visualizador@example.com', 'usuario': 'visualizador', 'rol': 'visualizador', 'password': 'visualizador123'},
+    ]
+
+    # Comprobar si la tabla ya tiene registros
+    if Registro.query.count() == 0:
+        for usuario in usuarios_prueba:
+            nuevo_registro = Registro(
+                nombre=usuario['nombre'],
+                telefono=usuario['telefono'],
+                correo=usuario['correo'],
+                usuario=usuario['usuario'],
+                rol=usuario['rol'],
+                password=usuario['password']
+            )
+            db.session.add(nuevo_registro)
+        db.session.commit()
+        print("Usuarios de prueba insertados correctamente.")
+    else:
+        print("Ya existen registros en la base de datos. No se insertaron usuarios de prueba.")
+
 with app.app_context():
     db.create_all()
+    insertar_usuarios_prueba()
 
 # Ruta para mostrar el formulario
 @app.route('/')
