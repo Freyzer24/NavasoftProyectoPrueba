@@ -3,7 +3,7 @@
 body {
     font-family: 'Nunito', sans-serif;
    
-   margin-top: 5%;
+   
     padding: 0;
     background-color: #a0b7ca;
     
@@ -19,7 +19,7 @@ body {
 .separar {
     margin-top: 2%;
     display: flex;
-    gap: 15px;
+    gap: 1px;
     width: 97vw;
   }
 a{
@@ -174,7 +174,8 @@ a{
     width: 70%;
   }
   .columna p {
-    margin: 0 10px; /* Márgenes laterales para que el texto no esté pegado a los bordes */
+    text-align: left;
+   
     text-align: justify; /* Alinear el texto de forma justificada */
     font-size: 18px; /* Tamaño de fuente ajustado para mejor legibilidad */
    
@@ -197,7 +198,8 @@ a{
 
 /* Contenido de la barra final */
 .footer-content p {
-  margin: 5px 0; /* Márgenes entre los textos */
+  margin: 10px 0; /* Márgenes entre los textos */
+  font-size: larger;
 }
 body {
   font-family: 'Nunito', sans-serif;
