@@ -5,7 +5,7 @@ app = Flask(__name__)
 app.secret_key = 'super_secret_key'  # Cambia esto en producción
 
 # Configuración de la conexión a MySQL
-app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+mysqlconnector://root:24012006@localhost/navasoft'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+mysqlconnector://practicantes:Ora$sys1@practicantes/navasoftsoluciones'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db = SQLAlchemy(app)
