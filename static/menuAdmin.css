@@ -229,7 +229,7 @@ body {
 .carrusel h1 {
   border-bottom: 1px solid #C4CBCE;
     padding-bottom: .2em;
-  text-align: center;
+  text-align: left;
   color: #fff; /* White text for title */
   font-size: 36px;
   margin-bottom: 20px;
