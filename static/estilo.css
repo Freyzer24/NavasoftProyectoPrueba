@@ -34,7 +34,8 @@ h1 {
 /* Estilo del formulario */
 form {
     background-color: white; /* Fondo blanco para el formulario */
-    padding: 70px; /* Espaciado interno del formulario */
+    padding: 100px; /* Espaciado interno del formulario */
+    margin: 5% 25%;
     border-radius: 8px; /* Bordes redondeados */
     box-shadow: 0 4px 7px rgba(0, 0, 0, 0.1); /* Sombra ligera */
     width: 100%; /* Ancho completo */
@@ -44,7 +45,7 @@ form {
 
 /* Estilo de las etiquetas */
 label {
-    margin-bottom: 8px; /* Espacio debajo de las etiquetas */
+    margin-bottom: 10px; /* Espacio debajo de las etiquetas */
     font-weight: bold; /* Texto en negrita */
     color: #424242; /* Color del texto */
 }
