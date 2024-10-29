@@ -1,0 +1,183 @@
+/* Fuentes personalizadas */
+@font-face {
+    font-family: 'Averta'; /* Nombre de la fuente */
+    src: url('./fonts/AvertaDemoPE-ExtraboldItalic.otf') format('opentype'); /* Ruta a la fuente */
+    font-weight: bold; /* Grosor de la fuente */
+    font-style: italic; /* Estilo de la fuente */
+}
+
+/* Estilos generales para todos los elementos */
+* {
+    box-sizing: border-box; /* Incluye padding y border en el ancho total */
+    margin: 0; /* Elimina margen por defecto */
+    padding: 0; /* Elimina padding por defecto */
+}
+
+/* Estilo del cuerpo */
+body {
+    font-family: 'Nunito', sans-serif; /* Fuente principal del cuerpo */
+    background-color: #e4e3e3da; /* Color de fondo */
+    justify-content: center; /* Centra el contenido horizontalmente */
+    align-items: center; /* Centra el contenido verticalmente */
+    height: 100vh; /* Altura del cuerpo igual a la ventana del navegador */
+}
+
+/* Estilo del título */
+h1 {
+    font-family: "Averta", sans-serif; /* Fuente para el título */
+    text-align: center; /* Centra el texto */
+    margin-bottom: 20px; /* Espacio debajo del título */
+    color: #333; /* Color del texto */
+    margin-top: 1%; /* Espacio arriba del título */
+}
+
+/* Estilo del formulario */
+form {
+    background-color: white; /* Fondo blanco para el formulario */
+    padding: 70px; /* Espaciado interno del formulario */
+    border-radius: 8px; /* Bordes redondeados */
+    box-shadow: 0 4px 7px rgba(0, 0, 0, 0.1); /* Sombra ligera */
+    width: 100%; /* Ancho completo */
+    max-width: 550px; /* Ancho máximo del formulario */
+    text-align: center; /* Centra el contenido del formulario */
+}
+
+/* Estilo de las etiquetas */
+label {
+    margin-bottom: 8px; /* Espacio debajo de las etiquetas */
+    font-weight: bold; /* Texto en negrita */
+    color: #424242; /* Color del texto */
+}
+
+/* Estilo de los inputs de texto, email, password y tel */
+input[type="text"], input[type="email"], input[type="password"], input[type="tel"] {
+    width: 100%; /* Ancho completo del input */
+    padding: 10px; /* Espacio interior del input */
+    margin-bottom: 20px; /* Espacio debajo de cada input */
+    border: 1px solid #ddd; /* Borde del input */
+    border-radius: 80px; /* Bordes redondeados */
+    font-size: 16px; /* Tamaño de fuente */
+    background-color: #fafafa; /* Color de fondo del input */
+    transition: all 0.3s ease; /* Transición suave al enfocar */
+}
+
+/* Efecto al enfocar los inputs */
+input:focus {
+    border-color: #007BFF; /* Color del borde al enfocar */
+    box-shadow: 0 0 8px rgba(0, 123, 255, 0.2); /* Sombra al enfocar */
+    background-color: #fff; /* Fondo blanco al enfocar */
+}
+
+/* Contenedor de botones */
+.button-container {
+    display: flex; /* Usa flexbox para los botones */
+    justify-content: center; /* Centra los botones horizontalmente */
+    gap: 10px; /* Espacio entre botones */
+    margin-top: 10px; /* Espacio arriba de los botones */
+}
+
+/* Estilo general de los botones */
+button {
+    font-family: 'Nunito', sans-serif; /* Fuente para los botones */
+    padding: 12px 18px; /* Espaciado interno del botón */
+    border: none; /* Sin borde */
+    border-radius: 80px; /* Bordes redondeados */
+    cursor: pointer; /* Muestra cursor de mano */
+    font-size: 18px; /* Tamaño de la fuente */
+    font-weight: bold; /* Negrita para el texto */
+    transition: background-color 0.8s ease; /* Transición suave en el cambio de color */
+}
+
+/* Estilo del botón "Limpiar" */
+.btn-clear {
+    background-color: #ff2b1c; /* Fondo del botón */
+    color: rgb(95, 0, 0); /* Color del texto */
+}
+
+/* Efecto hover para el botón "Limpiar" */
+.btn-clear:hover {
+    background-color: #d32f2f; /* Cambia el fondo al pasar el ratón */
+}
+
+/* Estilo del botón "Editar" */
+.btn-edit {
+    background-color: #ff9800; /* Fondo del botón */
+    color: #723601; /* Color del texto */
+}
+
+/* Efecto hover para el botón "Editar" */
+.btn-edit:hover {
+    background-color: #e67e22; /* Cambia el fondo al pasar el ratón */
+}
+
+/* Estilo del botón "Guardar" */
+.btn-save {
+    background-color: #4CAF50; /* Fondo del botón */
+    color: rgb(32, 100, 14); /* Color del texto */
+}
+
+/* Efecto hover para el botón "Guardar" */
+.btn-save:hover {
+    background-color: #45a049; /* Cambia el fondo al pasar el ratón */
+}
+
+/* Diseño responsive para pantallas pequeñas */
+@media (max-width: 600px) {
+    .buttons {
+        flex-direction: column; /* Apila los botones verticalmente */
+        gap: 10px; /* Espaciado entre los botones */
+    }
+}
+
+/* Estilo para separar columnas en el formulario */
+.separar {
+    margin-top: 1%; /* Margen superior pequeño */
+    display: flex; /* Usa flexbox para dividir en columnas */
+    justify-content: center; /* Centra las columnas horizontalmente */
+    align-items: center; /* Centra las columnas verticalmente */
+}
+
+/* Estilo de las columnas del formulario */
+.columna {
+    display: flex; /* Usa flexbox dentro de la columna */
+    flex-direction: column; /* Elementos uno debajo del otro */
+    justify-content: center; /* Centra el contenido verticalmente */
+    align-items: center; /* Centra el contenido horizontalmente */
+    flex: 9; /* Flexibilidad para ajustar el ancho */
+}
+
+/* Estilo del select (menú desplegable) */
+select {
+    width: 100%; /* Ancho completo del select */
+    padding: 10px; /* Espaciado interno */
+    margin-top: 8px; /* Margen superior */
+    border: 2px solid #ccc; /* Borde del select */
+    border-radius: 80px; /* Bordes redondeados */
+    background-color: #f9f9f9; /* Fondo del select */
+    font-family: 'Nunito', sans-serif; /* Fuente del select */
+    font-size: 16px; /* Tamaño de la fuente */
+    color: #333; /* Color del texto */
+    box-shadow: inset 0 1px 3px rgba(0,0,0,0.1); /* Sombra interna */
+    appearance: none; /* Oculta la flecha predeterminada */
+    cursor: pointer; /* Muestra cursor de mano */
+    transition: border-color 0.3s, box-shadow 0.3s; /* Transición suave */
+}
+
+/* Efecto hover para el select */
+select:hover {
+    border-color: hsl(236, 98%, 53%); /* Cambia el color del borde */
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1); /* Añade sombra interna */
+}
+
+/* Efecto focus para el select */
+select:focus {
+    border-color: hsl(236, 98%, 53%); /* Cambia el borde al enfocar */
+    box-shadow: 0 0 5px hsl(236, 98%, 53%); /* Sombra en foco */
+    outline: none; /* Elimina el contorno predeterminado */
+}
+
+/* Contenedor del select */
+.select-container {
+    position: relative; /* Posición relativa para personalizar select */
+    width: 100%; /* Ancho completo */
+}
