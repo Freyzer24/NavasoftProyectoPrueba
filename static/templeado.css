@@ -53,9 +53,8 @@ body {
     transition: background-color 0.8s ease, color 0.8s ease; /* Transición suave para cambios de color de fondo y texto */
 }
 
-.nav-links li:hover {
+.nav-links li :hover {
     color: hsl(34, 98%, 53%); /* Color del texto al pasar el cursor */
-    border-radius: 10px; /* Bordes redondeados al pasar el cursor */
 }
 
 .nav-links a {
