@@ -245,36 +245,29 @@ function cambiarFoto(input, imgElementId) {
 
 //Login
   // Crear objeto Admin
-const admin = {
-    username: "admin",
-    password: "admin123",
-    role: "admin"
-    
+  const usuarios = {
+    admin: {
+        username: "admin",
+        password: "admin123",
+        rol: "admin"
+    },
+    empleado: {
+        username: "empleado",
+        password: "empleado123",
+        rol: "empleado"
+    },
+    visualizador: {
+        username: "visualizador",
+        password: "visualizador123",
+        rol: "visualizador"
+    },
+    supadministrador: {
+        username: "supadministrador",
+        password: "supadministrador",
+        rol: "supadmin"
+    }
 };
-
-// Crear objeto Empleado
-const empleado = {
-    username: "empleado",
-    password: "empleado123",
-    role: "empleado"
-};
-
-// Crear objeto Visualizador
-const visualizador = {
-    username: "visualizador",
-    password: "visualizador123",
-    role: "visualizador"
-};
-
-// Crear objeto Super Administrador
-const supadministrador = {
-    username: "supadministrador",
-    password: "supadministrador",
-    role: "supadministrador"
-};
-
-// Función para procesar el login
-function processLogin(event) {
+  function processLogin(event) {
     event.preventDefault(); // Evitar que el formulario se envíe automáticamente
 
     // Obtener los valores ingresados
@@ -293,55 +286,43 @@ function processLogin(event) {
     usernameError.style.display = 'none';
     passwordError.style.display = 'none';
 
-    let hasError = false; // Bandera para saber si hay algún error
+    // Comprobar si el usuario existe
+    const usuario = usuarios[username];
 
-    // Buscamos el nodo correspondiente al usuario ingresado
-    const nodoEncontrado = listaEnlazada.buscarPorNombre(username);
-
-    // Verificar si el usuario fue encontrado y la contraseña coincide
-    if (nodoEncontrado && nodoEncontrado.data.password === password) {
-        const rol = nodoEncontrado.data.rol; // Obtenemos el rol del usuario
-
+    if (usuario && usuario.password === password) {
         // Redirigir según el rol
-        if (rol === 'admin') {
-            window.location.href = "indexadmin.html"; // Redirigir a la página de Admin
-        } else if (rol === 'empleado') {
-            window.location.href = "indexempleado.html"; // Redirigir a la página de Empleado
-        } else if (rol === 'visualizador') {
-            window.location.href = "indexvisualizador.html"; // Redirigir a la página de Visualizador
-        } else if (rol === 'supadmin') {
-            window.location.href = "indexsuperadmin.html"; // Redirigir a la página de Super Admin
-        } else {
-            window.location.href = "indexusuario.html"; // Redirigir a la página de usuario normal
+        switch (usuario.rol) {
+            case 'admin':
+                window.location.href = "indexadmin.html"; // Redirigir a la página de Admin
+                break;
+            case 'empleado':
+                window.location.href = "indexempleado.html"; // Redirigir a la página de Empleado
+                break;
+            case 'visualizador':
+                window.location.href = "indexvisualizador.html"; // Redirigir a la página de Visualizador
+                break;
+            case 'supadmin':
+                window.location.href = "indexsuperadmin.html"; // Redirigir a la página de Super Admin
+                break;
+            default:
+                window.location.href = "indexusuario.html"; // Redirigir a la página de usuario normal
+                break;
         }
     } else {
         // Si no coincide, mostrar los errores
-        if (!nodoEncontrado) {
+        if (!usuario) {
             usernameInput.classList.add('error');
             usernameError.style.display = 'block';
-            hasError = true;
         }
 
-        if (nodoEncontrado && nodoEncontrado.data.password !== password) {
+        if (usuario && usuario.password !== password) {
             passwordInput.classList.add('error');
             passwordError.style.display = 'block';
-            hasError = true;
         }
 
-        if (hasError) {
-            alert('Usuario o contraseña incorrectos.');
-        }
+       
     }
-
-if (!userFound) {
-    document.getElementById('usernameError').style.display = 'block';
-} else if (!correctPassword) {
-    document.getElementById('passwordError').style.display = 'block';
 }
-}
-
-
-
 
 
 
