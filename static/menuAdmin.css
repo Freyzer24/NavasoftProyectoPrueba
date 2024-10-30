@@ -17,7 +17,6 @@ body {
   100% { margin-left: -200%; }/* Mantiene la tercera imagen visible */
 }
 .separar {
-    margin-top: 2%;
     display: flex;
     gap: 1px;
     width: 97vw;
@@ -65,7 +64,6 @@ a{
   
   .container {
     display: table-cell;
-    padding: 1em;
     text-align: center;
     vertical-align: middle;
   }
