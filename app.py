@@ -1,5 +1,5 @@
-from flask import Flask, render_template, request, redirect, url_for, flash;
-from flask_sqlalchemy import SQLAlchemy;
+from flask import Flask, render_template, request, redirect, url_for, flash
+from flask_sqlalchemy import SQLAlchemy
 
 app = Flask(__name__)
 app.secret_key = 'super_secret_key'  # Cambia esto en producción
@@ -27,7 +27,7 @@ class Registro(db.Model):
 with app.app_context():
     db.create_all()
 
-# Ruta para mostrar el formulario
+# Ruta para mostrar la página de inicio con todos los registros
 @app.route('/')
 def index():
     registros = Registro.query.all()
@@ -48,7 +48,13 @@ def guardar():
     db.session.commit()
 
     flash('Registro guardado con éxito')
-    return redirect(url_for('index'))
+    return redirect(url_for('mostrar'))  # Redirige a la vista de mostrar registros
+
+# Ruta para mostrar todos los registros (alternativa a index)
+@app.route('/mostrar')
+def mostrar():
+    registros = Registro.query.all()
+    return render_template('mostrar.html', registros=registros)
 
 # Ruta para editar un registro
 @app.route('/editar/<int:id>', methods=['POST'])
@@ -74,13 +80,12 @@ def eliminar(id):
 
     flash('Registro eliminado con éxito')
     return redirect(url_for('index'))
+
+# Ruta para mostrar una lista de usuarios específicos
 @app.route('/usuarios')
 def lista_usuarios():
-    cursor = db.cursor(dictionary=True)
-    cursor.execute("SELECT nombre, rol, telefono FROM registro")
-    usuarios = cursor.fetchall()
-    cursor.close()
-    return render_template('usuarios.html', usuarios=usuarios)
+    registros = Registro.query.with_entities(Registro.nombre, Registro.rol, Registro.telefono).all()
+    return render_template('usuarios.html', usuarios=registros)
 
 if __name__ == '__main__':
     app.run(debug=True)
