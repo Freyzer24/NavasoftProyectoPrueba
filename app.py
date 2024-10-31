@@ -31,7 +31,7 @@ with app.app_context():
 # Ruta para mostrar la página de inicio con todos los registros
 @app.route('/')
 def index():
-    return render_template('indexadmin.html')
+    return render_template('login.html')
 
 @app.route('/tAdmin')
 def tAdmin():
@@ -42,22 +42,31 @@ def menuAdmin():
     return render_template('menuAdmin.html')
 
 # Ruta para manejar el inicio de sesión
+# Ruta para manejar el inicio de sesión
 @app.route('/login', methods=['POST'])
 def login():
-    usuario = request.form['usuario']
-    password = request.form['password']
-    
-    print(f'Usuario: {usuario}, Contraseña: {password}')  # Verifica que los datos se están recibiendo correctamente
+    usuario = request.form['usuario'].strip()  # Limpia espacios
+    password = request.form['password']  # Limpia espacios
 
+    print(f'Intentando iniciar sesión con usuario: {usuario}')  # Para depuración
+
+    # Buscar en la base de datos
     registro = Registro.query.filter_by(usuario=usuario).first()
 
-    if registro and check_password_hash(registro.password, password):
-        print('Inicio de sesión exitoso')  # Verifica que se pasa esta condición
-        return redirect(url_for('menuAdmin'))
+    if registro:
+        print(f'Usuario encontrado: {registro.usuario}')  # Para depuración
+        print(f'Contraseña almacenada: {registro.password}')  # Para ver el hash
+        print(f'Contraseña ingresada: {password}')  # Para comparar
+        if check_password_hash(registro.password, password):
+            return redirect(url_for('menuAdmin'))
+        else:
+            print('Contraseña incorrecta')  # Para depuración
     else:
-        print('Usuario o contraseña incorrectos')  # Verifica que se pasa esta condición
-        flash('Usuario o contraseña incorrectos.')
-        return redirect(url_for('index'))
+        print('Usuario no encontrado')  # Para depuración
+
+    flash('Usuario o contraseña incorrectos.')
+    return redirect(url_for('index'))  # Regresar a la página de inicio de sesión
+
 
 
 # Ruta para agregar un nuevo registro
@@ -78,11 +87,16 @@ def guardar():
         rol=rol,
         password=generate_password_hash(password)  # Hash de la contraseña
     )
+
+    # Imprimir la contraseña almacenada para verificar
+    print(f'Contraseña almacenada: {nuevo_registro.password}')
+
     db.session.add(nuevo_registro)
     db.session.commit()
 
     flash('Registro guardado con éxito')
     return redirect(url_for('mostrar'))  # Redirige a la vista de mostrar registros
+
 
 # Ruta para mostrar todos los registros
 @app.route('/mostrar')
