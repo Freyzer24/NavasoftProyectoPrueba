@@ -5,17 +5,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Formulario de Inicio de Sesión</title>
     <link rel="stylesheet" href="/static/login.css">
-    <script src="/Empleados.js"></script>
 </head>
 <body>
 
     <div class="login-container">
         <h2>BIENVENIDOS</h2>
-        <form onsubmit="processLogin(event)">
+        <form action="/login" method="POST">  <!-- Cambia aquí para enviar el formulario directamente -->
             <div class="input-container">
                 <label for="username">Usuario</label>
                 <div class="input-with-icon">
-                    <input type="text" id="username" name="username" placeholder="Usuario" required>
+                    <input type="text" id="username" name="usuario" placeholder="Usuario" required>
                 </div>
                 <p class="error-message" id="usernameError">Usuario incorrecto</p>
             </div>
@@ -30,6 +29,7 @@
             <button type="submit">INGRESAR</button>
         </form>
     </div>
+    
     
 </body>
 </html>
