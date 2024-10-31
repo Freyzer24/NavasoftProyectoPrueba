@@ -54,7 +54,12 @@ def guardar():
 @app.route('/mostrar')
 def mostrar():
     registros = Registro.query.all()
-    return render_template('mostrar.html', registros=registros)
+    return render_template('Mostrar.html', registros=registros)
+
+
+@app.route('/nuevo_usuario')
+def nuevo_usuario():
+   return render_template('index.html')
 
 # Ruta para editar un registro
 @app.route('/editar/<int:id>', methods=['POST'])

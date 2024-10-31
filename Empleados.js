@@ -400,29 +400,29 @@ window.addEventListener("click", function(event) {
 
 
 //Gestión de usuarios
-function showModal(user, role, task) {
-    var modal = document.getElementById("userModal");
-    var content = document.getElementById("modalContent");
-    content.innerHTML = `
-    <p><strong>Usuario:</strong> ${user}</p>
-    <p><strong>Rol:</strong> ${role}</p>
-    <p><strong>Tareas:</p></strong> ${task}</p>
-`;
-
-     modal.style.display = "flex"; // Mostrar el modal
+function showModal(nombre, rol, usuario) {
+    // Asigna los valores a los elementos dentro del modal
+    document.getElementById('modalNombre').textContent = nombre;
+    document.getElementById('modalRol').textContent = rol;
+    document.getElementById('modalUsuario').textContent = usuario;
+    
+    // Muestra el modal
+    document.getElementById('myModal').style.display = 'block';
 }
 
 function closeModal() {
-    document.getElementById("userModal").style.display = "none"; // Ocultar el modal
+    // Oculta el modal
+    document.getElementById('myModal').style.display = 'none';
 }
 
-// Cerrar el modal si el usuario hace clic fuera del contenido del modal
+// Cierra el modal al hacer clic fuera de él
 window.onclick = function(event) {
-    var modal = document.getElementById("userModal");
+    var modal = document.getElementById('myModal');
     if (event.target == modal) {
-        modal.style.display = "none";
+        modal.style.display = 'none';
     }
-}
+};
+
 
 // Función para mostrar u ocultar secciones según el rol del usuario
 function mostrarSeccionesPorRol(rol) {

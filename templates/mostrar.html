@@ -3,32 +3,55 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mostrar Registros</title>
+    <title>Gestión de Usuarios</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="/static/GestionUsuarios.css">
+    <script src="/Empleados.js"></script>
 </head>
 <body>
-    <h1>Registros en la Base de Datos</h1>
+    <div class="user-management-container">
+        <h2>Administra usuarios. También se puede otorgar permisos.</h2>
+        
+        <table>
+            <thead>
+                <tr>
+                    <th><i class="fa fa-user"></i> Nombre</th>
+                    <th><i class="fa fa-user-cog"></i> Rol</th>
+                    <th><i class="fa fa-folder"></i> Usuario</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for registro in registros %}
+                <tr>
+                    <td>{{ registro.nombre }}</td>
+                    <td>{{ registro.rol }}</td>
+                    <td>{{ registro.usuario }}</td>
+                    <td>
+                       <!-- Botón de imagen para abrir el modal -->
+<button class="config-icon" onclick="showModal('{{ registro.nombre }}', '{{ registro.rol }}', '{{ registro.usuario }}')">
+    <img src="/imagenes/En_proceso.png" alt="Ver Detalles" style="width: 24px; height: 24px;">
+</button>
 
-    <table border="1">
-        <thead>
-            <tr>
-                <th>Nombre</th>
-                <th>Teléfono</th>
-                <th>Correo</th>
-                <th>Usuario</th>
-                <th>Rol</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for registro in registros %}
-            <tr>
-                <td>{{ registro.nombre }}</td>
-                <td>{{ registro.telefono }}</td>
-                <td>{{ registro.correo }}</td>
-                <td>{{ registro.usuario }}</td>
-                <td>{{ registro.rol }}</td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        
+        <div class="add-user">
+            <a href="/nuevo_usuario">+ Añadir usuario</a>
+        </div>
+
+        <div id="myModal" class="modal" style="display:none;">
+            <div class="modal-content">
+                <span class="close" onclick="closeModal()">&times;</span>
+                <h2>Detalles del Registro</h2>
+                <p><strong>Nombre:</strong> <span id="modalNombre"></span></p>
+                <p><strong>Rol:</strong> <span id="modalRol"></span></p>
+                <p><strong>Usuario:</strong> <span id="modalUsuario"></span></p>
+            </div>
+        </div>
+    </div>
 </body>
 </html>

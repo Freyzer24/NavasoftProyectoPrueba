@@ -26,31 +26,11 @@
             </tr>
         </thead>
         <tbody>
-            <!-- Fila para el Usuario 1 -->
+            {% for registro in registros %}
             <tr>
-                <td>
-                    <!-- Icono de usuario para el Usuario 1 -->
-                    <i class="fa fa-user-circle" style="color: #4a6bf1;"></i> Usuario 1
-                </td>
-                <td>Administrador</td>
-                <td>Prototipo</td>
-                <td>
-                    <!-- Icono para configurar el Usuario 1, que activa un modal al hacer clic -->
-                    <i class="fa fa-cog config-icon" onclick="showModal('Usuario 1', 'Administrador', 'Prototipo')"></i>
-                </td>
-            </tr>
-            <!-- Fila para el Usuario 2 -->
-            <tr>
-                <td>
-                    <!-- Icono de usuario para el Usuario 2 -->
-                    <i class="fa fa-user-circle" style="color: #ff4a4a;"></i> Usuario 2
-                </td>
-                <td>Empleado</td>
-                <td>Números</td>
-                <td>
-                    <!-- Icono para configurar el Usuario 2, que activa un modal al hacer clic -->
-                    <i class="fa fa-cog config-icon" onclick="showModal('Usuario 2', 'Empleado', 'Números')"></i>
-                </td>
+                <td>{{ registro.nombre }}</td>
+                <td>{{ registro.rol }}</td> 
+                <td>{{ registro.usuario }}</td>
             </tr>
         </tbody>
     </table>
