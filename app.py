@@ -31,7 +31,7 @@ with app.app_context():
 # Ruta para mostrar la página de inicio con todos los registros
 @app.route('/')
 def index():
-    return render_template('login.html')
+    return render_template('indexadmin.html')
 
 @app.route('/tAdmin')
 def tAdmin():
