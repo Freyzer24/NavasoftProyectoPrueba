@@ -34,7 +34,16 @@ def index():
 
 @app.route('/menuAdmin')
 def menuAdmin():
-    return render_template('index.html')
+    return render_template('indexadmin.html')
+@app.route('/Admin')
+def Admin():
+    return render_template('menuAdmin.html')
+@app.route('/Gtareas')#Gestión tareas
+def Gtareas():
+    return render_template('Gestióntareas.html')
+@app.route('/DGantt')
+def DGantt():
+    return render_template('Diagrama de Gantt.html')
 
 # Ruta para manejar el inicio de sesión
 @app.route('/login', methods=['POST'])
@@ -51,15 +60,30 @@ def login():
         print(f"Contraseña correcta: {is_correct}")  # Imprime True si coincide
 
         if is_correct:
-            # Aquí deberías establecer la sesión del usuario
-            flash('Inicio de sesión exitoso')
-            return redirect(url_for('menuAdmin'))
+            # Redirecciona dependiendo del rol
+            if registro.rol in ['admin', 'super_administrador']:
+                flash('Inicio de sesión exitoso - Admin')
+                return redirect(url_for('menuAdmin'))
+            else:
+                flash('Inicio de sesión exitoso - Empleado')
+                return redirect(url_for('menuEmpleado'))
         else:
             flash('Contraseña incorrecta. Por favor, inténtalo de nuevo.')
     else:
         flash('Usuario no encontrado. Verifica tus datos e intenta de nuevo.')
 
     return redirect(url_for('index'))
+
+@app.route('/menuEmpleado')
+def menuEmpleado():
+    return render_template('indexempleado.html')  # Asegúrate de tener esta plantilla creada
+@app.route('/Empleado')
+def Empleado():
+    return render_template('menuEmpleado.html')
+@app.route('/templeado')
+def templeado():
+    return render_template('templeado.html')
+
 
 # Ruta para agregar un nuevo registro
 @app.route('/guardar', methods=['POST'])
@@ -95,9 +119,6 @@ def guardar():
 def mostrar():
     registros = Registro.query.all()
     return render_template('Mostrar.html', registros=registros)
-
-if __name__ == '__main__':
-    app.run(debug=True)
 
 
 @app.route('/nuevo_usuario')
@@ -138,6 +159,10 @@ def eliminar(id):
 def lista_usuarios():
     registros = Registro.query.with_entities(Registro.nombre, Registro.rol, Registro.telefono).all()
     return render_template('usuarios.html', usuarios=registros)
+@app.route('/tAdmin')
+def tAdmin():
+    return render_template('tAdmin.html')
+
 
 if __name__ == '__main__':
     app.run(debug=True)
