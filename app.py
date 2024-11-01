@@ -31,7 +31,7 @@ with app.app_context():
 
 @app.route('/')
 def index():
-    return render_template('login.html')
+    return render_template('Gestion usuarios.html')
 
 @app.route('/menuAdmin')
 def menuAdmin():
