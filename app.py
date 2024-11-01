@@ -34,7 +34,16 @@ def index():
 
 @app.route('/menuAdmin')
 def menuAdmin():
-    return render_template('index.html')
+    return render_template('indexadmin.html')
+@app.route('/Admin')
+def Admin():
+    return render_template('menuAdmin.html')
+@app.route('/Gtareas')#Gestión tareas
+def Gtareas():
+    return render_template('Gestióntareas.html')
+@app.route('/DGantt')
+def DGantt():
+    return render_template('Diagrama de Gantt.html')
 
 # Ruta para manejar el inicio de sesión
 @app.route('/login', methods=['POST'])
@@ -96,9 +105,6 @@ def mostrar():
     registros = Registro.query.all()
     return render_template('Mostrar.html', registros=registros)
 
-if __name__ == '__main__':
-    app.run(debug=True)
-
 
 @app.route('/nuevo_usuario')
 def nuevo_usuario():
@@ -138,6 +144,10 @@ def eliminar(id):
 def lista_usuarios():
     registros = Registro.query.with_entities(Registro.nombre, Registro.rol, Registro.telefono).all()
     return render_template('usuarios.html', usuarios=registros)
+@app.route('/tAdmin')
+def tAdmin():
+    return render_template('tAdmin.html')
+
 
 if __name__ == '__main__':
     app.run(debug=True)
