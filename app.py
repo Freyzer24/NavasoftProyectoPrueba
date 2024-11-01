@@ -1,7 +1,11 @@
+import re
+import smtplib
+from email.mime.multipart import MIMEMultipart
+from email.mime.text import MIMEText
+from email.mime.image import MIMEImage
 from flask import Flask, render_template, request, redirect, url_for, flash
 from flask_sqlalchemy import SQLAlchemy
 from werkzeug.security import generate_password_hash, check_password_hash
-
 app = Flask(__name__)
 app.secret_key = 'super_secret_key'  # Cambia esto en producción
 
@@ -17,7 +21,7 @@ class Registro(db.Model):
     nombre = db.Column(db.String(100), nullable=False)
     telefono = db.Column(db.String(15), nullable=False)
     correo = db.Column(db.String(100), nullable=False)
-    usuario = db.Column(db.String(50), nullable=False)
+    usuario = db.Column(db.String(50), unique=True, nullable=False)
     rol = db.Column(db.String(50), nullable=False)
     password = db.Column(db.String(128), nullable=False)
 
@@ -85,6 +89,43 @@ def templeado():
     return render_template('templeado.html')
 
 
+def enviar_confirmacion_correo(nombre, usuario, correo):
+    remitente = "valeriapaolap49@gmail.com"
+    contraseña = "syjq cptv tlus wbcp"  # Sustitúyela con la contraseña de aplicación de Gmail
+    destinatario = correo
+
+    mensaje = MIMEMultipart()
+    mensaje['From'] = remitente
+    mensaje['To'] = destinatario
+    mensaje['Subject'] = "Confirmación de creación de usuario"
+
+    # Cuerpo del mensaje en HTML
+    cuerpo_html = f"""
+    <html>
+        <body>
+             <p style="font-size: 16px;">Hola <strong>{nombre}</strong>,</p>
+            <p style="font-size: 14px;">Has creado exitosamente tu usuario llamado <strong>{usuario}</strong>.</p>
+            <p style="font-size: 14px;">Tu contraseña temporal es: <strong>Navasoft$0</strong></p>
+            <p style="font-size: 14px;">Saludos cordiales,<br>El equipo de Navasoft</p>
+            <br>
+            <img src="https://media.licdn.com/dms/image/v2/D4E3DAQFAB3gn_AzD1Q/image-scale_191_1128/image-scale_191_1128/0/1710221899179/navasoft_soluciones_cover?e=2147483647&v=beta&t=avESRYqDr4FPJ0PfXGRQwhO1mOgBzUEEIrpu55nCJck" alt="Navasoft Logo" style="width:900px;height:auto;">
+        </body>
+    </html>
+    """
+    mensaje.attach(MIMEText(cuerpo_html, 'html'))
+
+
+    # Envío del correo
+    try:
+        servidor = smtplib.SMTP('smtp.gmail.com', 587)
+        servidor.starttls()
+        servidor.login(remitente, contraseña)
+        servidor.sendmail(remitente, destinatario, mensaje.as_string())
+        servidor.quit()  # Cierra la conexión de forma segura
+        print("Correo de confirmación enviado exitosamente")
+    except Exception as e:
+        print(f"Error al enviar el correo: {e}")
+
 # Ruta para agregar un nuevo registro
 @app.route('/guardar', methods=['POST'])
 def guardar():
@@ -95,9 +136,19 @@ def guardar():
     rol = request.form['rol']
     password = request.form['password']
 
+    # Validar la contraseña
+    if not validar_contrasena(password):
+        flash('La contraseña debe tener al menos 8 caracteres, una letra mayúscula, una letra minúscula, un número y un carácter especial.')
+        return redirect(url_for('nuevo_usuario'))
+
+    # Verificar si el usuario ya existe
+    usuario_existente = Registro.query.filter_by(usuario=usuario).first()
+    if usuario_existente:
+        flash('El nombre de usuario ya existe. Por favor, elige otro.')
+        return redirect(url_for('nuevo_usuario'))
+
     # Hash de la contraseña antes de guardarla
     hashed_password = generate_password_hash(password)
-    print(f"Hash de la contraseña guardada: {hashed_password}")  # Verifica el hash
 
     nuevo_registro = Registro(
         nombre=nombre,
@@ -105,15 +156,26 @@ def guardar():
         correo=correo,
         usuario=usuario,
         rol=rol,
-        password=hashed_password  # Guardamos la contraseña hasheada
+        password=hashed_password
     )
 
     db.session.add(nuevo_registro)
     db.session.commit()
 
+    # Enviar el correo de confirmación
+    enviar_confirmacion_correo(nombre, usuario, correo)
+
     flash('Registro guardado con éxito')
     return redirect(url_for('mostrar'))
 
+def validar_contrasena(contrasena):
+    if (len(contrasena) < 8 or 
+        not re.search(r"[A-Z]", contrasena) or
+        not re.search(r"[a-z]", contrasena) or
+        not re.search(r"[0-9]", contrasena) or
+        not re.search(r"[!@#$%^&*(),.?\":{}|<>]", contrasena)):
+        return False
+    return True
 # Rutas restantes
 @app.route('/mostrar')
 def mostrar():
