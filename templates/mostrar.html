@@ -18,7 +18,7 @@
                     <th><i class="fa fa-user"></i> Nombre</th>
                     <th><i class="fa fa-user-cog"></i> Rol</th>
                     <th><i class="fa fa-folder"></i> Usuario</th>
-                    <th>Acciones</th>
+                    <th>Opciones</th>
                 </tr>
             </thead>
             <tbody>
@@ -28,11 +28,9 @@
                     <td>{{ registro.rol }}</td>
                     <td>{{ registro.usuario }}</td>
                     <td>
-                       <!-- Botón de imagen para abrir el modal -->
-<button class="config-icon" onclick="showModal('{{ registro.nombre }}', '{{ registro.rol }}', '{{ registro.usuario }}')">
-    <img src="/imagenes/En_proceso.png" alt="Ver Detalles" style="width: 24px; height: 24px;">
-</button>
-
+                        <a href="{{ url_for('eliminar_usuario', id=registro.id) }}" onclick="return confirm('¿Estás seguro de que deseas eliminar este usuario?');">
+                            <i class="fa fa-trash"></i>
+                        </a>
                     </td>
                 </tr>
                 {% endfor %}

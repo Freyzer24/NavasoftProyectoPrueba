@@ -146,13 +146,15 @@ def perfil():
 
 # Ruta para eliminar un registro
 @app.route('/eliminar/<int:id>')
-def eliminar(id):
+def eliminar_usuario(id):  # Cambia el nombre de la función aquí para evitar duplicados
     registro = Registro.query.get_or_404(id)
     db.session.delete(registro)
     db.session.commit()
 
     flash('Registro eliminado con éxito')
-    return redirect(url_for('index'))
+    return redirect(url_for('mostrar'))
+
+
 
 # Ruta para mostrar una lista de usuarios específicos
 @app.route('/usuarios')
