@@ -1,7 +1,11 @@
+import re
+import smtplib
+from email.mime.multipart import MIMEMultipart
+from email.mime.text import MIMEText
+from email.mime.image import MIMEImage
 from flask import Flask, render_template, request, redirect, url_for, flash
 from flask_sqlalchemy import SQLAlchemy
 from werkzeug.security import generate_password_hash, check_password_hash
-
 app = Flask(__name__)
 app.secret_key = 'super_secret_key'  # Cambia esto en producción
 
@@ -17,7 +21,7 @@ class Registro(db.Model):
     nombre = db.Column(db.String(100), nullable=False)
     telefono = db.Column(db.String(15), nullable=False)
     correo = db.Column(db.String(100), nullable=False)
-    usuario = db.Column(db.String(50), nullable=False)
+    usuario = db.Column(db.String(50), unique=True, nullable=False)
     rol = db.Column(db.String(50), nullable=False)
     password = db.Column(db.String(128), nullable=False)
 
@@ -87,6 +91,7 @@ def templeado():
     return render_template('templeado.html')
 
 
+# Ruta para agregar un nuevo registro
 @app.route('/guardar', methods=['POST'])
 def guardar():
     nombre = request.form['nombre']
@@ -96,24 +101,40 @@ def guardar():
     rol = request.form['rol']
     password = request.form['password']
 
+    # Validar la contraseña
+    if not validar_contrasena(password):
+        flash('La contraseña debe tener al menos 8 caracteres, una letra mayúscula, una letra minúscula, un número y un carácter especial.')
+        return redirect(url_for('nuevo_usuario'))
+
+    # Verificar si el usuario ya existe
+    usuario_existente = Registro.query.filter_by(usuario=usuario).first()
+    if usuario_existente:
+        flash('El nombre de usuario ya existe. Por favor, elige otro.')
+        return redirect(url_for('nuevo_usuario'))
+
     # Hash de la contraseña antes de guardarla
     hashed_password = generate_password_hash(password)
+    print(f"Hash de la contraseña guardada: {hashed_password}")  # Verifica el hash
+
     nuevo_registro = Registro(
         nombre=nombre,
         telefono=telefono,
         correo=correo,
         usuario=usuario,
         rol=rol,
-        password=hashed_password  # Guardamos la contraseña hasheada
+        password=hashed_password
     )
 
     db.session.add(nuevo_registro)
     db.session.commit()
 
+    # Enviar el correo de confirmación
+    enviar_confirmacion_correo(nombre, usuario, correo)
+
     flash('Registro guardado con éxito')
     return redirect(url_for('mostrar'))
 
-# Ruta para mostrar todos los registros
+# Rutas restantes
 @app.route('/mostrar')
 def mostrar():
     registros = Registro.query.all()
