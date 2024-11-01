@@ -27,6 +27,8 @@ class Registro(db.Model):
 # Crear la base de datos y las tablas
 with app.app_context():
     db.create_all()
+    
+    
 
 @app.route('/')
 def index():
@@ -85,7 +87,6 @@ def templeado():
     return render_template('templeado.html')
 
 
-# Ruta para agregar un nuevo registro
 @app.route('/guardar', methods=['POST'])
 def guardar():
     nombre = request.form['nombre']
@@ -97,8 +98,6 @@ def guardar():
 
     # Hash de la contraseña antes de guardarla
     hashed_password = generate_password_hash(password)
-    print(f"Hash de la contraseña guardada: {hashed_password}")  # Verifica el hash
-
     nuevo_registro = Registro(
         nombre=nombre,
         telefono=telefono,
@@ -114,31 +113,43 @@ def guardar():
     flash('Registro guardado con éxito')
     return redirect(url_for('mostrar'))
 
-# Rutas restantes
+# Ruta para mostrar todos los registros
 @app.route('/mostrar')
 def mostrar():
     registros = Registro.query.all()
     return render_template('Mostrar.html', registros=registros)
 
-
+# Ruta para mostrar el formulario de nuevo usuario
 @app.route('/nuevo_usuario')
 def nuevo_usuario():
     return render_template('index.html')
 
 # Ruta para editar un registro
-@app.route('/editar/<int:id>', methods=['POST'])
+@app.route('/editar/<int:id>', methods=['GET', 'POST'])
 def editar(id):
-    registro = Registro.query.get_or_404(id)
-    registro.nombre = request.form['nombre']
-    registro.telefono = request.form['telefono']
-    registro.correo = request.form['correo']
-    registro.usuario = request.form['usuario']
-    registro.rol = request.form['rol']
-    registro.password = generate_password_hash(request.form['password'])  # Hash de la contraseña
-    db.session.commit()
+    registro = Registro.query.get_or_404(id)  # Obtiene el registro o devuelve un error 404
 
-    flash('Registro actualizado con éxito')
-    return redirect(url_for('index'))
+    if request.method == 'POST':
+        # Manejar la presentación del formulario
+        registro.nombre = request.form['nombre']
+        registro.telefono = request.form['telefono']
+        registro.correo = request.form['correo']
+        registro.usuario = request.form['usuario']
+        registro.rol = request.form['rol']
+        password = request.form['password']
+        
+        # Si se proporciona una nueva contraseña, se actualiza el hash
+        if password:
+            registro.password = generate_password_hash(password)  # Hashea la nueva contraseña
+
+        db.session.commit()  # Guarda los cambios en la base de datos
+
+        flash('Registro actualizado con éxito')
+        return redirect(url_for('mostrar'))  # Redirigir a la vista de mostrar registros
+    else:
+        # Manejar la solicitud GET para mostrar el formulario
+        return render_template('editar.html', registro=registro)  # Asegúrate de tener esta plantilla
+
 @app.route('/perfil')
 def perfil():
     # Aquí renderizas la página de perfil
@@ -153,8 +164,6 @@ def eliminar_usuario(id):  # Cambia el nombre de la función aquí para evitar d
 
     flash('Registro eliminado con éxito')
     return redirect(url_for('mostrar'))
-
-
 
 # Ruta para mostrar una lista de usuarios específicos
 @app.route('/usuarios')
