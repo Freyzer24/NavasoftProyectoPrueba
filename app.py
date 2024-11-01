@@ -39,7 +39,7 @@ def tAdmin():
 
 @app.route('/menuAdmin')
 def menuAdmin():
-    return render_template('menuAdmin.html')
+    return render_template('indexadmin.html')
 
 # Ruta para manejar el inicio de sesión
 # Ruta para manejar el inicio de sesión
@@ -87,16 +87,11 @@ def guardar():
         rol=rol,
         password=generate_password_hash(password)  # Hash de la contraseña
     )
-
-    # Imprimir la contraseña almacenada para verificar
-    print(f'Contraseña almacenada: {nuevo_registro.password}')
-
     db.session.add(nuevo_registro)
     db.session.commit()
 
     flash('Registro guardado con éxito')
-    return redirect(url_for('mostrar'))  # Redirige a la vista de mostrar registros
-
+    return redirect(url_for('mostrar'))  # Redirige a la vista de mostrar 
 
 # Ruta para mostrar todos los registros
 @app.route('/mostrar')
@@ -122,6 +117,10 @@ def editar(id):
 
     flash('Registro actualizado con éxito')
     return redirect(url_for('index'))
+@app.route('/perfil')
+def perfil():
+    # Aquí renderizas la página de perfil
+    return render_template('perfil.html')
 
 # Ruta para eliminar un registro
 @app.route('/eliminar/<int:id>')
