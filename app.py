@@ -19,7 +19,7 @@ class Registro(db.Model):
     correo = db.Column(db.String(100), nullable=False)
     usuario = db.Column(db.String(50), nullable=False)
     rol = db.Column(db.String(50), nullable=False)
-    password = db.Column(db.String(128), nullable=False)  # Aumentado para el hash
+    password = db.Column(db.String(128), nullable=False)
 
     def __repr__(self):
         return f'<Registro {self.nombre}>'
@@ -28,46 +28,38 @@ class Registro(db.Model):
 with app.app_context():
     db.create_all()
 
-# Ruta para mostrar la página de inicio con todos los registros
 @app.route('/')
 def index():
     return render_template('login.html')
 
-@app.route('/tAdmin')
-def tAdmin():
-    return render_template('tAdmin.html')
-
 @app.route('/menuAdmin')
 def menuAdmin():
-    return render_template('indexadmin.html')
+    return render_template('index.html')
 
-# Ruta para manejar el inicio de sesión
 # Ruta para manejar el inicio de sesión
 @app.route('/login', methods=['POST'])
 def login():
-    usuario = request.form['usuario'].strip()  # Limpia espacios
-    password = request.form['password']  # Limpia espacios
+    usuario = request.form['usuario'].strip()
+    password = request.form['password'].strip()
 
-    print(f'Intentando iniciar sesión con usuario: {usuario}')  # Para depuración
-
-    # Buscar en la base de datos
+    # Verifica si el usuario existe en la base de datos
     registro = Registro.query.filter_by(usuario=usuario).first()
-
+    
     if registro:
-        print(f'Usuario encontrado: {registro.usuario}')  # Para depuración
-        print(f'Contraseña almacenada: {registro.password}')  # Para ver el hash
-        print(f'Contraseña ingresada: {password}')  # Para comparar
-        if check_password_hash(registro.password, password):
+        print(f"Usuario encontrado: {registro.usuario}")  # Verifica el usuario
+        is_correct = check_password_hash(registro.password, password)
+        print(f"Contraseña correcta: {is_correct}")  # Imprime True si coincide
+
+        if is_correct:
+            # Aquí deberías establecer la sesión del usuario
+            flash('Inicio de sesión exitoso')
             return redirect(url_for('menuAdmin'))
         else:
-            print('Contraseña incorrecta')  # Para depuración
+            flash('Contraseña incorrecta. Por favor, inténtalo de nuevo.')
     else:
-        print('Usuario no encontrado')  # Para depuración
+        flash('Usuario no encontrado. Verifica tus datos e intenta de nuevo.')
 
-    flash('Usuario o contraseña incorrectos.')
-    return redirect(url_for('index'))  # Regresar a la página de inicio de sesión
-
-
+    return redirect(url_for('index'))
 
 # Ruta para agregar un nuevo registro
 @app.route('/guardar', methods=['POST'])
@@ -79,25 +71,34 @@ def guardar():
     rol = request.form['rol']
     password = request.form['password']
 
+    # Hash de la contraseña antes de guardarla
+    hashed_password = generate_password_hash(password)
+    print(f"Hash de la contraseña guardada: {hashed_password}")  # Verifica el hash
+
     nuevo_registro = Registro(
         nombre=nombre,
         telefono=telefono,
         correo=correo,
         usuario=usuario,
         rol=rol,
-        password=generate_password_hash(password)  # Hash de la contraseña
+        password=hashed_password  # Guardamos la contraseña hasheada
     )
+
     db.session.add(nuevo_registro)
     db.session.commit()
 
     flash('Registro guardado con éxito')
-    return redirect(url_for('mostrar'))  # Redirige a la vista de mostrar 
+    return redirect(url_for('mostrar'))
 
-# Ruta para mostrar todos los registros
+# Rutas restantes
 @app.route('/mostrar')
 def mostrar():
     registros = Registro.query.all()
     return render_template('Mostrar.html', registros=registros)
+
+if __name__ == '__main__':
+    app.run(debug=True)
+
 
 @app.route('/nuevo_usuario')
 def nuevo_usuario():
@@ -140,3 +141,4 @@ def lista_usuarios():
 
 if __name__ == '__main__':
     app.run(debug=True)
+# 
