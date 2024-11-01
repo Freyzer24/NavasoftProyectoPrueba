@@ -1,6 +1,7 @@
 from flask import Flask, render_template, request, redirect, url_for, flash
 from flask_sqlalchemy import SQLAlchemy
 from werkzeug.security import generate_password_hash, check_password_hash
+import re
 
 app = Flask(__name__)
 app.secret_key = 'super_secret_key'  # Cambia esto en producción
@@ -95,6 +96,11 @@ def guardar():
     rol = request.form['rol']
     password = request.form['password']
 
+    # Validar la contraseña
+    if not validar_contrasena(password):
+        flash('La contraseña debe tener al menos 8 caracteres, una letra mayúscula, una letra minúscula y un número.')
+        return redirect(url_for('nuevo_usuario'))  # Redirigir al formulario de nuevo usuario
+
     # Hash de la contraseña antes de guardarla
     hashed_password = generate_password_hash(password)
     print(f"Hash de la contraseña guardada: {hashed_password}")  # Verifica el hash
@@ -113,6 +119,14 @@ def guardar():
 
     flash('Registro guardado con éxito')
     return redirect(url_for('mostrar'))
+
+def validar_contrasena(contrasena):
+    if (len(contrasena) < 8 or 
+        not re.search(r"[A-Z]", contrasena) or  # Al menos una letra mayúscula
+        not re.search(r"[a-z]", contrasena) or  # Al menos una letra minúscula
+        not re.search(r"[0-9]", contrasena)):   # Al menos un número
+        return False
+    return True
 
 # Rutas restantes
 @app.route('/mostrar')
