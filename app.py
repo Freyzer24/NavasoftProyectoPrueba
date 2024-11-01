@@ -60,15 +60,30 @@ def login():
         print(f"Contraseña correcta: {is_correct}")  # Imprime True si coincide
 
         if is_correct:
-            # Aquí deberías establecer la sesión del usuario
-            flash('Inicio de sesión exitoso')
-            return redirect(url_for('menuAdmin'))
+            # Redirecciona dependiendo del rol
+            if registro.rol in ['admin', 'super_administrador']:
+                flash('Inicio de sesión exitoso - Admin')
+                return redirect(url_for('menuAdmin'))
+            else:
+                flash('Inicio de sesión exitoso - Empleado')
+                return redirect(url_for('menuEmpleado'))
         else:
             flash('Contraseña incorrecta. Por favor, inténtalo de nuevo.')
     else:
         flash('Usuario no encontrado. Verifica tus datos e intenta de nuevo.')
 
     return redirect(url_for('index'))
+
+@app.route('/menuEmpleado')
+def menuEmpleado():
+    return render_template('indexempleado.html')  # Asegúrate de tener esta plantilla creada
+@app.route('/Empleado')
+def Empleado():
+    return render_template('menuEmpleado.html')
+@app.route('/templeado')
+def templeado():
+    return render_template('templeado.html')
+
 
 # Ruta para agregar un nuevo registro
 @app.route('/guardar', methods=['POST'])
