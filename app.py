@@ -7,7 +7,7 @@ from flask import Flask, render_template, request, redirect, url_for, flash
 from flask_sqlalchemy import SQLAlchemy
 from werkzeug.security import generate_password_hash, check_password_hash
 app = Flask(__name__)
-app.secret_key = 'super_secret_key'  # Cambia esto en producción
+app.secret_key = 'super_secret_key' 
 
 # Configuración de la conexión a MySQL
 app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+mysqlconnector://practicantes:Ora$sys1@u1268360.onlinehome-server.com/navasoftsoluciones'
@@ -33,23 +33,13 @@ with app.app_context():
     db.create_all()
     
     
-
+#Pantalla que se muestra con /
 @app.route('/')
 def index():
     return render_template('indexAdmin.html')
 
-@app.route('/menuAdmin')
-def menuAdmin():
-    return render_template('indexadmin.html')
-@app.route('/Admin')
-def Admin():
-    return render_template('menuAdmin.html')
-@app.route('/Gtareas')#Gestión tareas
-def Gtareas():
-    return render_template('Gestióntareas.html')
-@app.route('/DGantt')
-def DGantt():
-    return render_template('Diagrama de Gantt.html')
+
+
 
 # Ruta para manejar el inicio de sesión
 @app.route('/login', methods=['POST'])
@@ -80,6 +70,20 @@ def login():
 
     return redirect(url_for('index'))
 
+
+
+@app.route('/menuAdmin')
+def menuAdmin():
+    return render_template('indexadmin.html')
+@app.route('/Admin')
+def Admin():
+    return render_template('menuAdmin.html')
+@app.route('/Gtareas')#Gestión tareas
+def Gtareas():
+    return render_template('Gestióntareas.html')
+@app.route('/DGantt')
+def DGantt():
+    return render_template('Diagrama de Gantt.html')
 @app.route('/menuEmpleado')
 def menuEmpleado():
     return render_template('indexempleado.html')  # Asegúrate de tener esta plantilla creada
@@ -89,8 +93,69 @@ def Empleado():
 @app.route('/templeado')
 def templeado():
     return render_template('templeado.html')
+@app.route('/nuevo_usuario')
+def nuevo_usuario():
+    return render_template('index.html')
+@app.route('/perfil')
+def perfil():
+    return render_template('perfil.html')
+@app.route('/tAdmin')
+def tAdmin():
+    return render_template('tAdmin.html')
 
 
+def enviar_confirmacion_correo(nombre, usuario, correo):
+    remitente = "valeriapaolap49@gmail.com"
+    contraseña = "syjq cptv tlus wbcp"  # Sustitúyela con la contraseña de aplicación de Gmail
+    destinatario = correo
+
+    mensaje = MIMEMultipart()
+    mensaje['From'] = remitente
+    mensaje['To'] = destinatario
+    mensaje['Subject'] = "Confirmación de creación de usuario"
+
+    # Cuerpo del mensaje en HTML
+    cuerpo_html = f"""
+    <html>
+        <body>
+             <p style="font-size: 16px;">Hola <strong>{nombre}</strong>,</p>
+            <p style="font-size: 14px;">Has creado exitosamente tu usuario llamado <strong>{usuario}</strong>.</p>
+            <p style="font-size: 14px;">Tu contraseña temporal es: <strong>Navasoft$0</strong></p>
+            <p style="font-size: 14px;">Saludos cordiales,<br>El equipo de Navasoft</p>
+            <br>
+            <img src="https://media.licdn.com/dms/image/v2/D4E3DAQFAB3gn_AzD1Q/image-scale_191_1128/image-scale_191_1128/0/1710221899179/navasoft_soluciones_cover?e=2147483647&v=beta&t=avESRYqDr4FPJ0PfXGRQwhO1mOgBzUEEIrpu55nCJck" alt="Navasoft Logo" style="width:900px;height:auto;">
+        </body>
+    </html>
+    """
+    mensaje.attach(MIMEText(cuerpo_html, 'html'))
+
+
+    # Envío del correo
+    try:
+        servidor = smtplib.SMTP('smtp.gmail.com', 587)
+        servidor.starttls()
+        servidor.login(remitente, contraseña)
+        servidor.sendmail(remitente, destinatario, mensaje.as_string())
+        servidor.quit()  # Cierra la conexión de forma segura
+        print("Correo de confirmación enviado exitosamente")
+    except Exception as e:
+        print(f"Error al enviar el correo: {e}")
+
+#mostrar
+@app.route('/mostrar')
+def mostrar():
+    registros = Registro.query.all()
+    return render_template('Mostrar.html', registros=registros)
+
+def validar_contrasena(contrasena):
+    if (len(contrasena) < 8 or 
+        not re.search(r"[A-Z]", contrasena) or
+        not re.search(r"[a-z]", contrasena) or
+        not re.search(r"[0-9]", contrasena) or
+        not re.search(r"[!@#$%^&*(),.?\":{}|<>]", contrasena)):
+        return False
+    return True
+    
 # Ruta para agregar un nuevo registro
 @app.route('/guardar', methods=['POST'])
 def guardar():
@@ -134,17 +199,6 @@ def guardar():
     flash('Registro guardado con éxito')
     return redirect(url_for('mostrar'))
 
-# Rutas restantes
-@app.route('/mostrar')
-def mostrar():
-    registros = Registro.query.all()
-    return render_template('Mostrar.html', registros=registros)
-
-# Ruta para mostrar el formulario de nuevo usuario
-@app.route('/nuevo_usuario')
-def nuevo_usuario():
-    return render_template('index.html')
-
 # Ruta para editar un registro
 @app.route('/editar/<int:id>', methods=['GET', 'POST'])
 def editar(id):
@@ -171,11 +225,6 @@ def editar(id):
         # Manejar la solicitud GET para mostrar el formulario
         return render_template('editar.html', registro=registro)  # Asegúrate de tener esta plantilla
 
-@app.route('/perfil')
-def perfil():
-    # Aquí renderizas la página de perfil
-    return render_template('perfil.html')
-
 # Ruta para eliminar un registro
 @app.route('/eliminar/<int:id>')
 def eliminar_usuario(id):  # Cambia el nombre de la función aquí para evitar duplicados
@@ -191,10 +240,6 @@ def eliminar_usuario(id):  # Cambia el nombre de la función aquí para evitar d
 def lista_usuarios():
     registros = Registro.query.with_entities(Registro.nombre, Registro.rol, Registro.telefono).all()
     return render_template('usuarios.html', usuarios=registros)
-@app.route('/tAdmin')
-def tAdmin():
-    return render_template('tAdmin.html')
-
 
 if __name__ == '__main__':
     app.run(debug=True)
