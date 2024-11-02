@@ -3,7 +3,7 @@ import smtplib
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 from email.mime.image import MIMEImage
-from flask import Flask, render_template, request, redirect, url_for, flash
+from flask import Flask, render_template, request, redirect, url_for, flash,session
 from flask_sqlalchemy import SQLAlchemy
 from werkzeug.security import generate_password_hash, check_password_hash
 app = Flask(__name__)
@@ -102,6 +102,10 @@ def perfil():
 @app.route('/tAdmin')
 def tAdmin():
     return render_template('tAdmin.html')
+@app.route('/logout')  # Ruta para cerrar sesión
+def logout():
+    flash('Has cerrado sesión exitosamente.')
+    return render_template('login.html')
 
 
 def enviar_confirmacion_correo(nombre, usuario, correo):
@@ -164,13 +168,12 @@ def guardar():
     correo = request.form['correo']
     usuario = request.form['usuario']
     rol = request.form['rol']
-    password = request.form['password']
+    password = request.form['password'] or 'Navasoft$0'  # Asigna la contraseña predeterminada si está vacía
 
     # Validar la contraseña
-    if not validar_contrasena(password):
+    if password != 'Navasoft$0' and not validar_contrasena(password):
         flash('La contraseña debe tener al menos 8 caracteres, una letra mayúscula, una letra minúscula, un número y un carácter especial.')
         return redirect(url_for('nuevo_usuario'))
-
     # Verificar si el usuario ya existe
     usuario_existente = Registro.query.filter_by(usuario=usuario).first()
     if usuario_existente:

@@ -28,13 +28,10 @@
                     <td>{{ registro.rol }}</td>
                     <td>{{ registro.usuario }}</td>
                     <td>
-                        <a href="{{ url_for('editar', id=registro.id) }}">
-                            <i class="fa fa-edit"></i>
-                        </a>
-                        <a href="{{ url_for('eliminar_usuario', id=registro.id) }}" onclick="return confirm('¿Estás seguro de que deseas eliminar este usuario?');">
-                            <i class="fa fa-trash"></i>
-                        </a>
+                        <a href="{{ url_for('editar', id=registro.id) }}"><i class="fa fa-edit"></i></a>
+                        <a href="{{ url_for('eliminar_usuario', id=registro.id) }}" onclick="return confirm('¿Estás seguro de que deseas eliminar este usuario?');"><i class="fa fa-trash"></i></a>
                     </td>
+                    
                 </tr>
                 {% endfor %}
             </tbody>

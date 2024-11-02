@@ -20,10 +20,17 @@
                 </form>
             </div>
             <div class="profile-right">
-              <h2>Paola Pérez</h2>
+                <h2>Paola Pérez</h2>
                 <div><i class="fas fa-envelope"></i> Correo electrónico: valeriapaolap49@gmail.com</div>
                 <div><i class="fas fa-phone"></i> Teléfono: 8376973967</div>
                 <div class="admin-badge">Admin</div>
+
+                <!-- Formulario para cambiar la contraseña -->
+                <form method="post" action="/cambiar_contrasena">
+                    <label for="nueva_contrasena">Nueva Contraseña:</label>
+                    <input type="password" id="nueva_contrasena" name="nueva_contrasena" required>
+                    <button type="submit">Guardar Contraseña</button>
+                </form>
             </div>
         </div>
 
@@ -39,12 +46,24 @@
                 <div class="admin-badge">Admin</div>
             </div>
             <div class="profile-right">
-              <h2>Paola Pérez</h2>
+                <h2>Paola Pérez</h2>
                 <div><i class="fas fa-envelope"></i> Correo electrónico: valeriapaolap49@gmail.com</div>
                 <div><i class="fas fa-phone"></i> Teléfono: 8376973967</div>
+
+                <!-- Formulario para cambiar la contraseña -->
+                <form method="post" action="/cambiar_contrasena">
+                    <label for="nueva_contrasenaDos">Nueva Contraseña:</label>
+                    <input type="password" id="nueva_contrasenaDos" name="nueva_contrasena" required>
+                    <button type="submit">Guardar Contraseña</button>
+                </form>
             </div>
         </div>
    </div> <!-- Cierre del contenedor -->
+   
+   <!-- Botón de cerrar sesión -->
+   <li><a href="{{ url_for('logout') }}">Cerrar sesión </a></li>
+
+
 </body>
 <script src="/Empleados.js"></script>
 </html>
