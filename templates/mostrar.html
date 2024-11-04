@@ -46,13 +46,20 @@
                     <div class="modal-content">
                         <span class="close" onclick="document.getElementById('modal-{{ registro.id }}').style.display='none'">&times;</span>
                         <h2>Detalles del Registro</h2>
-                        <p><strong>Nombre:</strong> {{ registro.nombre }}</p>
-                        <p><strong>Rol:</strong> {{ registro.rol }}</p>
-                        <p><strong>Usuario:</strong> {{ registro.usuario }}</p>
-                        <p><strong>Teléfono:</strong> {{ registro.telefono }}</p>
-                        <p><strong>Correo:</strong> {{ registro.correo }}</p>
+                        <div class="modal-columns"> <!-- Agregada la clase para columnas -->
+                            <div class="column">
+                                <p><strong>Nombre:</strong> {{ registro.nombre }}</p>
+                                <p><strong>Usuario:</strong> {{ registro.usuario }}</p>
+                            </div>
+                            <div class="column">
+                                <p><strong>Rol:</strong> {{ registro.rol }}</p>
+                                <p><strong>Teléfono:</strong> {{ registro.telefono }}</p>
+                                <p><strong>Correo:</strong> {{ registro.correo }}</p>
+                            </div>
+                        </div>
                     </div>
                 </div>
+
                 {% endfor %}
             </tbody>
         </table>
@@ -75,22 +82,35 @@
             overflow: auto;
             background-color: rgba(0,0,0,0.4);
         }
-
+    
         .modal-content {
             background-color: #fefefe;
             margin: 15% auto;
             padding: 20px;
             border: 1px solid #888;
             width: 80%;
+            display: flex; /* Usando flexbox */
+            flex-direction: column; /* Cambia a columna para el título y el cierre */
         }
-
+    
+        .modal-columns {
+            display: flex; /* Cambia a flex para las columnas */
+            justify-content: space-between; /* Espacio entre las columnas */
+            margin-top: 20px; /* Espacio superior entre el título y las columnas */
+        }
+    
+        .column {
+            flex: 1; /* Ocupa el mismo espacio */
+            padding: 10px; /* Espacio interno en las columnas */
+        }
+    
         .close {
             color: #aaa;
             float: right;
             font-size: 28px;
             font-weight: bold;
         }
-
+    
         .close:hover,
         .close:focus {
             color: black;
@@ -98,5 +118,6 @@
             cursor: pointer;
         }
     </style>
+    
 </body>
 </html>
