@@ -1,58 +1,60 @@
-/* Estilo general del modal */
+/* Estilo del modal */
 .modal {
     display: none; /* Ocultar por defecto */
-    position: fixed;
-    z-index: 1;
+    position: fixed; /* Mantener en posición fija */
+    z-index: 1000; /* Por encima de otros elementos */
     left: 0;
     top: 0;
-    width: 100%;
-    height: 100%;
-    overflow: auto;
-    background-color: rgba(0, 0, 0, 0.5); /* Fondo oscuro */
+    width: 100%; /* Ancho completo */
+    height: 100%; /* Altura completa */
+    overflow: auto; /* Permitir scroll si es necesario */
+    background-color: rgba(0, 0, 0, 0.7); /* Fondo semi-transparente */
 }
 
 /* Contenido del modal */
 .modal-content {
-    background-color: #fefefe; /* Fondo blanco */
-    margin: 10% auto; /* Margen vertical */
+    background-color: #ffffff;
+    margin: 10% auto; /* Centramos el modal */
     padding: 20px;
-    border: 1px solid #888; /* Borde gris */
-    width: 80%; /* Ancho del modal */
-    max-width: 600px; /* Ancho máximo */
-    border-radius: 8px; /* Bordes redondeados */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Sombra */
+    border: 1px solid #888;
+    width: 90%; /* Ancho del modal */
+    max-width: 500px; /* Ancho máximo */
+    border-radius: 10px; /* Bordes redondeados */
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3); /* Sombra más pronunciada */
 }
 
-/* Estilo para el botón de cerrar */
+/* Estilo del botón de cerrar */
 .close {
-    color: #aaa; /* Color gris */
-    float: right; /* Alinear a la derecha */
-    font-size: 28px; /* Tamaño del texto */
-    font-weight: bold; /* Negrita */
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+    cursor: pointer;
 }
 
 .close:hover,
 .close:focus {
-    color: black; /* Cambia a negro al pasar el mouse */
-    text-decoration: none; /* Sin subrayado */
-    cursor: pointer; /* Cambiar cursor */
+    color: #000;
+    text-decoration: none;
 }
 
-/* Detalles del modal */
+/* Estilos para el contenido del modal */
 .modal-details {
-    display: grid; /* Usar grid para organizar en columnas */
-    grid-template-columns: repeat(2, 1fr); /* Dos columnas */
-    gap: 10px; /* Espacio entre columnas */
-    margin-top: 20px; /* Margen superior */
+    margin-top: 20px;
 }
 
-/* Elemento de detalle */
 .detail-item {
-    padding: 10px; /* Espaciado interno */
-    border-bottom: 1px solid #ddd; /* Línea divisoria */
+    margin: 10px 0;
+    font-size: 16px;
 }
 
-/* Fuerte para resaltar etiquetas */
-.detail-item strong {
-    color: #333; /* Color para etiquetas */
+/* Enfocar el texto */
+strong {
+    color: #333; /* Color del texto fuerte */
+}
+
+/* Opcional: Estilo para los spans que muestran la información */
+.modal-details span {
+    color: #555; /* Color del texto normal */
+    font-weight: 500; /* Un poco más grueso */
 }
