@@ -1,0 +1,58 @@
+/* Estilo general del modal */
+.modal {
+    display: none; /* Ocultar por defecto */
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.5); /* Fondo oscuro */
+}
+
+/* Contenido del modal */
+.modal-content {
+    background-color: #fefefe; /* Fondo blanco */
+    margin: 10% auto; /* Margen vertical */
+    padding: 20px;
+    border: 1px solid #888; /* Borde gris */
+    width: 80%; /* Ancho del modal */
+    max-width: 600px; /* Ancho máximo */
+    border-radius: 8px; /* Bordes redondeados */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Sombra */
+}
+
+/* Estilo para el botón de cerrar */
+.close {
+    color: #aaa; /* Color gris */
+    float: right; /* Alinear a la derecha */
+    font-size: 28px; /* Tamaño del texto */
+    font-weight: bold; /* Negrita */
+}
+
+.close:hover,
+.close:focus {
+    color: black; /* Cambia a negro al pasar el mouse */
+    text-decoration: none; /* Sin subrayado */
+    cursor: pointer; /* Cambiar cursor */
+}
+
+/* Detalles del modal */
+.modal-details {
+    display: grid; /* Usar grid para organizar en columnas */
+    grid-template-columns: repeat(2, 1fr); /* Dos columnas */
+    gap: 10px; /* Espacio entre columnas */
+    margin-top: 20px; /* Margen superior */
+}
+
+/* Elemento de detalle */
+.detail-item {
+    padding: 10px; /* Espaciado interno */
+    border-bottom: 1px solid #ddd; /* Línea divisoria */
+}
+
+/* Fuerte para resaltar etiquetas */
+.detail-item strong {
+    color: #333; /* Color para etiquetas */
+}

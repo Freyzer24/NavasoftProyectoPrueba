@@ -202,6 +202,11 @@ def guardar():
     flash('Registro guardado con éxito')
     return redirect(url_for('mostrar'))
 
+# Nueva ruta para obtener detalles del usuario
+@app.route('/detalles_usuario/<int:id>')
+def detalles_usuario(id):
+    registro = Registro.query.get_or_404(id)
+    return render_template('detalles_modal.html', registro=registro)
 # Ruta para editar un registro
 @app.route('/editar/<int:id>', methods=['GET', 'POST'])
 def editar(id):
