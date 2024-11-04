@@ -7,8 +7,8 @@
     <link rel="stylesheet" href="/static/Perfil.css">
 </head>
 <body>
-   <h1>EDITAR PERFIL</h1>
-   <div class="profile-container"> <!-- Contenedor para las tarjetas -->
+    <h1>EDITAR PERFIL</h1>
+    <div class="profile-container"> <!-- Contenedor para las tarjetas -->
         <div class="profile-card">
             <div class="profile-left">
                 <form method="post" action="#" enctype="multipart/form-data">
@@ -20,11 +20,11 @@
                 </form>
             </div>
             <div class="profile-right">
-                <h2>Paola Pérez</h2>
-                <div><i class="fas fa-envelope"></i> Correo electrónico: valeriapaolap49@gmail.com</div>
-                <div><i class="fas fa-phone"></i> Teléfono: 8376973967</div>
-                <div class="admin-badge">Admin</div>
-
+                <h2>{{ datos.usuario }}</h2>
+                <div><i class="fas fa-envelope"></i> Correo electrónico: {{ datos.correo }}</div>
+                <div><i class="fas fa-phone"></i> Teléfono: {{ datos.telefono }}</div>
+                <div class="admin-badge">{{ datos.rol }}</div>
+    
                 <!-- Formulario para cambiar la contraseña -->
                 <form method="post" action="/cambiar_contrasena">
                     <label for="nueva_contrasena">Nueva Contraseña:</label>
@@ -33,32 +33,9 @@
                 </form>
             </div>
         </div>
-
-        <div class="profile-card">
-            <div class="profile-left">
-                <form method="post" action="#" enctype="multipart/form-data">
-                    <div>
-                        <img src="/imagenes/logo 1.jpeg" alt="avatar" id="imgDos" />
-                        <input type="file" name="fotoDos" id="fotoDos" accept="image/*" />
-                        <label for="fotoDos">Cambiar foto</label>
-                    </div>
-                </form>
-                <div class="admin-badge">Admin</div>
-            </div>
-            <div class="profile-right">
-                <h2>Paola Pérez</h2>
-                <div><i class="fas fa-envelope"></i> Correo electrónico: valeriapaolap49@gmail.com</div>
-                <div><i class="fas fa-phone"></i> Teléfono: 8376973967</div>
-
-                <!-- Formulario para cambiar la contraseña -->
-                <form method="post" action="/cambiar_contrasena">
-                    <label for="nueva_contrasenaDos">Nueva Contraseña:</label>
-                    <input type="password" id="nueva_contrasenaDos" name="nueva_contrasena" required>
-                    <button type="submit">Guardar Contraseña</button>
-                </form>
-            </div>
-        </div>
-   </div> <!-- Cierre del contenedor -->
+    </div>
+    
+    
    
    <!-- Botón de cerrar sesión -->
    <li><a href="{{ url_for('logout') }}">Cerrar sesión </a></li>
