@@ -35,7 +35,7 @@ with app.app_context():
 #Pantalla que se muestra con /
 @app.route('/')
 def index():
-    return render_template('login.html')
+    return render_template('indexadmin.html')
 
 
 @app.route('/login', methods=['POST'])
@@ -115,6 +115,41 @@ def perfil():
     }
 
     return render_template('perfil.html', datos=datos_usuario)
+@app.route('/cambiar_contrasena', methods=['POST'])
+def cambiar_contrasena():
+    # Verifica si el usuario ha iniciado sesión
+    user_id = session.get('user_id')
+    if not user_id:
+        flash("Por favor, inicia sesión para cambiar tu contraseña.")
+        return redirect(url_for('index'))
+
+    # Obtiene la nueva contraseña del formulario
+    nueva_contrasena = request.form.get('nueva_contrasena').strip()
+
+    # Validaciones de la nueva contraseña (puedes ajustar según tus requisitos)
+    if len(nueva_contrasena) < 8:
+        flash("La nueva contraseña debe tener al menos 8 caracteres.")
+        return redirect(url_for('perfil'))
+    if not any(char.isdigit() for char in nueva_contrasena):
+        flash("La nueva contraseña debe contener al menos un número.")
+        return redirect(url_for('perfil'))
+    if not any(char.isupper() for char in nueva_contrasena):
+        flash("La nueva contraseña debe contener al menos una letra mayúscula.")
+        return redirect(url_for('perfil'))
+    if not any(char in "!@#$%^&*()-_+=" for char in nueva_contrasena):
+        flash("La nueva contraseña debe contener al menos un carácter especial.")
+        return redirect(url_for('perfil'))
+
+    # Encripta la nueva contraseña
+    nueva_contrasena_hash = generate_password_hash(nueva_contrasena)
+
+    # Actualiza la contraseña en la base de datos
+    usuario = Registro.query.get(user_id)
+    usuario.password = nueva_contrasena_hash
+    db.session.commit()
+
+    flash("Contraseña actualizada exitosamente.")
+    return redirect(url_for('perfil'))
 
 @app.route('/tAdmin')
 def tAdmin():
@@ -140,7 +175,7 @@ def enviar_confirmacion_correo(nombre, usuario, correo):
     <html>
         <body>
              <p style="font-size: 16px;">Hola <strong>{nombre}</strong>,</p>
-            <p style="font-size: 14px;">Has creado exitosamente tu usuario llamado <strong>{usuario}</strong>.</p>
+            <p style="font-size: 14px;">Hemos creado exitosamente tu usuario llamado <strong>{usuario}</strong>.</p>
             <p style="font-size: 14px;">Tu contraseña temporal es: <strong>Navasoft$0</strong></p>
             <p style="font-size: 14px;">Saludos cordiales,<br>El equipo de Navasoft</p>
             <br>
