@@ -35,7 +35,7 @@ with app.app_context():
 #Pantalla que se muestra con /
 @app.route('/')
 def index():
-    return render_template('indexadmin.html')
+    return render_template('login.html')
 
 
 @app.route('/login', methods=['POST'])
@@ -150,7 +150,9 @@ def cambiar_contrasena():
 
     flash("Contraseña actualizada exitosamente.")
     return redirect(url_for('perfil'))
-
+@app.route('/proyectos')
+def proyectos():
+    return render_template('proyectos.html')
 @app.route('/tAdmin')
 def tAdmin():
     return render_template('tAdmin.html')

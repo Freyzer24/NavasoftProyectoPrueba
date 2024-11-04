@@ -8,30 +8,68 @@
     <script src="./proyecto.js"></script>
 </head>
 <body>
-    <div class="projects-container">
-        <h1>Proyectos</h1>
-        <table>
-            <thead>
-                <tr>
-                    <th>Nombre</th>
-                    <th>Progreso</th>
-                    <th></th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>Balance</td>
-                    <td><span class="status-dot green"></span> Listo</td>
-                    <td><button class="delete-btn" title="Eliminar"><img src="/imagenes/trashicon.webp" alt="Eliminar"></button></td>
-                </tr>
-                <tr>
-                    <td><a href="Diagrama de Gantt.html" class="project-link">Prototipo</a></td>
-                    <td><span class="status-dot orange"></span> Avanzado</td>
-                    <td><button class="delete-btn" title="Eliminar"><img src="/imagenes/trashicon.webp" alt="Eliminar"></button></td>
-                </tr>
-            </tbody>
-        </table>
-    </div>
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Document</title>
+        <link rel="stylesheet" href="/static/proyectos.css">
+        <script src="./proyecto.js"></script>
+    </head>
+    <body>
+        <div class="projects-container">
+            <h1>Proyectos</h1>
+            <button onclick="openModal()" class="add-project-btn">Añadir Proyecto</button>
+            
+            <table>
+                <thead>
+                    <tr>
+                        <th>Nombre</th>
+                        <th>Progreso</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody id="projects-table">
+                    <tr>
+                        <td>Balance</td>
+                        <td><span class="status-dot green"></span> Listo</td>
+                        <td><button class="delete-btn" title="Eliminar"><img src="/imagenes/trashicon.webp" alt="Eliminar"></button></td>
+                    </tr>
+                    <tr>
+                        <td><a href="Diagrama de Gantt.html" class="project-link">Prototipo</a></td>
+                        <td><span class="status-dot orange"></span> Avanzado</td>
+                        <td><button class="delete-btn" title="Eliminar"><img src="/imagenes/trashicon.webp" alt="Eliminar"></button></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    
+        <!-- Modal para añadir proyecto -->
+        <div id="addProjectModal" class="modal">
+            <div class="modal-content">
+                <span class="close" onclick="closeModal()">&times;</span>
+                <h2>Añadir Proyecto</h2>
+                <form id="addProjectForm" method="POST" action="/add_project">
+                    <label for="project_name">Nombre del proyecto:</label>
+                    <input type="text" id="project_name" name="project_name" required>
+    
+                    <label for="progress">Progreso:</label>
+                    <select id="progress" name="progress">
+                        <option value="Listo">Listo</option>
+                        <option value="Avanzado">Avanzado</option>
+                        <option value="En progreso">En progreso</option>
+                    </select>
+                    
+                    <button type="submit">Guardar Proyecto</button>
+                </form>
+            </div>
+        </div>
+    
+        <script src="./proyecto.js"></script>
+    </body>
+    </html>
+    
 
 
 </body>
