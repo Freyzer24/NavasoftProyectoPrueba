@@ -2,8 +2,7 @@ import re
 import smtplib
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
-from email.mime.image import MIMEImage
-from flask import Flask, render_template, request, redirect, url_for, flash,session
+from flask import Flask, render_template, request, redirect, url_for, flash, session
 from flask_sqlalchemy import SQLAlchemy
 from werkzeug.security import generate_password_hash, check_password_hash
 app = Flask(__name__)
@@ -36,12 +35,9 @@ with app.app_context():
 #Pantalla que se muestra con /
 @app.route('/')
 def index():
-    return render_template('indexAdmin.html')
+    return render_template('login.html')
 
 
-
-
-# Ruta para manejar el inicio de sesión
 @app.route('/login', methods=['POST'])
 def login():
     usuario = request.form['usuario'].strip()
@@ -56,6 +52,12 @@ def login():
         print(f"Contraseña correcta: {is_correct}")  # Imprime True si coincide
 
         if is_correct:
+            # Guarda los datos del usuario en la sesión
+            session['usuario'] = registro.usuario
+            session['correo'] = registro.correo
+            session['telefono'] = registro.telefono
+            session['rol'] = registro.rol
+
             # Redirecciona dependiendo del rol
             if registro.rol in ['admin', 'super_administrador']:
                 flash('Inicio de sesión exitoso - Admin')
@@ -69,6 +71,7 @@ def login():
         flash('Usuario no encontrado. Verifica tus datos e intenta de nuevo.')
 
     return redirect(url_for('index'))
+
 
 
 
@@ -98,7 +101,21 @@ def nuevo_usuario():
     return render_template('index.html')
 @app.route('/perfil')
 def perfil():
-    return render_template('perfil.html')
+    # Verificar que el usuario esté autenticado
+    if 'usuario' not in session:
+        flash('Debes iniciar sesión primero.')
+        return redirect(url_for('index'))
+
+    # Pasar los datos del usuario a la plantilla
+    datos_usuario = {
+        'usuario': session['usuario'],
+        'correo': session['correo'],
+        'telefono': session['telefono'],
+        'rol': session['rol']
+    }
+
+    return render_template('perfil.html', datos=datos_usuario)
+
 @app.route('/tAdmin')
 def tAdmin():
     return render_template('tAdmin.html')
