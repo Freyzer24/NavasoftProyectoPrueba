@@ -44,7 +44,7 @@ with app.app_context():
 #Pantalla que se muestra con /
 @app.route('/')
 def index():
-    return render_template('indexadmin.html')
+    return render_template('login.html')
 
 
 @app.route('/login', methods=['POST'])
@@ -113,7 +113,7 @@ def perfil():
     # Verificar que el usuario esté autenticado
     if 'usuario' not in session:
         flash('Debes iniciar sesión primero.')
-        return redirect(url_for('index'))
+        return redirect(url_for('pe'))
 
     # Pasar los datos del usuario a la plantilla
     datos_usuario = {
@@ -192,6 +192,17 @@ def eliminar_proyecto(id):
         db.session.delete(proyecto)
         db.session.commit()
         flash('Proyecto eliminado correctamente.')
+    else:
+        flash('Proyecto no encontrado.')
+    return redirect(url_for('proyectos'))
+@app.route('/actualizar_proyecto/<int:id>', methods=['POST'])
+def actualizar_proyecto(id):
+    proyecto = Proyecto.query.get(id)
+    if proyecto:
+        proyecto.nombre = request.form['nombre']
+        proyecto.encargado = request.form['encargado']
+        db.session.commit()
+        flash('Proyecto actualizado correctamente.')
     else:
         flash('Proyecto no encontrado.')
     return redirect(url_for('proyectos'))
