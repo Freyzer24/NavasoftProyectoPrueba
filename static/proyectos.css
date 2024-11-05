@@ -26,6 +26,19 @@ body {
     z-index: 1;
     overflow: auto;
 }
+.user-management-container {
+    background-color: white;
+    padding: 30px;
+    border-radius: 15px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    width: 100vw; /* Ocupa el 90% del ancho de la pantalla */
+    height: auto;
+    max-width: 1200px; /* Ancho máximo para pantallas grandes */
+    overflow-x: auto; /* Permitir desplazamiento horizontal en pantallas pequeñas */
+    text-align: center;
+    align-items: center;
+}
+
 
 h1{
     margin-top: 2%;
@@ -40,6 +53,12 @@ h1{
     max-width: 500px;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
     position: relative;
+    align-items: center;
+    text-align: center;
+}
+.modal-content label,
+.modal-content input {
+    margin-top: 1%; /* Margen superior del 1% */
 }
 
 .close {
@@ -52,11 +71,14 @@ h1{
 
 /* Estilos de la tabla */
 table {
+    margin-top: 1%;
     width: 100%;
     border-collapse: collapse;
-    max-width: 800px;
+    max-width: 1300px;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
     margin-bottom: 20px;
+    text-align: center;
+    align-items: center;
 }
 
 thead th {
@@ -90,17 +112,30 @@ tbody td button i {
 tbody td button:hover i {
     color: #ec5c5c; /* Color del ícono al pasar el ratón */
 }
-
-/* Estilos del botón de añadir proyecto */
-.model button {
-    background-color: #527ae6;
-    color: white;
-    padding: 10px 20px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
+.Ingreso button {
+    background-color: #527ae6; /* Color de fondo */
+    color: white; /* Color del texto */
+    padding: 10px 20px; /* Espaciado interno */
+    border: none; /* Sin borde */
+    border-radius: 5px; /* Bordes redondeados */
+    cursor: pointer; /* Cambia el cursor al pasar el ratón */
 }
 
-.model button:hover {
-    background-color: #6a9ffb;
+.Ingreso button:hover {
+    background-color: #6a9ffb; /* Color de fondo al pasar el ratón */
+}
+
+/* Estilos del botón de añadir proyecto */
+.modal-content button {
+    background-color: #527ae6; /* Color de fondo */
+    color: white; /* Color del texto */
+    padding: 10px 20px; /* Espaciado interno */
+    border: none; /* Sin borde */
+    border-radius: 5px; /* Bordes redondeados */
+    cursor: pointer; /* Cambia el cursor al pasar el ratón */
+    margin-top: 10px; /* Espaciado superior */
+}
+
+.modal-content button:hover {
+    background-color: #6a9ffb; /* Color de fondo al pasar el ratón */
 }

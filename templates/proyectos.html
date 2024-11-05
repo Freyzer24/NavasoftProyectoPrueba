@@ -8,7 +8,8 @@
     <link rel="stylesheet" href="/static/proyectos.css"> <!-- Asegúrate de que la ruta sea correcta -->
 </head>
 <body>
-    <h1>Proyectos</h1>
+    <div class="user-management-container">
+    <h1>PROYECTOS</h1>
 
     <!-- Modal -->
     <div id="modalForm" class="modal">
@@ -17,12 +18,12 @@
             <h2>Añadir Proyecto</h2>
             <form action="{{ url_for('agregar_proyecto') }}" method="POST">
                 <label for="nombre">Nombre del Proyecto:</label>
-                <input type="text" name="nombre" id="nombre" required>
+                <input type="text" name="nombre" id="nombre" required> <br>
                 
-                <label for="encargado">Encargado del Proyecto:</label>
-                <input type="text" name="encargado" id="encargado" required>
+                <label for="encargado">Encargado:</label>
+                <input type="text" name="encargado" id="encargado" required> <br>
                 
-                <button type="submit">Añadir Proyecto</button>
+                <button type="submit" >Añadir Proyecto</button>
             </form>
         </div>
     </div>
@@ -52,10 +53,12 @@
             {% endfor %}
         </tbody>
     </table>
-
-    <!-- Botón para abrir el modal -->
+    <div class="Ingreso"><!-- Botón para abrir el modal -->
     <button onclick="abrirModal()">Añadir Proyecto</button>
+    </div>
+</div>
 
+    
     <script>
         function abrirModal() {
             document.getElementById('modalForm').style.display = 'block';
