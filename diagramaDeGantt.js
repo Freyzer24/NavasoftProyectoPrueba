@@ -1,101 +1,104 @@
-let tasks = [
-    ['1', 'Tarea Inicial', 'Grupo 1', new Date(2024, 9, 1), new Date(2024, 9, 5), null, 100, null]
-];
+// Array para almacenar las tareas
+let tasks = [];
 
-// Cargar la librería de Google Charts
-google.charts.load('current', { 'packages': ['gantt'] });
-google.charts.setOnLoadCallback(drawChart);
-
-// Función para dibujar el gráfico
-function drawChart() {
-    var data = new google.visualization.DataTable();
-    data.addColumn('string', 'ID de la tarea');
-    data.addColumn('string', 'Nombre de la tarea');
-    data.addColumn('string', 'Recurso');
-    data.addColumn('date', 'Inicio');
-    data.addColumn('date', 'Fin');
-    data.addColumn('number', 'Duración');
-    data.addColumn('number', 'Porcentaje completado');
-    data.addColumn('string', 'Dependencia');
-
-    // Añadir las tareas
-    data.addRows(tasks);
-
-    var options = {
-        height: 400,
-        gantt: {
-            trackHeight: 30
-        }
-    };
-
-    var chart = new google.visualization.Gantt(document.getElementById('gantt_chart'));
-    chart.draw(data, options);
-}
-
-// Función para agregar nuevas tareas
+// Al enviar el formulario
 document.getElementById('task_form').addEventListener('submit', function (event) {
     event.preventDefault(); // Evitar recargar la página
+    
+    // Obtener los valores del formulario
     let taskName = document.getElementById('task_name').value;
     let taskStart = new Date(document.getElementById('task_start').value);
     let taskEnd = new Date(document.getElementById('task_end').value);
-    let taskId = (tasks.length + 1).toString();
     let taskCompletion = parseInt(document.getElementById('task_completion').value) || 0;
+    
+    // Validar datos
+    if (!taskName || !taskStart || !taskEnd || isNaN(taskCompletion)) {
+        alert("Por favor, complete todos los campos correctamente.");
+        return;
+    }
 
-    tasks.push([taskId, taskName, 'Grupo ' + taskId, taskStart, taskEnd, null, taskCompletion, null]);
+    // Añadir la tarea al array
+    tasks.push({ 
+        name: taskName, 
+        start: taskStart, 
+        end: taskEnd, 
+        completion: taskCompletion 
+    });
 
-    // Redibujar el gráfico con la nueva tarea
+    // Redibujar el gráfico de Gantt
     drawChart();
 
     // Limpiar el formulario
     document.getElementById('task_form').reset();
 });
 
-// Función para descargar las tareas
-document.getElementById('downloadBtn').addEventListener('click', function() {
-    const formattedTasks = tasks.map(task => {
-        return [
-            `ID: "${task[0]}"`, // ID
-            `Nombre: "${task[1]}"`, // Nombre
-            `Recurso: "${task[2]}"`, // Recurso
-            `Fecha de inicio: "${task[3].toISOString().split('T')[0]}"`, // Inicio
-            `Fecha de fin: "${task[4].toISOString().split('T')[0]}"`, // Fin
-            `Porcentaje completado: "${task[6]}"` // Porcentaje completado
-        ].join(', ');
-    }).join('\n');
+// Función para generar el diagrama de Gantt
+function drawChart() {
+    const ganttChart = document.getElementById('gantt_chart');
+    ganttChart.innerHTML = ''; // Limpiar el gráfico antes de volver a dibujarlo
 
-    // Crear un blob con el texto
-    const blob = new Blob([formattedTasks], { type: 'text/csv' });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = 'tareas.csv'; // Nombre del archivo
+    // Obtener las fechas más tempranas y más tardías para establecer el rango de fechas
+    let minDate = new Date(Math.min(...tasks.map(t => t.start)));
+    let maxDate = new Date(Math.max(...tasks.map(t => t.end)));
 
-    // Simular clic en el enlace
-    document.body.appendChild(a);
-    a.click();
+    // Convertir las fechas a formato de año, mes, día
+    const startYear = minDate.getFullYear();
+    const endYear = maxDate.getFullYear();
 
-    // Limpiar
-    document.body.removeChild(a);
-    URL.revokeObjectURL(url);
-});
+    // Crear el contenedor para el gráfico
+    const ganttTimeline = document.createElement('div');
+    ganttTimeline.className = 'gantt-timeline';
+    ganttChart.appendChild(ganttTimeline);
 
-function GenerarExcel() {  
-    var usuario  = $("select#selUsuario option:selected").attr('value');		 
-    var fini     = $("#dtpFechaInicio").val();
-    var ffin     = $("#dtpFechaFin").val(); 
-    var proyecto  = $("#proyectoNombre").val(); // Asumiendo que tienes un campo para el nombre del proyecto
-    var porcentaje = $("#proyectoPorcentaje").val(); // Asumiendo que tienes un campo para el porcentaje del proyecto
+    // Generar las secciones de años, meses y días
+    let currentDate = new Date(minDate);
+    let months = [];
 
-    // Agrega los parámetros del proyecto y porcentaje a la URL
-    var url = 'Excel.php?id=' + usuario + '&fi=' + fini + '&ff=' + ffin + '&proyecto=' + encodeURIComponent(proyecto) + '&porcentaje=' + encodeURIComponent(porcentaje);
-    
-    window.open(url, '_blank');		  
-}
+    // Crear las divisiones para los años y meses
+    for (let year = startYear; year <= endYear; year++) {
+        const yearDiv = document.createElement('div');
+        yearDiv.className = 'year';
+        yearDiv.innerText = year;
+        ganttTimeline.appendChild(yearDiv);
 
-// Cerrar el modal si se hace clic fuera del contenido del modal
-window.addEventListener("click", function(event) {
-    if (event.target === confirmationModal) {
-        confirmationModal.style.display = "none";
-        isConfirmed = false;
+        for (let month = 0; month < 12; month++) {
+            const monthDiv = document.createElement('div');
+            monthDiv.className = 'month';
+            monthDiv.innerText = new Date(year, month).toLocaleString('default', { month: 'short' });
+            ganttTimeline.appendChild(monthDiv);
+
+            for (let day = 1; day <= 31; day++) {
+                const dayDiv = document.createElement('div');
+                dayDiv.className = 'day';
+                dayDiv.innerText = day;
+                ganttTimeline.appendChild(dayDiv);
+            }
+        }
     }
-});
+
+    // Dibujar las barras para cada tarea
+    tasks.forEach(task => {
+        const taskBar = document.createElement('div');
+        taskBar.className = 'task-bar';
+
+        // Calcular el ancho y desplazamiento de la barra
+        const taskStartDay = Math.floor((task.start - minDate) / (1000 * 60 * 60 * 24));
+        const taskEndDay = Math.floor((task.end - minDate) / (1000 * 60 * 60 * 24));
+        const taskDuration = taskEndDay - taskStartDay;
+        
+        taskBar.style.left = `${taskStartDay * 20}px`;  // Ajustar la posición
+        taskBar.style.width = `${taskDuration * 20}px`;  // Ajustar la longitud
+
+        // Ajustar el color de la barra según el porcentaje completado
+        if (task.completion === 100) {
+            taskBar.style.backgroundColor = 'green';
+        } else if (task.completion >= 65) {
+            taskBar.style.backgroundColor = 'yellow';
+        } else {
+            taskBar.style.backgroundColor = 'red';
+        }
+
+        // Añadir la barra de tarea al gráfico
+        ganttChart.appendChild(taskBar);
+    });
+}

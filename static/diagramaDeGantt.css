@@ -6,198 +6,265 @@
 }
 
 body {
-    font-family: 'Nunito', sans-serif; /* Define la fuente principal */
-    margin: 20px; /* Margen alrededor del contenido */
-    background-color: #e4e3e3da;/* Fondo con degradado */
-    color: #333; /* Color del texto */
+    font-family: 'Nunito', sans-serif, 'Arial', sans-serif; /* Fuentes principales */
+    margin: 20px;
+    background-color: #e4e3e3da; /* Fondo gris claro */
+    color: #333;
 }
 
 h1 {
+    text-align: center;
+    color: #4a90e2; /* Color del título */
     font-family: "Averta", sans-serif;
-    text-align: center; /* Centra el título */
-    color: #444; /* Color del título */
     font-size: 2.5rem; /* Tamaño del título */
-    margin-bottom: 20px; /* Espacio debajo del título */
-    
+    margin-bottom: 20px;
 }
 
 form {
-    display: grid; /* Utiliza grid para el diseño del formulario */
-    grid-template-columns: 1fr 1fr; /* Dos columnas de igual ancho */
-    gap: 20px; /* Espacio entre columnas */
-    margin-bottom: 30px; /* Margen inferior del formulario */
-    background-color: #ffffff; /* Color de fondo del formulario */
-    padding: 20px; /* Espacio interno del formulario */
+    display: grid; /* Usa grid para el formulario */
+    grid-template-columns: 1fr 1fr; /* Dos columnas */
+    gap: 20px; /* Espacio entre elementos */
+    background-color: #ffffff; /* Fondo blanco */
+    padding: 20px;
     border-radius: 10px; /* Bordes redondeados */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Sombra del formulario */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Sombra */
 }
 
-/* Estilo de las etiquetas */
 label {
-    font-weight: bold; /* Texto en negrita */
-    margin-bottom: 8px; /* Espacio debajo de la etiqueta */
-    color: #555; /* Color del texto de la etiqueta */
+    font-weight: bold;
+    color: #555;
+    margin-bottom: 8px;
 }
 
-/* Estilo para los campos de entrada */
 input {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
     width: 100%; /* Ancho completo */
-    padding: 10px; /* Espacio interior */
-    border: 1px solid #ccc; /* Borde del input */
-    border-radius: 5px; /* Bordes redondeados */
-    box-sizing: border-box; /* Incluye padding y border en el ancho total */
-    font-size: 1rem; /* Tamaño de fuente en los inputs */
+    font-size: 14px;
+    box-sizing: border-box; /* Incluye padding y borde en el ancho */
 }
 
-/* Estilo para los botones */
 button {
-    grid-column: span 2; /* Ocupa ambas columnas del formulario */
-    padding: 12px; /* Espacio interior del botón */
-    background-color: #1F5F74; /* Color de fondo del botón */
-    color: #ffffff; /* Color del texto del botón */
-    border: none; /* Sin borde */
-    border-radius: 5px; /* Bordes redondeados */
-    font-size: 1.2rem; /* Tamaño de fuente del botón */
-    cursor: pointer; /* Cambia el cursor al pasar el ratón */
-    transition: background-color 0.3s ease, transform 0.3s ease, font-size 0.3s ease; /* Transiciones suaves */
+    grid-column: span 2;
+    padding: 12px;
+    background-color: #1F5F74;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1.2rem;
+    transition: background-color 0.3s ease, transform 0.3s ease, font-size 0.3s ease;
 }
 
-/* Efecto hover para el botón */
 button:hover {
-    background-color: #0f4557; /* Cambia el color al pasar el ratón */
-    transform: scale(1.05); /* Aumenta el tamaño del botón */
-    font-size: 1.3rem; /* Aumenta el tamaño de la fuente al pasar el ratón */
+    background-color: #0f4557;
+    transform: scale(1.05);
+    font-size: 1.3rem;
 }
 
 /* Estilos para el gráfico Gantt */
-#gantt_chart {
-
-    width: 100%; /* Ancho completo */
-    height: 500px; /* Altura del gráfico */
-    background-color: #fcfcfc; /* Color de fondo del gráfico */
-    border: 2px solid #ffffff; /* Borde del gráfico */
-    border-radius: 10px; /* Bordes redondeados */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Sombra del gráfico */
+#ganttChart {
+    margin-top: 20px;
+    border-radius: 4px;
+    overflow: hidden;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
 }
 
-/* Estilos del modal */
+.gantt-chart-container {
+    overflow-x: auto;
+    white-space: nowrap;
+    border: 1px solid #ccc;
+}
+
+#timeline {
+    display: flex;
+    margin-top: 10px;
+    position: relative;
+}
+
+.month {
+    position: relative;
+    width: 30px; /* Ancho de cada mes */
+    background-color: #e9f5ff;
+    border-right: 1px solid #ddd;
+}
+
+.day {
+    flex: 1;
+    border-top: 1px solid #ddd;
+    height: 10px;
+    position: relative;
+}
+
+.day-number {
+    position: absolute;
+    top: -20px;
+    left: 0;
+    right: 0;
+    font-size: 12px;
+    text-align: center;
+}
+
+.gantt-row {
+    display: flex;
+    align-items: center;
+    background-color: #ffffff;
+    transition: background-color 0.3s ease;
+    border-top: 1px solid #ddd;
+    position: relative;
+    padding: 10px 0;
+}
+
+.gantt-row:hover {
+    background-color: #f9f9f9;
+}
+
+.details {
+    flex: 1;
+    margin-right: 20px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    padding: 10px;
+    background-color: #f9f9f9;
+}
+
+.details div {
+    margin-bottom: 5px;
+    font-size: 14px;
+}
+
+.details div.contenteditable {
+    border: 1px dashed #ddd;
+    padding: 5px;
+    border-radius: 4px;
+    transition: background-color 0.2s;
+}
+
+.details div.contenteditable:focus {
+    background-color: #e8f4fd;
+}
+
+.bar {
+    height: 20px;
+    border-radius: 3px;
+    position: absolute;
+    top: 0;
+}
+
+.days-container {
+    display: flex;
+    flex: 1;
+    margin-top: 10px;
+}
+
 .modal {
-    display: none; /* Oculto por defecto */
-    position: fixed; /* Posición fija para cubrir toda la pantalla */
-    z-index: 1000; /* Asegura que esté por encima de otros elementos */
-    left: 0; /* Alineado a la izquierda */
-    top: 0; /* Alineado arriba */
-    width: 100%; /* Ancho completo */
-    height: 100%; /* Altura completa */
-    background-color: rgba(0, 0, 0, 0.5); /* Fondo semi-transparente */
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
 }
 
-/* Estilos del contenido del modal */
 .modal_content {
-    background-color: #fff; /* Color de fondo del modal */
-    margin: 15% auto; /* Margen superior e inferior */
-    padding: 20px; /* Espacio interior del modal */
-    border: 1px solid #ffffff; /* Borde del modal */
-    width: 400px; /* Ancho del modal */
-    border-radius: 10px; /* Bordes redondeados */
-    text-align: center; /* Centra el texto dentro del modal */
+    background-color: #fff;
+    margin: 15% auto;
+    padding: 20px;
+    border: 1px solid #ffffff;
+    width: 400px;
+    border-radius: 10px;
+    text-align: center;
 }
 
-/* Estilo para el botón de cerrar el modal */
 .close {
-    color: #aaa; /* Color del icono de cerrar */
-    float: right; /* Alinea a la derecha */
-    font-size: 28px; /* Tamaño de fuente del icono */
-    font-weight: bold; /* Negrita */
-    cursor: pointer; /* Cambia el cursor al pasar el ratón */
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+    cursor: pointer;
 }
 
-/* Efecto hover para el botón de cerrar */
 .close:hover,
 .close:focus {
-    color: #000; /* Cambia el color al pasar el ratón */
-    text-decoration: none; /* Sin subrayado */
-    cursor: pointer; /* Cambia el cursor al pasar el ratón */
+    color: #000;
+    text-decoration: none;
+    cursor: pointer;
 }
 
-/* Estilos para los botones de confirmación en el modal */
 .confirm_buttons {
-    display: flex; /* Usa flexbox para los botones */
-    justify-content: center; /* Centra los botones horizontalmente */
-    gap: 20px; /* Espacio entre botones */
-    margin-top: 20px; /* Margen superior de los botones */
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    margin-top: 20px;
 }
 
-/* Estilos para los botones de confirmación en el modal */
 .confirm_buttons button {
-    padding: 10px 20px; /* Espacio interior de los botones */
-    border: none; /* Sin borde */
-    border-radius: 5px; /* Bordes redondeados */
-    cursor: pointer; /* Cambia el cursor al pasar el ratón */
-    transition: background-color 0.3s ease; /* Transición suave en el cambio de color */
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
 }
 
-/* Estilo del botón de confirmar */
 .confirm_buttons .confirm {
-    background-color: #ff3730; /* Color de fondo */
-    color: white; /* Color del texto */
+    background-color: #ff3730;
+    color: white;
 }
 
-/* Estilo del botón de cancelar */
 .confirm_buttons .cancel {
-    background-color: #076b04; /* Color de fondo */
-    color: white; /* Color del texto */
+    background-color: #076b04;
+    color: white;
 }
 
-/* Efecto hover para el botón de confirmar */
 .confirm_buttons .confirm:hover {
-    background-color: #c82333; /* Cambia el color al pasar el ratón */
+    background-color: #c82333;
 }
 
-/* Efecto hover para el botón de cancelar */
 .confirm_buttons .cancel:hover {
-    background-color: #1f5827; /* Cambia el color al pasar el ratón */
-}
-.documento{
-    margin-top: 2%;
-     font-family: 'Nunito', sans-serif;
+    background-color: #1f5827;
 }
 
-/* Estilos responsive */
+.documento {
+    margin-top: 2%;
+}
+
 @media (max-width: 768px) {
     form {
-        grid-template-columns: 1fr; /* Cambia el formulario a una columna en pantallas pequeñas */
+        grid-template-columns: 1fr; /* Una columna en pantallas pequeñas */
     }
 
     button {
-        grid-column: span 1; /* Asegura que el botón ocupe toda la fila en pantallas pequeñas */
-        font-size: 1rem; /* Ajusta el tamaño de la fuente en el botón */
+        grid-column: span 1;
+        font-size: 1rem;
     }
 
     h1 {
-        font-size: 2rem; /* Reduce el tamaño del título en pantallas más pequeñas */
+        font-size: 2rem;
     }
 }
 
 @media (max-width: 480px) {
     body {
-        margin: 10px; /* Ajusta el margen en pantallas más pequeñas */
+        margin: 10px;
     }
 
     .modal_content {
-        width: 90%; /* Asegura que el modal sea más pequeño en pantallas móviles */
+        width: 90%;
     }
 
     h1 {
-        font-size: 1.8rem; /* Reduce aún más el tamaño del título en pantallas muy pequeñas */
+        font-size: 1.8rem;
     }
 
     input {
-        font-size: 0.9rem; /* Ajusta el tamaño del texto en los inputs */
+        font-size: 0.9rem;
     }
 
     button {
-        padding: 10px; /* Ajusta el padding del botón */
-        font-size: 1rem; /* Ajusta el tamaño de los botones */
+        padding: 10px;
+        font-size: 1rem;
     }
 }
