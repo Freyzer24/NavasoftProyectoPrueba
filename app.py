@@ -15,15 +15,13 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 
 class Proyecto(db.Model):
-    __tablename__ = 'proyectos'  # Nombre de la tabla en la base de datos
     id = db.Column(db.Integer, primary_key=True)
     nombre = db.Column(db.String(100), nullable=False)
-    progreso = db.Column(db.String(50), nullable=False)  # Por ejemplo, 'Listo', 'Avanzado', etc.
     encargado=db.Column(db.String(100),nullable=False)
 
-    def __init__(self, nombre, progreso):
+    def __init__(self, nombre, encargado):
         self.nombre = nombre
-        self.progreso = progreso
+        self.encargado = encargado
 
 # Modelo para los registros
 class Registro(db.Model):
@@ -179,8 +177,8 @@ def proyectos():
 @app.route('/agregar_proyecto', methods=['POST'])
 def agregar_proyecto():
     nombre = request.form['nombre']
-    progreso = request.form['progreso']
-    nuevo_proyecto = Proyecto(nombre=nombre, progreso=progreso)
+    encargado = request.form['encargado']
+    nuevo_proyecto = Proyecto(nombre=nombre, encargado=encargado)
     db.session.add(nuevo_proyecto)
     db.session.commit()
     flash('Proyecto agregado exitosamente.')

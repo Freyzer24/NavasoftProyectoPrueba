@@ -14,12 +14,8 @@
         <label for="nombre">Nombre del Proyecto:</label>
         <input type="text" name="nombre" id="nombre" required>
         
-        <label for="progreso">Progreso:</label>
-        <select name="progreso" id="progreso" required>
-            <option value="Listo">Listo</option>
-            <option value="Avanzado">Avanzado</option>
-            <option value="En progreso">En progreso</option>
-        </select>
+        <label for="nombre">Encargado del Proyecto:</label>
+        <input type="text" name="encargado" id="encargado" required>
         
         <button type="submit">Añadir Proyecto</button>
     </form>
@@ -29,7 +25,7 @@
         <thead>
             <tr>
                 <th>Nombre</th>
-                <th>Progreso</th>
+                <th>Encargado</th>
                 <th>Acciones</th>
             </tr>
         </thead>
@@ -37,9 +33,9 @@
             {% for proyecto in proyectos %}
             <tr>
                 <td>{{ proyecto.nombre }}</td>
-                <td>{{ proyecto.progreso }}</td>
+                <td>{{ proyecto.encargado }}</td>
                 <td>
-                    <form action="{{ url_for('eliminar_proyecto', id=proyecto.id) }}" method="POST" style="display:inline;">
+                    <form action="{{ url_for('eliminar_proyecto', id=proyecto.id) }}" method="POST" style="display:inline;" onsubmit="return confirm('¿Estás seguro de que deseas eliminar este proyecto?');">
                         <button type="submit">Eliminar</button>
                     </form>
                 </td>
