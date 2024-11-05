@@ -37,8 +37,12 @@
     
     
    
-   <!-- Botón de cerrar sesión -->
-   <li><a href="{{ url_for('logout') }}">Cerrar sesión </a></li>
+    <li>
+        <form action="{{ url_for('logout') }}" method="post" style="display: inline;">
+            <button type="submit">Cerrar sesión</button>
+        </form>
+    </li>
+    
 
 
 </body>
