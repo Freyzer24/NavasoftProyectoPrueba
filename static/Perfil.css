@@ -204,3 +204,30 @@ form button {
       padding: 4px 8px;
   }
 }
+
+.profile-card {
+  /* ... existing styles ... */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Enhanced shadow */
+  transition: all 0.3s ease-in-out; /* Smoother transitions */
+}
+
+.profile-card:hover {
+  transform: scale(1.05);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+}
+
+/* Dark mode support */
+@media (prefers-color-scheme: dark) {
+  body {
+      background-color: #222;
+      color: #fff;
+  }
+  /* Adjust other colors accordingly */
+}
+
+/* Additional styles for specific elements */
+.form-control {
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  padding: 8px;
+}
