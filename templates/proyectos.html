@@ -3,36 +3,51 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Proyectos</title>
     <link rel="stylesheet" href="/static/proyectos.css">
-    <script src="./proyecto.js"></script>
 </head>
 <body>
-    <div class="projects-container">
-        <h1>Proyectos</h1>
-        <table>
-            <thead>
-                <tr>
-                    <th>Nombre</th>
-                    <th>Progreso</th>
-                    <th></th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>Balance</td>
-                    <td><span class="status-dot green"></span> Listo</td>
-                    <td><button class="delete-btn" title="Eliminar"><img src="/imagenes/trashicon.webp" alt="Eliminar"></button></td>
-                </tr>
-                <tr>
-                    <td><a href="Diagrama de Gantt.html" class="project-link">Prototipo</a></td>
-                    <td><span class="status-dot orange"></span> Avanzado</td>
-                    <td><button class="delete-btn" title="Eliminar"><img src="/imagenes/trashicon.webp" alt="Eliminar"></button></td>
-                </tr>
-            </tbody>
-        </table>
-    </div>
+    <h1>Proyectos</h1>
 
+    <!-- Formulario para agregar un proyecto -->
+    <form action="{{ url_for('agregar_proyecto') }}" method="POST">
+        <label for="nombre">Nombre del Proyecto:</label>
+        <input type="text" name="nombre" id="nombre" required>
+        
+        <label for="progreso">Progreso:</label>
+        <select name="progreso" id="progreso" required>
+            <option value="Listo">Listo</option>
+            <option value="Avanzado">Avanzado</option>
+            <option value="En progreso">En progreso</option>
+        </select>
+        
+        <button type="submit">Añadir Proyecto</button>
+    </form>
 
+    <!-- Tabla para listar los proyectos -->
+    <table>
+        <thead>
+            <tr>
+                <th>Nombre</th>
+                <th>Progreso</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for proyecto in proyectos %}
+            <tr>
+                <td>{{ proyecto.nombre }}</td>
+                <td>{{ proyecto.progreso }}</td>
+                <td>
+                    <form action="{{ url_for('eliminar_proyecto', id=proyecto.id) }}" method="POST" style="display:inline;">
+                        <button type="submit">Eliminar</button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
 </body>
 </html>
+
+   

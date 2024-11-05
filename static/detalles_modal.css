@@ -1,4 +1,4 @@
-/* Estilo del modal */
+/* Estilo del fondo del modal */
 .modal {
     display: none; /* Ocultar por defecto */
     position: fixed; /* Mantener en posición fija */
@@ -7,54 +7,81 @@
     top: 0;
     width: 100%; /* Ancho completo */
     height: 100%; /* Altura completa */
-    overflow: auto; /* Permitir scroll si es necesario */
     background-color: rgba(0, 0, 0, 0.7); /* Fondo semi-transparente */
+    justify-content: flex-end; /* Alinea el contenido a la derecha */
+    align-items: center;
 }
 
-/* Contenido del modal */
+/* Contenedor del panel lateral */
 .modal-content {
-    background-color: #ffffff;
-    margin: 10% auto; /* Centramos el modal */
+    background-color: #f0f4f8; /* Fondo azul claro con gris */
+    width: 300px; /* Ancho del panel */
+    height: 100vh; /* Altura completa de la pantalla */
     padding: 20px;
-    border: 1px solid #888;
-    width: 90%; /* Ancho del modal */
-    max-width: 500px; /* Ancho máximo */
-    border-radius: 10px; /* Bordes redondeados */
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3); /* Sombra más pronunciada */
+    box-shadow: -2px 0 10px rgba(0, 0, 0, 0.3); /* Sombra lateral */
+    border-top-left-radius: 12px;
+    border-bottom-left-radius: 12px;
+    animation: slideIn 0.3s ease; /* Animación de deslizamiento */
+}
+
+/* Animación de deslizamiento desde la derecha */
+@keyframes slideIn {
+    from { transform: translateX(100%); }
+    to { transform: translateX(0); }
 }
 
 /* Estilo del botón de cerrar */
 .close {
     color: #aaa;
     float: right;
-    font-size: 28px;
+    font-size: 24px;
     font-weight: bold;
     cursor: pointer;
+    transition: color 0.2s;
 }
 
 .close:hover,
 .close:focus {
-    color: #000;
+    color: #333;
     text-decoration: none;
+}
+
+/* Estilo del título */
+.modal-content h2 {
+    text-align: left;
+    font-size: 20px;
+    color: #333; /* Color negro */
+    margin-bottom: 15px;
 }
 
 /* Estilos para el contenido del modal */
 .modal-details {
     margin-top: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px; /* Espaciado entre detalles */
 }
 
+/* Estilo de los elementos de detalle */
 .detail-item {
-    margin: 10px 0;
-    font-size: 16px;
+    display: flex;
+    justify-content: space-between;
+    padding: 8px 0;
+    border-bottom: 1px solid #e0e4e8; /* Línea divisoria */
+    color: #2b3a4d; /* Color azul grisáceo */
+    font-size: 14px;
+    font-weight: 500;
 }
 
-/* Enfocar el texto */
-strong {
-    color: #333; /* Color del texto fuerte */
+/* Enfocar el texto fuerte */
+.detail-item strong {
+    color: #1f2d3d; /* Azul oscuro */
+    font-weight: 600;
 }
 
-/* Opcional: Estilo para los spans que muestran la información */
+/* Estilo para los spans que muestran la información */
 .modal-details span {
-    color: #555; /* Color del texto normal */
-    font-weight: 500; /* Un poco más grueso */
+    color: #52697f; /* Azul grisáceo suave */
+    font-weight: 500;
+    text-align: right;
 }
