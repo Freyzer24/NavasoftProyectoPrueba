@@ -27,17 +27,28 @@
                     <td>{{ registro.rol }}</td>
                     <td>{{ registro.usuario }}</td>
                     <td>
-                        <!-- Link para abrir el modal específico -->
-                        <a href="#modal-{{ registro.id }}" onclick="document.getElementById('modal-{{ registro.id }}').style.display='block'">
-                            <i class="fa fa-info-circle" style="color: blue;"></i>
-                        </a>
-                        <a href="{{ url_for('editar', id=registro.id) }}">
-                            <i style="color: darkgreen;" class="fa fa-edit"></i>
-                        </a>
-                        <a href="{{ url_for('eliminar_usuario', id=registro.id) }}" 
-                           onclick="return confirm('¿Estás seguro de que deseas eliminar este usuario?');">
-                            <i style="color: rgb(153, 8, 8);" class="fa fa-trash"></i>
-                        </a>
+                        <!-- Enlace para mostrar el modal -->
+<!-- Enlace para mostrar el modal -->
+<!-- Aplica la clase 'icon-link' a los enlaces -->
+<a href="#modal-{{ registro.id }}" class="icon-link" onclick="document.getElementById('modal-{{ registro.id }}').style.display='block'; return false;">
+    <i class="fa fa-info-circle" style="color: blue;"></i>
+</a>
+<a href="{{ url_for('editar', id=registro.id) }}" class="icon-link">
+    <i class="fa fa-edit" style="color: darkgreen;"></i>
+</a>
+<a href="{{ url_for('eliminar_usuario', id=registro.id) }}" class="icon-link" onclick="return confirm('¿Estás seguro de que deseas eliminar este usuario?');">
+    <i class="fa fa-trash" style="color: rgb(153, 8, 8);"></i>
+</a>
+
+<!-- Agrega este CSS en tu archivo de estilos o dentro de una etiqueta <style> -->
+<style>
+    .icon-link {
+        text-decoration: none; /* Quita el subrayado */
+    }
+</style>
+
+
+
                     </td>
                 </tr>
 
