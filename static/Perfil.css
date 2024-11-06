@@ -1,7 +1,7 @@
 body {
   font-family: Arial, sans-serif; /* Fuente predeterminada */
-  background-color: #d61d1d; /* Color de fondo */
-  color: rgb(0, 0, 0); /* Color del texto */
+  background-color: #a0b7ca; /* Color de fondo */
+  color: white; /* Color del texto */
 }
 
 h1 {
@@ -138,6 +138,7 @@ form input {
 }
 
 form button {
+  align-items: center;
   padding: 8px 20px; /* Espaciado interno */
   border: 1px solid darkgreen; /* Color del borde */
   width: 50%; /* Ancho del botón */
@@ -216,18 +217,3 @@ form button {
   box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
 }
 
-/* Dark mode support */
-@media (prefers-color-scheme: dark) {
-  body {
-      background-color: #222;
-      color: #fff;
-  }
-  /* Adjust other colors accordingly */
-}
-
-/* Additional styles for specific elements */
-.form-control {
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  padding: 8px;
-}
