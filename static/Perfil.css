@@ -1,7 +1,7 @@
 body {
   font-family: Arial, sans-serif; /* Fuente predeterminada */
-  background-color: #a0b7ca; /* Color de fondo */
-  color: white; /* Color del texto */
+  background-color: #d61d1d; /* Color de fondo */
+  color: rgb(0, 0, 0); /* Color del texto */
 }
 
 h1 {
