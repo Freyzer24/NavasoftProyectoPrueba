@@ -1,87 +1,100 @@
-/* Estilo del fondo del modal */
+/* Estilos para el modal */
 .modal {
-    display: none; /* Ocultar por defecto */
-    position: fixed; /* Mantener en posición fija */
-    z-index: 1000; /* Por encima de otros elementos */
+    display: none;
+    position: fixed;
+    z-index: 1;
     left: 0;
     top: 0;
-    width: 100%; /* Ancho completo */
-    height: 100%; /* Altura completa */
-    background-color: rgba(0, 0, 0, 0.7); /* Fondo semi-transparente */
-    justify-content: flex-end; /* Alinea el contenido a la derecha */
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.6); /* Fondo oscuro con opacidad */
+    animation: fadeIn 0.3s ease; /* Animación suave al aparecer */
+}
+
+/* Contenido del modal */
+.modal-content {
+    background-color: #fff;
+    margin: 10% auto;
+    padding: 30px;
+    border-radius: 8px; /* Bordes redondeados */
+    width: 80%;
+    max-width: 600px; /* Ancho máximo */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Sombra suave */
+    display: flex;
+    flex-direction: column;
     align-items: center;
 }
 
-/* Contenedor del panel lateral */
-.modal-content {
-    background-color: #f0f4f8; /* Fondo azul claro con gris */
-    width: 300px; /* Ancho del panel */
-    height: 100vh; /* Altura completa de la pantalla */
-    padding: 20px;
-    box-shadow: -2px 0 10px rgba(0, 0, 0, 0.3); /* Sombra lateral */
-    border-top-left-radius: 12px;
-    border-bottom-left-radius: 12px;
-    animation: slideIn 0.3s ease; /* Animación de deslizamiento */
+/* Animación para el modal */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
 }
 
-/* Animación de deslizamiento desde la derecha */
-@keyframes slideIn {
-    from { transform: translateX(100%); }
-    to { transform: translateX(0); }
+/* Título del modal */
+.modal h2 {
+    font-size: 1.8em;
+    color: #527ae6; /* Color destacado para el título */
+    margin-bottom: 20px;
+    font-weight: bold;
+    text-align: center;
 }
 
-/* Estilo del botón de cerrar */
+/* Botón de cierre */
 .close {
     color: #aaa;
-    float: right;
-    font-size: 24px;
+    font-size: 32px;
     font-weight: bold;
+    position: absolute;
+    top: 15px;
+    right: 20px;
     cursor: pointer;
-    transition: color 0.2s;
+    transition: color 0.3s ease;
 }
 
 .close:hover,
 .close:focus {
-    color: #333;
+    color: #ff4c4c; /* Color rojo para el hover */
     text-decoration: none;
 }
 
-/* Estilo del título */
-.modal-content h2 {
-    text-align: left;
-    font-size: 20px;
-    color: #333; /* Color negro */
-    margin-bottom: 15px;
-}
-
-/* Estilos para el contenido del modal */
-.modal-details {
-    margin-top: 20px;
-    display: flex;
-    flex-direction: column;
-    gap: 12px; /* Espaciado entre detalles */
-}
-
-/* Estilo de los elementos de detalle */
-.detail-item {
+/* Estilos para las columnas dentro del modal */
+.modal-columns {
     display: flex;
     justify-content: space-between;
-    padding: 8px 0;
-    border-bottom: 1px solid #e0e4e8; /* Línea divisoria */
-    color: #2b3a4d; /* Color azul grisáceo */
-    font-size: 14px;
-    font-weight: 500;
+    gap: 15px; /* Espacio entre columnas */
+    width: 100%;
+    margin-top: 20px;
 }
 
-/* Enfocar el texto fuerte */
-.detail-item strong {
-    color: #1f2d3d; /* Azul oscuro */
-    font-weight: 600;
+/* Estilos de cada columna */
+.column {
+    flex: 1;
+    padding: 15px;
+    background-color: #f8f8f8;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: background-color 0.3s ease;
 }
 
-/* Estilo para los spans que muestran la información */
-.modal-details span {
-    color: #52697f; /* Azul grisáceo suave */
-    font-weight: 500;
-    text-align: right;
+.column:hover {
+    background-color: #f0f0f0; /* Cambio de color al pasar el mouse */
+}
+
+/* Estilos para las etiquetas dentro del modal */
+.modal-label {
+    font-size: 1em;
+    color: #333;
+    margin-bottom: 5px;
+}
+
+.modal-value {
+    font-size: 1.1em;
+    color: #555;
+    font-weight: bold;
 }

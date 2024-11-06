@@ -78,46 +78,103 @@ tbody td i {
 .add-user a:hover {
     text-decoration: underline;
 }
-/* Modal styles */
-/* Estilos generales para el modal */
+
+/* Estilos para el modal */
 .modal {
-    display: none; /* Oculto por defecto */
-    position: fixed; /* Posición fija respecto a la ventana */
-    right: 0; /* Alineado a la izquierda */
-    top: 0; /* Comienza en la parte superior */
-    width: 20%; /* Ajusta el ancho del modal (puedes cambiar este valor) */
-    height: 100%; /* Que ocupe toda la altura */
-    background-color: rgba(0, 0, 0, 0.4); /* Fondo semitransparente */
-    overflow: auto; /* Para permitir el scroll si es necesario */
-    z-index: 1; /* Asegura que el modal esté por encima del contenido */
+    display: none;
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+  
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.6); /* Fondo oscuro con opacidad */
+    animation: fadeIn 0.3s ease; /* Animación suave al aparecer */
 }
 
-/* Estilos para el contenido del modal */
+/* Contenido del modal */
 .modal-content {
-    background-color: white;
-    margin: 0; /* Sin margen */
-    padding: 20px; /* Espaciado interior */
-    height: 100%; /* Para que el contenido ocupe toda la altura */
-    overflow-y: auto; /* Para que sea desplazable si es necesario */
+    background-color: #fff;
+    margin: 10% auto;
+    padding: 30px;
+    border-radius: 8px; /* Bordes redondeados */
+    width: 80%;
+    max-width: 600px; /* Ancho máximo */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Sombra suave */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
-/* Botón de cerrar */
+/* Animación para el modal */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+/* Título del modal */
+.modal h2 {
+    font-size: 1.8em;
+    color: #000000; /* Color destacado para el título */
+
+    font-weight: bold;
+    text-align: center;
+}
+
+/* Botón de cierre */
 .close {
     color: #aaa;
-    float: right;
-    font-size: 28px;
+    font-size: 32px;
     font-weight: bold;
+    position: absolute;
+
+    right: 400px;
+    cursor: pointer;
+    transition: color 0.3s ease;
 }
 
 .close:hover,
 .close:focus {
-    color: black;
+    color: #ff4c4c; /* Color rojo para el hover */
     text-decoration: none;
-    cursor: pointer;
 }
 
-
-.config-icon {
-    cursor: pointer;
+/* Estilos para las columnas dentro del modal */
+.modal-columns {
+    display: flex;
+    justify-content: space-between;
+    gap: 15px; /* Espacio entre columnas */
+    width: 100%;
+    margin-top: 20px;
 }
 
+/* Estilos de cada columna */
+.column {
+    flex: 1;
+    padding: 15px;
+    background-color: #f8f8f8;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: background-color 0.3s ease;
+}
+
+.column:hover {
+    background-color: #f0f0f0; /* Cambio de color al pasar el mouse */
+}
+
+/* Estilos para las etiquetas dentro del modal */
+.modal-label {
+    font-size: 1em;
+    color: #333;
+    margin-bottom: 5px;
+}
+
+.modal-value {
+    font-size: 1.1em;
+    color: #555;
+    font-weight: bold;
+}
