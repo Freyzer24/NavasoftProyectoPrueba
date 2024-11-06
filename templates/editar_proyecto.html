@@ -1,10 +1,21 @@
-<form action="{{ url_for('actualizar_proyecto', id=proyecto.id) }}" method="POST">
-    <label for="nombre">Nombre del Proyecto:</label>
-    <input type="text" name="nombre" id="nombre" value="{{ proyecto.nombre }}" required>
-    
-    <label for="encargado">Encargado:</label>
-    <input type="text" name="encargado" id="encargado" value="{{ proyecto.encargado }}" required>
-    
-    <button type="submit">Actualizar Proyecto</button>
-</form>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="/static/editar.css">
+</head>
+<body>
+    <form action="{{ url_for('actualizar_proyecto', id=proyecto.id) }}" method="POST">
+        <label for="nombre">Nombre del Proyecto:</label>
+        <input type="text" name="nombre" id="nombre" value="{{ proyecto.nombre }}" required>
+        
+        <label for="encargado">Encargado:</label>
+        <input type="text" name="encargado" id="encargado" value="{{ proyecto.encargado }}" required>
+        
+        <button type="submit">Actualizar Proyecto</button>
+    </form>
+</body>
+</html>
 

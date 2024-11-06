@@ -21,12 +21,19 @@
                 <input type="text" name="nombre" id="nombre" required> <br>
                 
                 <label for="encargado">Encargado:</label>
-                <input type="text" name="encargado" id="encargado" required> <br>
+                <select name="encargado" id="encargado" required>
+                    <option value="" disabled selected>Selecciona un encargado</option>
+                    {% for encargado in encargados %}
+                        <option value="{{ encargado.id }}">{{ encargado.nombre }}</option>
+                    {% endfor %}
+                </select>
+                <br>
                 
-                <button type="submit" >Añadir Proyecto</button>
+                <button type="submit">Añadir Proyecto</button>
             </form>
         </div>
     </div>
+    
 
     <!-- Tabla para listar los proyectos -->
     <table>
@@ -43,16 +50,24 @@
                 <td>{{ proyecto.nombre }}</td>
                 <td>{{ proyecto.encargado }}</td>
                 <td>
+                    <a href="{{ url_for('static', filename='Diagrama de Gantt.html') }}" class="icon-link">
+                            <i class="fa fa-sign-in icon-large" style="color: blue;"></i>
+                    </a>
                     <a href="{{ url_for('editar_proyecto', id=proyecto.id) }}" class="icon-link">
-                        <i class="fa fa-edit" style="color: darkgreen;"></i>
+                        <i class="fa fa-edit  icon-large" style="color: darkgreen;"></i>
                     </a>
                     
                     <a href="{{ url_for('eliminar_proyecto', id=proyecto.id) }}" class="icon-link" onclick="return confirm('¿Estás seguro de que deseas eliminar este proyecto?');">
-                            <i class="fa fa-trash" style="color: rgb(153, 8, 8);"></i>
+                            <i class="fa fa-trash icon-large" style="color: rgb(153, 8, 8);"></i>
                         </a>
+                    
                         <style>
                             .icon-link {
                                 text-decoration: none; /* Quita el subrayado */
+                                
+                            }
+                            .icon-large {
+                                font-size: 24px; /* Ajusta el tamaño según lo que necesites */
                             }
                         </style>
                         
