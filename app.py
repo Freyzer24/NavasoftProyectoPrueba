@@ -195,18 +195,15 @@ def eliminar_proyecto(id):
     else:
         flash('Proyecto no encontrado.')
     return redirect(url_for('proyectos'))
-@app.route('/actualizar_proyecto/<int:id>', methods=['POST'])
-def actualizar_proyecto(id):
+
+@app.route('/editar_proyecto/<int:id>')
+def editar_proyecto(id):
     proyecto = Proyecto.query.get(id)
     if proyecto:
-        proyecto.nombre = request.form['nombre']
-        proyecto.encargado = request.form['encargado']
-        db.session.commit()
-        flash('Proyecto actualizado correctamente.')
+        return render_template('editar_proyecto.html', proyecto=proyecto)
     else:
         flash('Proyecto no encontrado.')
-    return redirect(url_for('proyectos'))
-
+        return render_template('proyectos.html', proyectos=proyectos)
 
 def enviar_confirmacion_correo(nombre, usuario, correo):
     remitente = "valeriapaolap49@gmail.com"

@@ -43,10 +43,21 @@
                 <td>{{ proyecto.nombre }}</td>
                 <td>{{ proyecto.encargado }}</td>
                 <td>
-                    <form action="{{ url_for('eliminar_proyecto', id=proyecto.id) }}" method="POST" style="display:inline;" onsubmit="return confirm('¿Estás seguro de que deseas eliminar este proyecto?');">
-                        <button type="submit" title="Eliminar">
-                            <i class="fas fa-trash"></i>
-                        </button>
+                    <a href="{{ url_for('editar_proyecto', id=proyecto.id) }}" class="icon-link">
+                        <i class="fa fa-edit" style="color: darkgreen;"></i>
+                    </a>
+                    
+                    <a href="{{ url_for('eliminar_proyecto', id=proyecto.id) }}" class="icon-link" onclick="return confirm('¿Estás seguro de que deseas eliminar este proyecto?');">
+                            <i class="fa fa-trash" style="color: rgb(153, 8, 8);"></i>
+                        </a>
+                        <style>
+                            .icon-link {
+                                text-decoration: none; /* Quita el subrayado */
+                            }
+                        </style>
+                        
+                        
+                        
                         
                     </form>
                 </td>
