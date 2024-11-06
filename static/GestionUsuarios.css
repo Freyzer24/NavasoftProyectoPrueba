@@ -86,7 +86,8 @@ tbody td i {
     z-index: 1;
     left: 0;
     top: 0;
-  
+    height: 100%;
+    width: 100%;
     overflow: auto;
     background-color: rgba(0, 0, 0, 0.6); /* Fondo oscuro con opacidad */
     animation: fadeIn 0.3s ease; /* Animación suave al aparecer */
