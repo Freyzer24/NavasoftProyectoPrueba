@@ -44,7 +44,7 @@ with app.app_context():
 #Pantalla que se muestra con /
 @app.route('/')
 def index():
-    return render_template('indexadmin.html')
+    return render_template('login.html')
 
 
 @app.route('/login', methods=['POST'])
@@ -113,7 +113,7 @@ def perfil():
     # Verificar que el usuario esté autenticado
     if 'usuario' not in session:
         flash('Debes iniciar sesión primero.')
-        return redirect(url_for('pe'))
+        return redirect(url_for('perfil'))
 
     # Pasar los datos del usuario a la plantilla
     datos_usuario = {
