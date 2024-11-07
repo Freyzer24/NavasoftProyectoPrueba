@@ -201,25 +201,41 @@ def eliminar_proyecto(id):
         flash('Proyecto no encontrado.')
     return redirect(url_for('proyectos'))
 
+# Ruta para editar un proyecto
 @app.route('/editar_proyecto/<int:id>', methods=['GET'])
 def editar_proyecto(id):
     proyecto = Proyecto.query.get(id)
     if proyecto:
-        return render_template('editar_proyecto.html', proyecto=proyecto)
+        encargados = Registro.query.all()  # Obtener todos los encargados
+        return render_template('editar_proyecto.html', proyecto=proyecto, encargados=encargados)
     else:
         flash('Proyecto no encontrado.')
         return redirect(url_for('proyectos'))
+
+# Ruta para actualizar un proyecto
 @app.route('/actualizar_proyecto/<int:id>', methods=['POST'])
 def actualizar_proyecto(id):
     proyecto = Proyecto.query.get(id)
     if proyecto:
         proyecto.nombre = request.form['nombre']
-        proyecto.encargado = request.form['encargado']
+        encargado_id = request.form['encargado']
+
+        # Si se selecciona un encargado, actualizar el ID del encargado
+        if encargado_id:
+            encargado = Registro.query.get(encargado_id)
+            if encargado:
+                proyecto.encargado = encargado.id  # Guardamos el ID del encargado, no el nombre
+            else:
+                flash('El encargado seleccionado no existe.')
+                return redirect(url_for('editar_proyecto', id=id))
+
         db.session.commit()
         flash('Proyecto actualizado correctamente.')
+        return redirect(url_for('proyectos'))
     else:
         flash('Proyecto no encontrado.')
-    return redirect(url_for('proyectos'))
+        return redirect(url_for('proyectos'))
+
 
 
 def enviar_confirmacion_correo(nombre, usuario, correo):
