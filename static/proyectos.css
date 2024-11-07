@@ -27,6 +27,7 @@ body {
     overflow: auto;
 }
 .user-management-container {
+    margin-top: 4%;
     background-color: white;
     padding: 30px;
     border-radius: 15px;
@@ -35,12 +36,12 @@ body {
     height: auto;
     max-width: 1200px; /* Ancho máximo para pantallas grandes */
     overflow-x: auto; /* Permitir desplazamiento horizontal en pantallas pequeñas */
-    text-align: center;
-    align-items: center;
+    
 }
 
 
 h1{
+    text-align: center;
     margin-top: 2%;
 }
 
@@ -71,11 +72,12 @@ h1{
 
 /* Estilos de la tabla */
 table {
+    text-align: center;
+    align-items: center;
     margin-top: 1%;
     width: 100%;
     border-collapse: collapse;
     max-width: 1300px;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
     margin-bottom: 10px;
     text-align: center;
     align-items: center;
@@ -84,9 +86,12 @@ table {
 thead th {
     background-color: #b0c4de;
     color: #333;
-    text-align: center;
+    text-align: left;
     padding: 15px;
+    border-radius: 10px 10px 0 0;
     font-weight: bold;
+    align-items: center;
+    text-align: center;
 }
 
 tbody td {
@@ -104,27 +109,19 @@ tbody td button {
     cursor: pointer;
 }
 
-tbody td button i {
-    color: #f44336; /* Color del ícono */
-    font-size: 18px; /* Tamaño del ícono */
+.Ingreso {
+
+    color: #001ec7;
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 18px; /* Aumentar el tamaño del texto */
+    display: inline-block;
+    margin-top: 15px;
 }
 
-tbody td button:hover i {
-    color: #ec5c5c; /* Color del ícono al pasar el ratón */
+.Ingreso:hover {
+    text-decoration: underline;
 }
-.Ingreso button {
-    background-color: #527ae6; /* Color de fondo */
-    color: white; /* Color del texto */
-    padding: 10px 20px; /* Espaciado interno */
-    border: none; /* Sin borde */
-    border-radius: 5px; /* Bordes redondeados */
-    cursor: pointer; /* Cambia el cursor al pasar el ratón */
-}
-
-.Ingreso button:hover {
-    background-color: #6a9ffb; /* Color de fondo al pasar el ratón */
-}
-
 /* Estilos del botón de añadir proyecto */
 .modal-content button {
     background-color: #527ae6; /* Color de fondo */
@@ -156,3 +153,4 @@ tbody td button:hover i {
 .icon-large {
     font-size: 22px;
 }
+
