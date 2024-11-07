@@ -6,17 +6,6 @@
     <link rel="stylesheet" href="/static/estilo.css">
 </head>
 <body> 
- 
-  {% with messages = get_flashed_messages() %}
-  {% if messages %}
-    <ul>
-      {% for message in messages %}
-        <li>{{ message }}</li>
-      {% endfor %}
-    </ul>
-  {% endif %}
-{% endwith %}
-
    
     <form action="{{ url_for('guardar') }}" method="POST">
       <h1>Formulario de Registro</h1>
