@@ -183,6 +183,21 @@ def cambiar_contrasena():
 
     flash("Contraseña actualizada exitosamente.")
     return redirect(url_for('perfil'))
+@app.route('/editar_tarea/<int:id>', methods=['GET', 'POST'])
+def editar_tarea(id):
+    # Lógica para editar la tarea con el id proporcionado
+    pass
+
+@app.route('/eliminar_tarea/<int:id>', methods=['POST'])
+def eliminar_tarea(id):
+    tarea = Tarea.query.get(id)
+    if tarea:
+        db.session.delete(tarea)
+        db.session.commit()
+        flash('Tarea eliminada exitosamente.')
+    else:
+        flash('Tarea no encontrada.')
+    return redirect(url_for('Gtareas'))
 
 @app.route('/tAdmin')
 def tAdmin():

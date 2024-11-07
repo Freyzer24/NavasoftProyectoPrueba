@@ -1,12 +1,11 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Gestión de Tareas</title>
     <link rel="stylesheet" href="/static/Gestióntareas.css">
-    <link rel="stylesheet" href="Empleados.js">
-    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 
 </head>
 <body>
@@ -21,6 +20,7 @@
                     <th>Fecha de finalización</th>
                     <th>Encargado</th>
                     <th>Estado</th>
+                    <th>Acciones</th> <!-- Nueva columna para los botones -->
                 </tr>
             </thead>
             <tbody>
@@ -30,12 +30,65 @@
                     <td>{{ tarea.proyecto }}</td>
                     <td>{{ tarea.fecha_inicio.strftime('%d/%m/%Y') }}</td>
                     <td>{{ tarea.fecha_fin.strftime('%d/%m/%Y') }}</td>
-                    <td><span class="user user{{ tarea.encargado }}"></span> {{ tarea.encargado }}</td>
-                    <td><span class="status {{ tarea.estado | lower }}"></span> {{ tarea.estado }}</td>
+                    <td>{{ tarea.encargado }}</td>
+                    <td>
+                        <span class="status-circle {{ tarea.estado | lower }}"></span> {{ tarea.estado }}
+                    </td>
+                    <td>
+                        <!-- Botón de Editar -->
+                        <a href="{{ url_for('editar_tarea', id=tarea.id) }}" class="icon-btn edit">
+                            <i class="fa fa-edit" style="color: darkgreen;"></i>
+                        </a>
+                        
+                        <!-- Icono de Eliminar con confirmación -->
+                        <form action="{{ url_for('eliminar_tarea', id=tarea.id) }}" method="POST" style="display:inline;">
+                            <button type="submit" class="icon-btn delete" onclick="return confirm('¿Estás seguro de que deseas eliminar esta tarea?');">
+                                <i class="fa fa-trash" style="color: rgb(153, 8, 8);"></i>
+                            </button>
+                        </form>
+                    </td>
                 </tr>
                 {% endfor %}
             </tbody>
         </table>
     </section>
+
+    <!-- Modal de Edición -->
+<div id="editModal" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="cerrarModal()">&times;</span>
+        <h2>Editar Tarea</h2>
+        <form id="editForm" method="POST" action="">
+            <input type="hidden" name="tarea_id" id="tarea_id">
+            <label for="nombre">Nombre:</label>
+            <input type="text" id="nombre" name="nombre" required><br>
+
+            <label for="proyecto">Proyecto:</label>
+            <input type="text" id="proyecto" name="proyecto" required><br>
+
+            <label for="fecha_inicio">Fecha de inicio:</label>
+            <input type="date" id="fecha_inicio" name="fecha_inicio" required><br>
+
+            <label for="fecha_fin">Fecha de finalización:</label>
+            <input type="date" id="fecha_fin" name="fecha_fin" required><br>
+
+            <label for="encargado">Encargado:</label>
+            <input type="text" id="encargado" name="encargado" required><br>
+
+            <label for="estado">Estado:</label>
+            <select id="estado" name="estado" required>
+                <option value="iniciado">Iniciado</option>
+                <option value="en_progreso">En progreso</option>
+                <option value="avanzado">Avanzado</option>
+                <option value="completado">Completado</option>
+            </select><br>
+
+            <button type="submit">Guardar Cambios</button>
+        </form>
+    </div>
+</div>
+
+    
+</section>
 </body>
 </html>
