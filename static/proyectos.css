@@ -139,3 +139,20 @@ tbody td button:hover i {
 .modal-content button:hover {
     background-color: #6a9ffb; /* Color de fondo al pasar el ratón */
 }
+
+.icon-container {
+    display: flex;
+    justify-content: flex-start;  /* Mantiene los íconos alineados a la izquierda dentro del contenedor */
+    align-items: center;
+    margin-left: auto; /* Empuja el contenedor hacia la derecha */
+    padding-left: 95px; /* Ajusta esta cantidad para mover los íconos hacia la izquierda o derecha desde el borde derecho */
+}
+
+.icon-link {
+    text-decoration: none;
+    margin-left: 10px; /* Espacio entre los íconos */
+}
+
+.icon-large {
+    font-size: 22px;
+}
