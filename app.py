@@ -171,7 +171,9 @@ def logout():
 @app.route('/proyectos')
 def proyectos():
     proyectos = Proyecto.query.all()
-    return render_template('proyectos.html', proyectos=proyectos)
+    encargados = Registro.query.all()  # Obtener la lista de encargados desde la tabla 'Registro'
+    return render_template('proyectos.html', proyectos=proyectos, encargados=encargados)
+
 
 # Ruta para agregar un nuevo proyecto
 @app.route('/agregar_proyecto', methods=['POST'])
