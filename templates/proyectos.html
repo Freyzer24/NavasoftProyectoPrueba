@@ -55,15 +55,17 @@
                         <a href="{{ url_for('static', filename='Diagrama de Gantt.html') }}" class="icon-link">
                             <i class="fa fa-sign-in icon-large" style="color: blue;"></i>
                         </a>
-                        <form action="{{ url_for('eliminar_proyecto', id=proyecto.id) }}"  class="icon-link" method="POST" onsubmit="return confirm('¿Estás seguro de que deseas eliminar este proyecto?');">
-                            <button type="submit" style="background: none; border: none;">
-                                <i class="fa fa-trash icon-large" style="color: rgb(153, 8, 8);"></i>
-                            </button>
-                        </form>
+                       
                         <a href="{{ url_for('editar_proyecto', id=proyecto.id) }}" class="icon-link">
                             <i class="fa fa-edit icon-large" style="color: darkgreen;"></i>
-                        </a>
-                    </div>            
+      
+                        </a> 
+                        <form action="{{ url_for('eliminar_proyecto', id=proyecto.id) }}"  class="icon-link" method="POST" onsubmit="return confirm('¿Estás seguro de que deseas eliminar este proyecto?');">
+                            <button type="submit" style="background: none; border: none;">
+                            <i class="fa fa-trash icon-large" style="color: rgb(153, 8, 8);"></i>
+                            </button>
+                        </form>
+                    </div>
                     </form>
                 </td>
             </tr>
