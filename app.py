@@ -176,15 +176,21 @@ def proyectos():
 
 
 # Ruta para agregar un nuevo proyecto
-@app.route('/agregar_proyecto', methods=['POST'])
+@app.route('/agregar_proyecto', methods=['GET', 'POST'])
 def agregar_proyecto():
-    nombre = request.form['nombre']
-    encargado = request.form['encargado']
-    nuevo_proyecto = Proyecto(nombre=nombre, encargado=encargado)
-    db.session.add(nuevo_proyecto)
-    db.session.commit()
-    flash('Proyecto agregado exitosamente.')
-    return redirect(url_for('proyectos'))
+    if request.method == 'POST':
+        nombre = request.form['nombre']
+        encargado = request.form['encargado']
+        nuevo_proyecto = Proyecto(nombre=nombre, encargado=encargado)
+        db.session.add(nuevo_proyecto)
+        db.session.commit()
+        flash('Proyecto agregado exitosamente.')
+        return redirect(url_for('proyectos'))
+
+    # Si es un GET, obtén los encargados y pasa la lista a la plantilla
+    encargados = Registro.query.all()  # Asumiendo que tienes un modelo de Encargado
+    return render_template('agregar_proyecto.html', encargados=encargados)
+
 
 # Ruta para eliminar un proyecto
 @app.route('/eliminar_proyecto/<int:id>', methods=['POST'])

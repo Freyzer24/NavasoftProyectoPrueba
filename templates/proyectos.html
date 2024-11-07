@@ -23,10 +23,13 @@
                 <label for="encargado">Encargado:</label>
                 <select name="encargado" id="encargado" required>
                     <option value="" disabled selected>Selecciona un encargado</option>
-                    {% for encargado in encargados %}
-                        <option value="{{ encargado.id }}">{{ encargado.nombre }}</option>
+                    {% for id, nombre in encargados_dict.items() %}
+                        <option value="{{ id }}">{{ nombre }}</option>
                     {% endfor %}
                 </select>
+</select>
+
+
                 
                 <br>
                 
