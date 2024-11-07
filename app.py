@@ -171,8 +171,8 @@ def logout():
 @app.route('/proyectos')
 def proyectos():
     proyectos = Proyecto.query.all()
-    encargados = Registro.query.all()  # Obtener la lista de encargados desde la tabla 'Registro'
-    return render_template('proyectos.html', proyectos=proyectos, encargados=encargados)
+    encargados_dict = {encargado.id: encargado.nombre for encargado in Registro.query.all()}
+    return render_template('proyectos.html', proyectos=proyectos, encargados_dict=encargados_dict)
 
 
 # Ruta para agregar un nuevo proyecto
@@ -201,26 +201,22 @@ def eliminar_proyecto(id):
 @app.route('/editar_proyecto/<int:id>', methods=['GET'])
 def editar_proyecto(id):
     proyecto = Proyecto.query.get(id)
-    encargados = Registro.query.all()  # Consulta todos los encargados
     if proyecto:
-        return render_template('editar_proyecto.html', proyecto=proyecto, encargados=encargados)
+        return render_template('editar_proyecto.html', proyecto=proyecto)
     else:
         flash('Proyecto no encontrado.')
         return redirect(url_for('proyectos'))
-
-
 @app.route('/actualizar_proyecto/<int:id>', methods=['POST'])
 def actualizar_proyecto(id):
     proyecto = Proyecto.query.get(id)
     if proyecto:
         proyecto.nombre = request.form['nombre']
-        proyecto.encargado_id = request.form['encargado']  # Guarda el ID del encargado
+        proyecto.encargado = request.form['encargado']
         db.session.commit()
         flash('Proyecto actualizado correctamente.')
     else:
         flash('Proyecto no encontrado.')
     return redirect(url_for('proyectos'))
-
 
 
 def enviar_confirmacion_correo(nombre, usuario, correo):
