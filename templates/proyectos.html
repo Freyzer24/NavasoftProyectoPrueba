@@ -49,7 +49,7 @@
             {% for proyecto in proyectos %}
             <tr>
                 <td>{{ proyecto.nombre }}</td>
-                <td>{{ proyecto.encargado }}</td>
+                <td>{{ encargados_dict[proyecto.encargado] }}</td>  <!-- Muestra el nombre del encargado usando el diccionario -->
                 <td>
                     <div class="icon-container">
                         <a href="{{ url_for('static', filename='Diagrama de Gantt.html') }}" class="icon-link">
@@ -63,33 +63,7 @@
                         <a href="{{ url_for('editar_proyecto', id=proyecto.id) }}" class="icon-link">
                             <i class="fa fa-edit icon-large" style="color: darkgreen;"></i>
                         </a>
-                    </div>
-                    
-                    
-                    
-                    
-                    <style>
-                      .icon-container {
-    display: flex;
-    justify-content: flex-start;  /* Mantiene los íconos alineados a la izquierda dentro del contenedor */
-    align-items: center;
-    margin-left: auto; /* Empuja el contenedor hacia la derecha */
-    padding-left: 95px; /* Ajusta esta cantidad para mover los íconos hacia la izquierda o derecha desde el borde derecho */
-}
-
-.icon-link {
-    text-decoration: none;
-    margin-left: 10px; /* Espacio entre los íconos */
-}
-
-.icon-large {
-    font-size: 24px;
-}
-
-</style>
-                        
-                        
-                        
+                    </div>            
                     </form>
                 </td>
             </tr>
@@ -113,6 +87,26 @@
     </script>
 </body>
 </html>
+
+<style>
+    .icon-container {
+display: flex;
+justify-content: flex-start;  /* Mantiene los íconos alineados a la izquierda dentro del contenedor */
+align-items: center;
+margin-left: auto; /* Empuja el contenedor hacia la derecha */
+padding-left: 95px; /* Ajusta esta cantidad para mover los íconos hacia la izquierda o derecha desde el borde derecho */
+}
+
+.icon-link {
+text-decoration: none;
+margin-left: 10px; /* Espacio entre los íconos */
+}
+
+.icon-large {
+font-size: 24px;
+}
+
+</style>
 
 
 
