@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <form action="{{ url_for('guardar_tarea') }}" method="POST">
+        <h1>Registro de Tarea</h1>
+        <div class="separar">
+            
+            <!-- Primera columna del formulario -->
+            <div class="columna">
+                <label for="nombre">Nombre de la tarea:</label>
+                <input type="text" id="nombre" name="nombre" required><br>
+                
+                <label for="proyecto">Proyecto:</label>
+                <input type="text" id="proyecto" name="proyecto" required><br>
+                
+                <label for="fecha_inicio">Fecha de inicio:</label>
+                <input type="date" id="fecha_inicio" name="fecha_inicio" required><br>
+            </div>
+            
+            <!-- Segunda columna del formulario -->
+            <div class="columna">
+                <label for="fecha_fin">Fecha de finalización:</label>
+                <input type="date" id="fecha_fin" name="fecha_fin" required><br>
+                    
+                <label for="encargado">Encargado:</label>
+                <input type="text" id="encargado" name="encargado" required><br>
+                
+                <label for="estado">Estado:</label>
+                <select id="estado" name="estado" required>
+                    <option value="Pendiente">Pendiente</option>
+                    <option value="En progreso">En progreso</option>
+                    <option value="Completada">Completada</option>
+                </select><br>
+            </div>
+        </div>
+        <button type="submit">Guardar</button>
+    </form>
+    
+</body>
+</html>
+    

@@ -1,6 +1,7 @@
 import re
 import smtplib
 from email.mime.multipart import MIMEMultipart
+from datetime import datetime
 from email.mime.text import MIMEText
 from flask import Flask, render_template, request, redirect, url_for, flash, session
 from flask_sqlalchemy import SQLAlchemy
@@ -22,6 +23,24 @@ class Proyecto(db.Model):
     def __init__(self, nombre, encargado):
         self.nombre = nombre
         self.encargado = encargado
+
+class Tarea(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    nombre = db.Column(db.String(100), nullable=False)
+    proyecto = db.Column(db.String(100), nullable=False)
+    fecha_inicio = db.Column(db.Date, nullable=False)
+    fecha_fin = db.Column(db.Date, nullable=False)
+    encargado = db.Column(db.String(100), nullable=False)
+    estado = db.Column(db.String(50), nullable=False)
+
+    def __init__(self, nombre, proyecto, fecha_inicio, fecha_fin, encargado, estado):
+        self.nombre = nombre
+        self.proyecto = proyecto
+        self.fecha_inicio = fecha_inicio
+        self.fecha_fin = fecha_fin
+        self.encargado = encargado
+        self.estado = estado
+
 
 # Modelo para los registros
 class Registro(db.Model):
@@ -81,11 +100,12 @@ def login():
 
     return redirect(url_for('index'))
 
-
-
+@app.route("/agregartareas")
+def agregartareas():
+    return render_template('agregarTareas.html')
 @app.route("/Gantt")
 def Gantt():
-     return render_template('Diagrama de Gantt.html')
+    return render_template('Diagrama de Gantt.html')
 @app.route('/menuAdmin')
 def menuAdmin():
     return render_template('indexadmin.html')
@@ -94,7 +114,8 @@ def Admin():
     return render_template('menuAdmin.html')
 @app.route('/Gtareas')#Gestión tareas
 def Gtareas():
-    return render_template('Gestióntareas.html')
+    tareas = Tarea.query.all()
+    return render_template('Gestióntareas.html', tareas=tareas)
 @app.route('/DGantt')
 def DGantt():
     return render_template('Diagrama de Gantt.html')
@@ -115,7 +136,7 @@ def perfil():
     # Verificar que el usuario esté autenticado
     if 'usuario' not in session:
         flash('Debes iniciar sesión primero.')
-        return redirect(url_for('perfil'))
+        return redirect(url_for('login'))  # Redirige a la página de login si no está autenticado
 
     # Pasar los datos del usuario a la plantilla
     datos_usuario = {
@@ -125,7 +146,8 @@ def perfil():
         'rol': session['rol']
     }
 
-    return render_template('perfil.html', datos=datos_usuario)
+    return render_template('Perfil.html', datos=datos_usuario)
+
 @app.route('/cambiar_contrasena', methods=['POST'])
 def cambiar_contrasena():
     # Verifica si el usuario ha iniciado sesión
@@ -165,10 +187,14 @@ def cambiar_contrasena():
 @app.route('/tAdmin')
 def tAdmin():
     return render_template('tAdmin.html')
-@app.route('/logout')  # Ruta para cerrar sesión
+@app.route('/logout', methods=['POST'])
 def logout():
+    # Eliminar todos los datos de la sesión
+    session.clear()
     flash('Has cerrado sesión exitosamente.')
-    return render_template('login.html')
+    # Redirigir a una página pública, como la de login
+    return redirect(url_for('login'))  # Asegúrate de que 'login' sea la ruta correcta
+
 # Ruta para ver todos los proyectos
 @app.route('/proyectos')
 def proyectos():
@@ -201,41 +227,25 @@ def eliminar_proyecto(id):
         flash('Proyecto no encontrado.')
     return redirect(url_for('proyectos'))
 
-# Ruta para editar un proyecto
 @app.route('/editar_proyecto/<int:id>', methods=['GET'])
 def editar_proyecto(id):
     proyecto = Proyecto.query.get(id)
     if proyecto:
-        encargados = Registro.query.all()  # Obtener todos los encargados
-        return render_template('editar_proyecto.html', proyecto=proyecto, encargados=encargados)
+        return render_template('editar_proyecto.html', proyecto=proyecto)
     else:
         flash('Proyecto no encontrado.')
         return redirect(url_for('proyectos'))
-
-# Ruta para actualizar un proyecto
 @app.route('/actualizar_proyecto/<int:id>', methods=['POST'])
 def actualizar_proyecto(id):
     proyecto = Proyecto.query.get(id)
     if proyecto:
         proyecto.nombre = request.form['nombre']
-        encargado_id = request.form['encargado']
-
-        # Si se selecciona un encargado, actualizar el ID del encargado
-        if encargado_id:
-            encargado = Registro.query.get(encargado_id)
-            if encargado:
-                proyecto.encargado = encargado.id  # Guardamos el ID del encargado, no el nombre
-            else:
-                flash('El encargado seleccionado no existe.')
-                return redirect(url_for('editar_proyecto', id=id))
-
+        proyecto.encargado = request.form['encargado']
         db.session.commit()
         flash('Proyecto actualizado correctamente.')
-        return redirect(url_for('proyectos'))
     else:
         flash('Proyecto no encontrado.')
-        return redirect(url_for('proyectos'))
-
+    return redirect(url_for('proyectos'))
 
 
 def enviar_confirmacion_correo(nombre, usuario, correo):
@@ -378,6 +388,32 @@ def eliminar_usuario(id):  # Cambia el nombre de la función aquí para evitar d
 def lista_usuarios():
     registros = Registro.query.with_entities(Registro.nombre, Registro.rol, Registro.telefono).all()
     return render_template('usuarios.html', usuarios=registros)
+@app.route('/guardar_tarea', methods=['POST'])
+def guardar_tarea():
+    # Obtener los datos del formulario
+    nombre = request.form['nombre']
+    proyecto = request.form['proyecto']
+    fecha_inicio = datetime.strptime(request.form['fecha_inicio'], '%Y-%m-%d').date()
+    fecha_fin = datetime.strptime(request.form['fecha_fin'], '%Y-%m-%d').date()
+    encargado = request.form['encargado']
+    estado = request.form['estado']
+    
+    # Crear una nueva instancia de Tarea
+    nueva_tarea = Tarea(
+        nombre=nombre,
+        proyecto=proyecto,
+        fecha_inicio=fecha_inicio,
+        fecha_fin=fecha_fin,
+        encargado=encargado,
+        estado=estado
+    )
+    
+    # Guardar la nueva tarea en la base de datos
+    db.session.add(nueva_tarea)
+    db.session.commit()
+    
+    flash('Tarea registrada exitosamente.')
+    return redirect(url_for('proyectos'))
 
 if __name__ == '__main__':
     app.run(debug=True)
