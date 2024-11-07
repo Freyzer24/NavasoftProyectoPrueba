@@ -185,8 +185,33 @@ def cambiar_contrasena():
     return redirect(url_for('perfil'))
 @app.route('/editar_tarea/<int:id>', methods=['GET', 'POST'])
 def editar_tarea(id):
-    # Lógica para editar la tarea con el id proporcionado
-    pass
+    # Obtener la tarea de la base de datos por su ID
+    tarea = Tarea.query.get_or_404(id)
+
+    if request.method == 'GET':
+        # Mostrar el formulario con los datos de la tarea
+        return render_template('editar_tarea.html', tarea=tarea)
+
+    if request.method == 'POST':
+        # Obtener los datos enviados desde el formulario
+        nombre = request.form['nombre']
+        proyecto = request.form['proyecto']
+        encargado = request.form['encargado']
+        estado = request.form['estado']
+
+        # Actualizar los atributos de la tarea
+        tarea.nombre = nombre
+        tarea.proyecto = proyecto
+        tarea.encargado = encargado
+        tarea.estado = estado
+
+        # Guardar los cambios en la base de datos
+        db.session.commit()
+
+        flash('Tarea actualizada exitosamente', 'success')
+        return redirect(url_for('Gtareas'))  # Redirigir a la página principal o donde desees
+
+    return render_template('editar_tarea.html', tarea=tarea)
 
 @app.route('/eliminar_tarea/<int:id>', methods=['POST'])
 def eliminar_tarea(id):

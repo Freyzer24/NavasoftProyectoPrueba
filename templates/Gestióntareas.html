@@ -9,6 +9,29 @@
 
 </head>
 <body>
+    <script>
+    // Función para abrir el modal y cargar la información de la tarea en los campos
+function abrirModal(id, nombre, proyecto, encargado, estado) {
+    document.getElementById('tarea_id').value = id;
+    document.getElementById('nombre').value = nombre;
+    document.getElementById('proyecto').value = proyecto;
+    document.getElementById('encargado').value = encargado;
+    document.getElementById('estado').value = estado;
+    document.getElementById('modal-editar').style.display = "block";
+}
+
+// Función para cerrar el modal
+function cerrarModal() {
+    document.getElementById('modal-editar').style.display = "none";
+}
+
+// Cerrar el modal si el usuario hace clic fuera de la ventana
+window.onclick = function(event) {
+    if (event.target == document.getElementById('modal-editar')) {
+        cerrarModal();
+    }
+}
+</script>
     <section class="content">
         <h2>GESTIÓN DE TAREAS</h2>
         <table>
@@ -78,7 +101,7 @@
             <label for="estado">Estado:</label>
             <select id="estado" name="estado" required>
                 <option value="iniciado">Iniciado</option>
-                <option value="en_progreso">En progreso</option>
+                <option value="progresando">Progresando</option>
                 <option value="avanzado">Avanzado</option>
                 <option value="completado">Completado</option>
             </select><br>
@@ -87,6 +110,26 @@
         </form>
     </div>
 </div>
+<script>
+    function abrirModal(tarea) {
+        // Cargar datos en el modal
+        document.getElementById('tarea_id').value = tarea.id;
+        document.getElementById('nombre').value = tarea.nombre;
+        document.getElementById('proyecto').value = tarea.proyecto;
+        document.getElementById('fecha_inicio').value = tarea.fecha_inicio;
+        document.getElementById('fecha_fin').value = tarea.fecha_fin;
+        document.getElementById('encargado').value = tarea.encargado;
+        document.getElementById('estado').value = tarea.estado;
+
+        // Mostrar el modal
+        document.getElementById('editModal').style.display = 'block';
+    }
+
+    function cerrarModal() {
+        document.getElementById('editModal').style.display = 'none';
+    }
+</script>
+
 
     
 </section>
