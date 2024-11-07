@@ -4,11 +4,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Editar Registro</title>
-    <link rel="stylesheet" href="/static/editar.css">
+    <link rel="stylesheet" href="/static/estilo.css">
 </head>
 <body>
     <h1>Editar Registro</h1>
 <form action="{{ url_for('editar', id=registro.id) }}" method="POST">
+    <div class="separar"> 
+          
+        <!-- Primera columna del formulario -->
+        <div class="columna"> 
     <label for="nombre">Nombre:</label>
     <input type="text" name="nombre" value="{{ registro.nombre }}" required>
 
@@ -17,16 +21,24 @@
 
     <label for="correo">Correo:</label>
     <input type="email" name="correo" value="{{ registro.correo }}" required>
+</div>
+<div class="columna"> 
 
     <label for="usuario">Usuario:</label>
     <input type="text" name="usuario" value="{{ registro.usuario }}" required>
 
-    <label for="rol">Rol:</label>
-    <input type="text" name="rol" value="{{ registro.rol }}" required>
-    
+    <label for="rol">Rol:</label><br>
+    <select name="rol" id="rol" required>
+        <option value="" disabled selected>Selecciona un rol</option>
+        <option value="super_administrador" {% if registro.rol == "super_administrador" %}selected{% endif %}>Super Administrador</option>
+        <option value="administrador" {% if registro.rol == "administrador" %}selected{% endif %}>Administrador</option>
+        <option value="visualizar" {% if registro.rol == "visualizar" %}selected{% endif %}>Visualizar</option>
+        <option value="empleado" {% if registro.rol == "empleado" %}selected{% endif %}>Empleado</option>
+    </select>
+
     <label for="password">Contraseña:</label>
     <input type="password" name="password" placeholder="Dejar en blanco si no deseas cambiarla">
-
+</div></div>
     <button type="submit">Guardar cambios</button>
 </form>
 

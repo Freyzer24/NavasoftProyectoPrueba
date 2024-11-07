@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
-    <link rel="stylesheet" href="/static/editar.css">
+    <link rel="stylesheet" href="/static/estilo.css">
 </head>
 <body>
     <form action="{{ url_for('actualizar_proyecto', id=proyecto.id) }}" method="POST">
@@ -12,8 +12,16 @@
         <input type="text" name="nombre" id="nombre" value="{{ proyecto.nombre }}" required>
         
         <label for="encargado">Encargado:</label>
-        <input type="text" name="encargado" id="encargado" value="{{ proyecto.encargado }}" required>
-        
+<select name="encargado" id="encargado" required>
+    <option value="" disabled selected>Selecciona un encargado</option>
+    {% for encargado in encargados %}
+        <option value="{{ encargado.id }}" {% if proyecto.encargado == encargado.id %}selected{% endif %}>
+            {{ encargado.nombre }}
+        </option>
+    {% endfor %}
+</select>
+
+
         <button type="submit">Actualizar Proyecto</button>
     </form>
 </body>
