@@ -27,10 +27,7 @@
                         <option value="{{ id }}">{{ nombre }}</option>
                     {% endfor %}
                 </select>
-</select>
-
-
-                
+</select> 
                 <br>
                 
                 <button type="submit">Añadir Proyecto</button>
@@ -55,7 +52,7 @@
                 <td>{{ encargados_dict[proyecto.encargado] }}</td>  <!-- Muestra el nombre del encargado usando el diccionario -->
                 <td>
                     <div class="icon-container">
-                        <a href="{{ url_for('static', filename='Diagrama de Gantt.html') }}" class="icon-link">
+                        <a href="{{ url_for('Gantt') }}" class="icon-link">
                             <i class="fa fa-sign-in icon-large" style="color: blue;"></i>
                         </a>
                        

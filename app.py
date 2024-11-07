@@ -83,7 +83,9 @@ def login():
 
 
 
-
+@app.route("/Gantt")
+def Gantt():
+     return render_template('Diagrama de Gantt.html')
 @app.route('/menuAdmin')
 def menuAdmin():
     return render_template('indexadmin.html')
@@ -176,20 +178,15 @@ def proyectos():
 
 
 # Ruta para agregar un nuevo proyecto
-@app.route('/agregar_proyecto', methods=['GET', 'POST'])
+@app.route('/agregar_proyecto', methods=['POST'])
 def agregar_proyecto():
-    if request.method == 'POST':
-        nombre = request.form['nombre']
-        encargado = request.form['encargado']
-        nuevo_proyecto = Proyecto(nombre=nombre, encargado=encargado)
-        db.session.add(nuevo_proyecto)
-        db.session.commit()
-        flash('Proyecto agregado exitosamente.')
-        return redirect(url_for('proyectos'))
-
-    # Si es un GET, obtén los encargados y pasa la lista a la plantilla
-    encargados = Registro.query.all()  # Asumiendo que tienes un modelo de Encargado
-    return render_template('agregar_proyecto.html', encargados=encargados)
+    nombre = request.form['nombre']
+    encargado = request.form['encargado']
+    nuevo_proyecto = Proyecto(nombre=nombre, encargado=encargado)
+    db.session.add(nuevo_proyecto)
+    db.session.commit()
+    flash('Proyecto agregado exitosamente.')
+    return redirect(url_for('proyectos'))
 
 
 # Ruta para eliminar un proyecto
