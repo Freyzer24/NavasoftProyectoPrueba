@@ -76,7 +76,7 @@ table {
     border-collapse: collapse;
     max-width: 1300px;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-    margin-bottom: 20px;
+    margin-bottom: 10px;
     text-align: center;
     align-items: center;
 }
@@ -84,13 +84,13 @@ table {
 thead th {
     background-color: #b0c4de;
     color: #333;
-    text-align: left;
+    text-align: center;
     padding: 15px;
     font-weight: bold;
 }
 
 tbody td {
-    padding: 15px;
+    padding: 20px;
     border-bottom: 1px solid #e0e0e0;
 }
 
