@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+    <link rel="stylesheet" href="/static/estilo.css">
 </head>
 <body>
     <form action="{{ url_for('editar_tarea', id=tarea.id) }}" method="POST">
@@ -16,7 +17,7 @@
         <label for="encargado">Encargado:</label>
         <input type="text" id="encargado" name="encargado" value="{{ tarea.encargado }}" required><br>
     
-        <label for="estado">Estado:</label>
+        <label for="estado">Estado:</label> <br>
         <select id="estado" name="estado" required>
             <option value="Iniciado" {% if tarea.estado == 'Iniciado' %}selected{% endif %}>Iniciado</option>
             <option value="En progreso" {% if tarea.estado == 'En progreso' %}selected{% endif %}>En progreso</option>
