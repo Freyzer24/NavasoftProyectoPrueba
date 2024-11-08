@@ -31,14 +31,48 @@ function mostrarTareas() {
     const totalDays = Math.ceil((maxDate - minDate) / (1000 * 60 * 60 * 24)) + 1;
 
     // Crear la línea de tiempo
+    let currentMonth = new Date(minDate);
+    let months = [];
+    let currentMonthDays = [];
+
+    // Recorremos todos los días entre las fechas de inicio y fin
     for (let i = 0; i < totalDays; i++) {
         const day = new Date(minDate);
         day.setDate(day.getDate() + i);
-        const dayDiv = document.createElement('div');
-        dayDiv.className = 'day';
-        dayDiv.innerHTML = `<div class="day-number">${day.getDate()}</div>`;
-        timelineDiv.appendChild(dayDiv);
+
+        // Si cambiamos de mes, agregamos el mes anterior y reiniciamos el array de días
+        if (day.getMonth() !== currentMonth.getMonth()) {
+            months.push({ month: currentMonth.getMonth(), days: currentMonthDays });
+            currentMonthDays = []; // Reiniciar los días del mes
+            currentMonth = day; // Cambiar al nuevo mes
+        }
+
+        // Agregar el día al mes correspondiente
+        currentMonthDays.push(day);
     }
+
+    // Asegurarse de agregar el último mes
+    if (currentMonthDays.length > 0) {
+        months.push({ month: currentMonth.getMonth(), days: currentMonthDays });
+    }
+
+    // Mostrar los meses en la línea de tiempo
+    months.forEach(month => {
+        const monthDiv = document.createElement('div');
+        monthDiv.className = 'month';
+        const monthName = new Date(month.days[0]).toLocaleString('default', { month: 'long' });
+
+        monthDiv.innerHTML = `<div class="month-header">${monthName}</div>`;
+        timelineDiv.appendChild(monthDiv);
+
+        // Mostrar los días de ese mes
+        month.days.forEach(day => {
+            const dayDiv = document.createElement('div');
+            dayDiv.className = 'day';
+            dayDiv.innerHTML = `<div class="day-number">${day.getDate()}</div>`;
+            monthDiv.appendChild(dayDiv);
+        });
+    });
 
     // Mostrar las tareas
     tareas.forEach(tarea => {
@@ -47,7 +81,7 @@ function mostrarTareas() {
 
         const barraAncho = Math.ceil((tarea.fechaFin - tarea.fechaInicio) / (1000 * 60 * 60 * 24)) * (100 / totalDays);
         const inicioOffset = Math.ceil((tarea.fechaInicio - minDate) / (1000 * 60 * 60 * 24)) * (100 / totalDays);
-        
+
         // Definir el color de la barra basado en el porcentaje
         let barraColor;
         if (tarea.porcentaje === 100) {
@@ -136,5 +170,4 @@ function exportarAPdf() {
 
     // Descargar el archivo PDF
     doc.save('diagrama_gantt.pdf');
-    
 }

@@ -66,25 +66,40 @@ button:hover {
 
 .month {
     position: relative;
-    width: 30px; /* Ajusta este valor para el espacio del mes */
-    background-color: #e9f5ff; /* Color de fondo del mes */
-    border-right: 1px solid #ddd; /* Borde derecho para separar meses */
+    display: inline-block;
+    width: auto; /* Ajustar automáticamente al contenido */
+    margin-right: 5px;
+    background-color: #e9f5ff;
+    border-radius: 4px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.month-header {
+    text-align: center;
+    font-weight: bold;
+    padding: 5px;
+    background-color: #4a90e2;
+    color: white;
+    font-size: 14px;
+    border-radius: 4px;
 }
 
 .day {
-    flex: 1;
+    display: inline-block;
+    width: 30px; /* Ajustar este valor para los días */
     border-top: 1px solid #ddd;
-    height: 10px; /* Altura de las líneas de días */
+    height: 30px; /* Altura de los días */
+    text-align: center;
     position: relative;
 }
 
 .day-number {
     position: absolute;
-    top: -20px;
-    left: 0;
-    right: 0;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
     font-size: 12px;
-    text-align: center; /* Centrar el texto del día */
+    color: #333;
 }
 
 .gantt-row {
