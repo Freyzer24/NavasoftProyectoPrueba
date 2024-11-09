@@ -40,9 +40,13 @@ function mostrarTareas() {
         const day = new Date(minDate);
         day.setDate(day.getDate() + i);
 
-        // Si cambiamos de mes, agregamos el mes anterior y reiniciamos el array de días
-        if (day.getMonth() !== currentMonth.getMonth()) {
-            months.push({ month: currentMonth.getMonth(), days: currentMonthDays });
+        // Si cambiamos de mes o de año, agregamos el mes anterior y reiniciamos el array de días
+        if (day.getMonth() !== currentMonth.getMonth() || day.getFullYear() !== currentMonth.getFullYear()) {
+            months.push({ 
+                month: currentMonth.getMonth(), 
+                year: currentMonth.getFullYear(),
+                days: currentMonthDays 
+            });
             currentMonthDays = []; // Reiniciar los días del mes
             currentMonth = day; // Cambiar al nuevo mes
         }
@@ -53,7 +57,11 @@ function mostrarTareas() {
 
     // Asegurarse de agregar el último mes
     if (currentMonthDays.length > 0) {
-        months.push({ month: currentMonth.getMonth(), days: currentMonthDays });
+        months.push({ 
+            month: currentMonth.getMonth(), 
+            year: currentMonth.getFullYear(),
+            days: currentMonthDays 
+        });
     }
 
     // Mostrar los meses en la línea de tiempo
@@ -61,8 +69,9 @@ function mostrarTareas() {
         const monthDiv = document.createElement('div');
         monthDiv.className = 'month';
         const monthName = new Date(month.days[0]).toLocaleString('default', { month: 'long' });
+        const year = month.year;  // Obtener el año
 
-        monthDiv.innerHTML = `<div class="month-header">${monthName}</div>`;
+        monthDiv.innerHTML = `<div class="month-header">${monthName} ${year}</div>`;
         timelineDiv.appendChild(monthDiv);
 
         // Mostrar los días de ese mes
