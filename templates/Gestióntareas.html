@@ -9,6 +9,7 @@
 
 </head>
 <body>
+     
     <script>
     // Función para abrir el modal y cargar la información de la tarea en los campos
 function abrirModal(id, nombre, proyecto, encargado, estado) {
@@ -133,5 +134,15 @@ window.onclick = function(event) {
 
     
 </section>
+ <!-- Mostrar los mensajes flash -->
+ {% with messages = get_flashed_messages(with_categories=True) %}
+ {% if messages %}
+     <div class="flash-messages">
+         {% for category, message in messages %}
+             <div class="alert {{ category }}">{{ message }}</div>
+         {% endfor %}
+     </div>
+ {% endif %}
+{% endwith %}
 </body>
 </html>

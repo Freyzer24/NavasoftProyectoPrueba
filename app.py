@@ -87,7 +87,7 @@ def login():
             session['rol'] = registro.rol
 
             # Redirecciona dependiendo del rol
-            if registro.rol in ['admin', 'super_administrador']:
+            if registro.rol in ['administrador', 'super_administrador']:
                 flash('Inicio de sesión exitoso - Admin')
                 return redirect(url_for('menuAdmin'))
             else:
@@ -215,13 +215,18 @@ def editar_tarea(id):
 
 @app.route('/eliminar_tarea/<int:id>', methods=['POST'])
 def eliminar_tarea(id):
-    tarea = Tarea.query.get(id)
-    if tarea:
-        db.session.delete(tarea)
-        db.session.commit()
-        flash('Tarea eliminada exitosamente.')
+    # Verifica si el usuario tiene el rol de 'super_administrador'
+    if 'rol' in session and session['rol'] == 'super_administrador':
+        tarea = Tarea.query.get(id)
+        if tarea:
+            db.session.delete(tarea)
+            db.session.commit()
+            flash('Tarea eliminada exitosamente.')
+        else:
+            flash('Tarea no encontrada.')
     else:
-        flash('Tarea no encontrada.')
+        flash('Acceso denegado: no tienes permisos para eliminar tareas.')
+    
     return redirect(url_for('Gtareas'))
 
 @app.route('/tAdmin')
@@ -256,16 +261,25 @@ def agregar_proyecto():
 
 
 # Ruta para eliminar un proyecto
+from flask import flash, redirect, url_for, session
+
 @app.route('/eliminar_proyecto/<int:id>', methods=['POST'])
 def eliminar_proyecto(id):
-    proyecto = Proyecto.query.get(id)
-    if proyecto:
-        db.session.delete(proyecto)
-        db.session.commit()
-        flash('Proyecto eliminado correctamente.')
+    # Verifica si el usuario tiene el rol de 'super_administrador'
+    if 'rol' in session and session['rol'] == 'super_administrador':
+        proyecto = Proyecto.query.get(id)
+        if proyecto:
+            db.session.delete(proyecto)
+            db.session.commit()
+            flash('Proyecto eliminado correctamente.', 'success')
+        else:
+            flash('Proyecto no encontrado.', 'error')
     else:
-        flash('Proyecto no encontrado.')
+        # Mensaje de acceso denegado si el usuario no es super administrador
+        flash('Acceso denegado: solo los super administradores pueden eliminar proyectos.', 'error')
+
     return redirect(url_for('proyectos'))
+
 
 # Ruta para editar un proyecto
 @app.route('/editar_proyecto/<int:id>', methods=['GET'])
