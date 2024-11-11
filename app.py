@@ -215,8 +215,8 @@ def editar_tarea(id):
 
 @app.route('/eliminar_tarea/<int:id>', methods=['POST'])
 def eliminar_tarea(id):
-    # Verifica si el usuario tiene el rol de 'super_administrador'
-    if 'rol' in session and session['rol'] == 'super_administrador':
+    # Verifica si el usuario tiene el rol de 'super_administrador' o 'administrador'
+    if 'rol' in session and session['rol'] in ['super_administrador', 'administrador']:
         tarea = Tarea.query.get(id)
         if tarea:
             db.session.delete(tarea)
@@ -445,12 +445,17 @@ def editar(id):
 
 # Ruta para eliminar un registro
 @app.route('/eliminar/<int:id>')
-def eliminar_usuario(id):  # Cambia el nombre de la función aquí para evitar duplicados
-    registro = Registro.query.get_or_404(id)
-    db.session.delete(registro)
-    db.session.commit()
+def eliminar_usuario(id):
+    # Verifica si el usuario tiene el rol de 'super_administrador'
+    if 'rol' in session and session['rol'] == 'super_administrador':
+        registro = Registro.query.get_or_404(id)
+        db.session.delete(registro)
+        db.session.commit()
+        flash('Registro eliminado con éxito', 'success')
+    else:
+        # Mensaje de acceso denegado si el usuario no es super administrador
+        flash('Acceso denegado: solo los super administradores pueden eliminar usuarios.', 'error')
 
-    flash('Registro eliminado con éxito')
     return redirect(url_for('mostrar'))
 
 # Ruta para mostrar una lista de usuarios específicos
