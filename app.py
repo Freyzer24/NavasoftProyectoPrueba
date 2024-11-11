@@ -294,7 +294,15 @@ def eliminar_proyecto(id):
 
     return redirect(url_for('proyectos'))
 
-
+@app.route('/editar_proyecto/<int:id>', methods=['GET'])
+def editar_proyecto(id):
+    proyecto = Proyecto.query.get(id)
+    if proyecto:
+        encargados = Registro.query.all()  # Obtener todos los encargados
+        return render_template('editar_proyecto.html', proyecto=proyecto, encargados=encargados)
+    else:
+        flash('Proyecto no encontrado.')
+        return redirect(url_for('proyectos'))
 # Ruta para actualizar un proyecto
 @app.route('/actualizar_proyecto/<int:id>', methods=['POST'])
 def actualizar_proyecto(id):
