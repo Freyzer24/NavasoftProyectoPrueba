@@ -516,7 +516,7 @@ def guardar_tarea():
     db.session.commit()
     
     flash('Tarea registrada exitosamente.')
-    return redirect(url_for('proyectos'))
+    return redirect(url_for('DGantt'))
 
 
 if __name__ == '__main__':
