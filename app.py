@@ -296,13 +296,20 @@ def eliminar_proyecto(id):
 
 @app.route('/editar_proyecto/<int:id>', methods=['GET'])
 def editar_proyecto(id):
-    proyecto = Proyecto.query.get(id)
-    if proyecto:
-        encargados = Registro.query.all()  # Obtener todos los encargados
-        return render_template('editar_proyecto.html', proyecto=proyecto, encargados=encargados)
+    # Verificar si el usuario tiene el rol de 'super_administrador'
+    if 'rol' in session and session['rol'] == 'super_administrador':
+        proyecto = Proyecto.query.get(id)
+        
+        if proyecto:
+            encargados = Registro.query.all()  # Obtener todos los encargados
+            return render_template('editar_proyecto.html', proyecto=proyecto, encargados=encargados)
+        else:
+            flash('Proyecto no encontrado.', 'error')  # Mensaje único de error si el proyecto no se encuentra
+            return redirect(url_for('proyectos'))  # Redirigir a la vista de proyectos si no se encuentra el proyecto
     else:
-        flash('Proyecto no encontrado.')
-        return redirect(url_for('proyectos'))
+        flash('Acceso denegado: solo los super administradores pueden editar proyectos.', 'error')
+        return redirect(url_for('proyectos'))  # Redirigir a la vista de proyectos si el rol no es adecuado
+
 # Ruta para actualizar un proyecto
 @app.route('/actualizar_proyecto/<int:id>', methods=['POST'])
 def actualizar_proyecto(id):
