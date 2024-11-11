@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Diagrama de Gantt</title>
     <link rel="stylesheet" href="/static/diagramaDeGantt.css">
-    <script src="/js/diagramaDeGantt.js"></script>
+    <script src="{{ url_for('static', filename='js/diagramaDeGantt.js') }}"></script>
     <!-- Agregar la librería SheetJS -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.6/xlsx.full.min.js"></script>
     <!-- Agregar la librería jsPDF -->
