@@ -13,13 +13,13 @@
 <body>
     <!-- Barra de navegación -->
     <nav class="navbar">
-        <a href="./Perfil.html" target="central">
-            <img src="/static/imagenes/image (1).png" alt="Menú" width="50">
+        <a href="{{ url_for('perfil') }}" target="central">
+            <img src="{{ url_for('static', filename='imagenes/image (1).png') }}" alt="Menú" width="50">
         </a>
         <ul class="nav-links">
-            <li><a href="./menuEmpleado.html" target="central">Menú</a></li>
-            <li><a href="./Gestióntareas.html"  target="central">Gestión tareas</a></li>
-            <li><a href="./proyectos.html"target="central">Diagrama de Gantt</a></li>
+            <li><a href="{{ url_for('Empleado') }}" target="central">Menú</a></li>
+            <li><a href="{{ url_for('Gtareas') }}" target="central">Gestión tareas</a></li>
+            <li><a href="{{ url_for('proyectos') }}" target="central">Diagrama de Gantt</a></li>
            
         </ul>
         <a href="https://www.navasoftsoluciones.com" target="_blank">

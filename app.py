@@ -112,6 +112,9 @@ def menuAdmin():
 @app.route('/Admin')
 def Admin():
     return render_template('menuAdmin.html')
+@app.route('/Empleado')
+def Empleado():
+    return render_template('menuEmpleado.html')
 @app.route('/Gtareas')#Gestión tareas
 def Gtareas():
     tareas = Tarea.query.all()
@@ -122,9 +125,6 @@ def DGantt():
 @app.route('/menuEmpleado')
 def menuEmpleado():
     return render_template('indexempleado.html')  # Asegúrate de tener esta plantilla creada
-@app.route('/Empleado')
-def Empleado():
-    return render_template('menuEmpleado.html')
 @app.route('/templeado')
 def templeado():
     return render_template('templeado.html')
