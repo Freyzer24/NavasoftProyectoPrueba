@@ -185,6 +185,11 @@ def cambiar_contrasena():
     return redirect(url_for('perfil'))
 @app.route('/editar_tarea/<int:id>', methods=['GET', 'POST'])
 def editar_tarea(id):
+    # Verifica si el usuario tiene el rol de 'visualizador'
+    if 'rol' in session and session['rol'] == 'visualizador':
+        flash('Acceso denegado: no tienes permisos para editar tareas.')
+        return redirect(url_for('Gtareas'))  # Redirige a la página principal o de tareas
+
     # Obtener la tarea de la base de datos por su ID
     tarea = Tarea.query.get_or_404(id)
 
@@ -212,6 +217,7 @@ def editar_tarea(id):
         return redirect(url_for('Gtareas'))  # Redirigir a la página principal o donde desees
 
     return render_template('editar_tarea.html', tarea=tarea)
+
 
 @app.route('/eliminar_tarea/<int:id>', methods=['POST'])
 def eliminar_tarea(id):
@@ -251,12 +257,19 @@ def proyectos():
 # Ruta para agregar un nuevo proyecto
 @app.route('/agregar_proyecto', methods=['POST'])
 def agregar_proyecto():
-    nombre = request.form['nombre']
-    encargado = request.form['encargado']
-    nuevo_proyecto = Proyecto(nombre=nombre, encargado=encargado)
-    db.session.add(nuevo_proyecto)
-    db.session.commit()
-    flash('Proyecto agregado exitosamente.')
+    # Verifica si el usuario tiene el rol de 'super_administrador' o 'administrador'
+    if 'rol' in session and session['rol'] in ['super_administrador', 'administrador']:
+        nombre = request.form['nombre']
+        encargado = request.form['encargado']
+        
+        nuevo_proyecto = Proyecto(nombre=nombre, encargado=encargado)
+        db.session.add(nuevo_proyecto)
+        db.session.commit()
+        
+        flash('Proyecto agregado exitosamente.')
+    else:
+        flash('Acceso denegado: no tienes permisos para agregar proyectos.')
+    
     return redirect(url_for('proyectos'))
 
 
@@ -281,40 +294,33 @@ def eliminar_proyecto(id):
     return redirect(url_for('proyectos'))
 
 
-# Ruta para editar un proyecto
-@app.route('/editar_proyecto/<int:id>', methods=['GET'])
-def editar_proyecto(id):
-    proyecto = Proyecto.query.get(id)
-    if proyecto:
-        encargados = Registro.query.all()  # Obtener todos los encargados
-        return render_template('editar_proyecto.html', proyecto=proyecto, encargados=encargados)
-    else:
-        flash('Proyecto no encontrado.')
-        return redirect(url_for('proyectos'))
-
 # Ruta para actualizar un proyecto
 @app.route('/actualizar_proyecto/<int:id>', methods=['POST'])
 def actualizar_proyecto(id):
-    proyecto = Proyecto.query.get(id)
-    if proyecto:
-        proyecto.nombre = request.form['nombre']
-        encargado_id = request.form['encargado']
+    # Verifica si el usuario tiene el rol de 'super_administrador' o 'administrador'
+    if 'rol' in session and session['rol'] in ['super_administrador', 'administrador']:
+        proyecto = Proyecto.query.get(id)
+        if proyecto:
+            proyecto.nombre = request.form['nombre']
+            encargado_id = request.form['encargado']
 
-        # Si se selecciona un encargado, actualizar el ID del encargado
-        if encargado_id:
-            encargado = Registro.query.get(encargado_id)
-            if encargado:
-                proyecto.encargado = encargado.id  # Guardamos el ID del encargado, no el nombre
-            else:
-                flash('El encargado seleccionado no existe.')
-                return redirect(url_for('editar_proyecto', id=id))
+            # Si se selecciona un encargado, actualizar el ID del encargado
+            if encargado_id:
+                encargado = Registro.query.get(encargado_id)
+                if encargado:
+                    proyecto.encargado = encargado.id  # Guardamos el ID del encargado, no el nombre
+                else:
+                    flash('El encargado seleccionado no existe.')
+                    return redirect(url_for('editar_proyecto', id=id))
 
-        db.session.commit()
-        flash('Proyecto actualizado correctamente.')
-        return redirect(url_for('proyectos'))
+            db.session.commit()
+            flash('Proyecto actualizado correctamente.')
+        else:
+            flash('Proyecto no encontrado.')
     else:
-        flash('Proyecto no encontrado.')
-        return redirect(url_for('proyectos'))
+        flash('Acceso denegado: no tienes permisos para actualizar proyectos.')
+
+    return redirect(url_for('proyectos'))
 
 
 
@@ -466,6 +472,11 @@ def lista_usuarios():
 
 @app.route('/guardar_tarea', methods=['POST'])
 def guardar_tarea():
+    # Verifica si el usuario tiene el rol de 'visualizador'
+    if 'rol' in session and session['rol'] == 'visualizador':
+        flash('Acceso denegado: no tienes permisos para registrar nuevas tareas.')
+        return redirect(url_for('proyectos'))  # Redirige a la página de proyectos o donde desees
+
     # Obtener los datos del formulario
     nombre = request.form['nombre']
     proyecto = request.form['proyecto']
@@ -490,6 +501,7 @@ def guardar_tarea():
     
     flash('Tarea registrada exitosamente.')
     return redirect(url_for('proyectos'))
+
 
 if __name__ == '__main__':
     app.run(debug=True)
