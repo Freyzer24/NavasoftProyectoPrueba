@@ -105,7 +105,14 @@ def agregartareas():
     return render_template('agregarTareas.html')
 @app.route("/Gantt")
 def Gantt():
-    return render_template('Diagrama de Gantt.html')
+    # Obtén los encargados desde la tabla 'registro' en la base de datos
+    encargados = Registro.query.with_entities(Registro.id, Registro.nombre).all()
+    # Convierte los encargados en un diccionario para pasarlo al contexto
+    encargados_dict = {encargado.id: encargado.nombre for encargado in encargados}
+    
+    # Pasa encargados_dict al render_template
+    return render_template('Diagrama de Gantt.html', encargados_dict=encargados_dict)
+    
 @app.route('/menuAdmin')
 def menuAdmin():
     return render_template('indexadmin.html')
@@ -119,9 +126,7 @@ def Empleado():
 def Gtareas():
     tareas = Tarea.query.all()
     return render_template('Gestióntareas.html', tareas=tareas)
-@app.route('/DGantt')
-def DGantt():
-    return render_template('Diagrama de Gantt.html')
+
 @app.route('/menuEmpleado')
 def menuEmpleado():
     return render_template('indexempleado.html')  # Asegúrate de tener esta plantilla creada
@@ -492,7 +497,6 @@ def guardar_tarea():
     if 'rol' in session and session['rol'] == 'visualizador':
         flash('Acceso denegado: no tienes permisos para registrar nuevas tareas.')
         return redirect(url_for('proyectos'))  # Redirige a la página de proyectos o donde desees
-
     # Obtener los datos del formulario
     nombre = request.form['nombre']
     proyecto = request.form['proyecto']
@@ -516,7 +520,7 @@ def guardar_tarea():
     db.session.commit()
     
     flash('Tarea registrada exitosamente.')
-    return redirect(url_for('DGantt'))
+    return redirect(url_for('Gantt'))
 
 
 if __name__ == '__main__':

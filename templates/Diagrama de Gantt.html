@@ -37,7 +37,13 @@
             <input type="date" id="fecha_fin" name="fecha_fin" required><br>
                 
             <label for="encargado">Encargado:</label>
-            <input type="text" id="encargado" name="encargado" required><br>
+            <select name="encargado" id="encargado" required>
+                <option value="" disabled selected>Selecciona un encargado</option>
+                {% for id, nombre in encargados_dict.items() %}
+                    <option value="{{ id }}">{{ nombre }}</option>
+                {% endfor %}
+            </select>
+            
                 
             <label for="estado">Estado:</label>
             <select id="estado" name="estado" required>
