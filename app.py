@@ -146,13 +146,19 @@ def agregartareas(current_user):
 @app.route("/Gantt")
 @token_requerido
 def Gantt(current_user):
-    # Obtén los encargados desde la tabla 'registro' en la base de datos
-    encargados = Registro.query.with_entities(Registro.id, Registro.nombre).all()
-    # Convierte los encargados en un diccionario para pasarlo al contexto
-    encargados_dict = {encargado.id: encargado.nombre for encargado in encargados}
+    # Obtener todas las tareas
+    tareas = Tarea.query.all()
     
-    # Pasa encargados_dict al render_template
-    return render_template('Diagrama de Gantt.html', encargados_dict=encargados_dict)
+    # Obtener todos los encargados desde la tabla 'registro' y crear el diccionario
+    encargados = Registro.query.all()
+    encargados_dict = {encargado.nombre: encargado.nombre for encargado in encargados}
+    
+    # Pasar las tareas y encargados_dict al template
+    return render_template('Diagrama de Gantt.html', tareas=tareas, encargados_dict=encargados_dict)
+
+
+
+
     
 @app.route('/menuAdmin')
 @token_requerido
@@ -192,6 +198,7 @@ def perfil():
     if not token:
         flash('Debes iniciar sesión primero.')
         return redirect(url_for('login'))  # Redirige a login si no hay token
+     # Pasar los datos del usuario a la plantilla
 
     try:
         # Decodificar el token (sin verificar expiración en este ejemplo, pero puedes hacerlo)
