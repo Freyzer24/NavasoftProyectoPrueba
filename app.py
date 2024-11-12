@@ -257,8 +257,7 @@ def cambiar_contrasena():
     return redirect(url_for('perfil'))
 @app.route('/editar_tarea/<int:id>', methods=['GET', 'POST'])
 def editar_tarea(id):
-    # Verificar si el usuario tiene el rol adecuado para editar tareas
-    if 'rol' in session and session['rol'] in ['super_administrador', 'administrador', 'empleado']:
+    
         # Obtener la tarea de la base de datos por su ID
         tarea = Tarea.query.get_or_404(id)
 
@@ -285,17 +284,11 @@ def editar_tarea(id):
             flash('Tarea actualizada exitosamente', 'success')
             return redirect(url_for('Gtareas'))  # Redirigir a la página principal o de tareas
 
-        return render_template('editar_tarea.html', tarea=tarea)
-
-    else:
-        flash('Acceso denegado: solo los usuarios con roles permitidos pueden editar tareas.', 'error')
-        return redirect(url_for('Gtareas'))  # Redirigir a la página principal o de tareas
+    
 
 
 @app.route('/eliminar_tarea/<int:id>', methods=['POST'])
 def eliminar_tarea(id):
-    # Verifica si el usuario tiene el rol de 'super_administrador' o 'administrador'
-    if 'rol' in session and session['rol'] in ['super_administrador', 'administrador']:
         tarea = Tarea.query.get(id)
         if tarea:
             db.session.delete(tarea)
@@ -303,10 +296,8 @@ def eliminar_tarea(id):
             flash('Tarea eliminada exitosamente.')
         else:
             flash('Tarea no encontrada.')
-    else:
-        flash('Acceso denegado: no tienes permisos para eliminar tareas.')
     
-    return redirect(url_for('Gtareas'))
+        return redirect(url_for('Gtareas'))
 
 @app.route('/tAdmin')
 @token_requerido
@@ -334,7 +325,6 @@ def proyectos():
 @app.route('/agregar_proyecto', methods=['POST'])
 def agregar_proyecto():
     # Verifica si el usuario tiene el rol de 'super_administrador' o 'administrador'
-    if 'rol' in session and session['rol'] in ['super_administrador', 'administrador']:
         nombre = request.form['nombre']
         encargado = request.form['encargado']
         
@@ -343,10 +333,7 @@ def agregar_proyecto():
         db.session.commit()
         
         flash('Proyecto agregado exitosamente.')
-    else:
-        flash('Acceso denegado: no tienes permisos para agregar proyectos.')
-    
-    return redirect(url_for('proyectos'))
+        return redirect(url_for('proyectos'))
 
 
 # Ruta para eliminar un proyecto
@@ -355,7 +342,7 @@ from flask import flash, redirect, url_for, session
 @app.route('/eliminar_proyecto/<int:id>', methods=['POST'])
 def eliminar_proyecto(id):
     # Verifica si el usuario tiene el rol de 'super_administrador'
-    if 'rol' in session and session['rol'] == 'super_administrador':
+  
         proyecto = Proyecto.query.get(id)
         if proyecto:
             db.session.delete(proyecto)
@@ -363,16 +350,11 @@ def eliminar_proyecto(id):
             flash('Proyecto eliminado correctamente.', 'success')
         else:
             flash('Proyecto no encontrado.', 'error')
-    else:
-        # Mensaje de acceso denegado si el usuario no es super administrador
-        flash('Acceso denegado: solo los super administradores pueden eliminar proyectos.', 'error')
 
-    return redirect(url_for('proyectos'))
+        return redirect(url_for('proyectos'))
 
 @app.route('/editar_proyecto/<int:id>', methods=['GET'])
 def editar_proyecto(id):
-    # Verificar si el usuario tiene el rol de 'super_administrador'
-    if 'rol' in session and session['rol'] == 'super_administrador':
         proyecto = Proyecto.query.get(id)
         
         if proyecto:
@@ -381,15 +363,14 @@ def editar_proyecto(id):
         else:
             flash('Proyecto no encontrado.', 'error')  # Mensaje único de error si el proyecto no se encuentra
             return redirect(url_for('proyectos'))  # Redirigir a la vista de proyectos si no se encuentra el proyecto
-    else:
-        flash('Acceso denegado: solo los super administradores pueden editar proyectos.', 'error')
+    
         return redirect(url_for('proyectos'))  # Redirigir a la vista de proyectos si el rol no es adecuado
 
 # Ruta para actualizar un proyecto
 @app.route('/actualizar_proyecto/<int:id>', methods=['POST'])
 def actualizar_proyecto(id):
     # Verifica si el usuario tiene el rol de 'super_administrador' o 'administrador'
-    if 'rol' in session and session['rol'] in ['super_administrador', 'administrador']:
+   
         proyecto = Proyecto.query.get(id)
         if proyecto:
             proyecto.nombre = request.form['nombre']
@@ -408,10 +389,8 @@ def actualizar_proyecto(id):
             flash('Proyecto actualizado correctamente.')
         else:
             flash('Proyecto no encontrado.')
-    else:
-        flash('Acceso denegado: no tienes permisos para actualizar proyectos.')
 
-    return redirect(url_for('proyectos'))
+        return redirect(url_for('proyectos'))
 
 
 
@@ -544,16 +523,11 @@ def editar(id):
 # Ruta para eliminar un registro
 @app.route('/eliminar/<int:id>')
 def eliminar_usuario(id):
-    # Verifica si el usuario tiene el rol de 'super_administrador'
-    if 'rol' in session and session['rol'] == 'super_administrador':
-        registro = Registro.query.get_or_404(id)
-        db.session.delete(registro)
-        db.session.commit()
-        flash('Registro eliminado con éxito', 'success')
-    else:
-        # Mensaje de acceso denegado si el usuario no es super administrador
-        flash('Acceso denegado: solo los super administradores pueden eliminar usuarios.', 'error')
 
+    registro = Registro.query.get_or_404(id)
+    db.session.delete(registro)
+    db.session.commit()
+    flash('Registro eliminado con éxito', 'success')
     return redirect(url_for('mostrar'))
 
 # Ruta para mostrar una lista de usuarios específicos
@@ -564,10 +538,8 @@ def lista_usuarios():
 
 @app.route('/guardar_tarea', methods=['POST'])
 def guardar_tarea():
-    # Verifica si el usuario tiene el rol de 'visualizador'
-    if 'rol' in session and session['rol'] == 'visualizador':
-        flash('Acceso denegado: no tienes permisos para registrar nuevas tareas.')
-        return redirect(url_for('proyectos'))  # Redirige a la página de proyectos o donde desees
+
+    
     # Obtener los datos del formulario
     nombre = request.form['nombre']
     proyecto = request.form['proyecto']
@@ -592,8 +564,6 @@ def guardar_tarea():
     
     flash('Tarea registrada exitosamente.')
     return redirect(url_for('Gantt'))
-
-
 if __name__ == '__main__':
     app.run(debug=True)
 # 
