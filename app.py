@@ -184,21 +184,32 @@ def templeado(current_user):
 @token_requerido
 def nuevo_usuario(current_user):
     return render_template('index.html')
-@app.route('/perfil')
-@token_requerido
-def perfil(current_user):
-    # Verificar que el usuario esté autenticado
-    if 'usuario' not in session:
-        flash('Debes iniciar sesión primero.')
-        return redirect(url_for('login'))  # Redirige a la página de login si no está autenticado
+@app.route('/perfil', methods=['GET', 'POST'])
+def perfil():
+    # Obtener el token de la cookie
+    token = request.cookies.get('token')
 
-    # Pasar los datos del usuario a la plantilla
-    datos_usuario = {
-        'usuario': session['usuario'],
-        'correo': session['correo'],
-        'telefono': session['telefono'],
-        'rol': session['rol']
-    }
+    if not token:
+        flash('Debes iniciar sesión primero.')
+        return redirect(url_for('login'))  # Redirige a login si no hay token
+
+    try:
+        # Decodificar el token (sin verificar expiración en este ejemplo, pero puedes hacerlo)
+        payload = jwt.decode(token, SECRET_KEY, algorithms=["HS256"])
+
+        # Los datos del usuario se extraen del payload del token
+        datos_usuario = {
+            'usuario': payload.get('usuario'),
+            'correo': payload.get('correo'),
+            'telefono': payload.get('telefono', 'No disponible'),  # 'telefono' puede ser opcional
+            'rol': payload.get('rol')
+        }
+    except jwt.ExpiredSignatureError:
+        flash('Tu sesión ha expirado. Por favor, inicia sesión nuevamente.')
+        return redirect(url_for('login'))  # Token expirado, redirige al login
+    except jwt.InvalidTokenError:
+        flash('Token inválido. Por favor, inicia sesión nuevamente.')
+        return redirect(url_for('login'))  # Token inválido, redirige al login
 
     return render_template('Perfil.html', datos=datos_usuario)
 
