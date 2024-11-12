@@ -159,7 +159,8 @@ def Gantt(current_user):
 def menuAdmin(current_user):
     return render_template('indexadmin.html')
 @app.route('/admin')
-def Admin():  # Nombre de la función en mayúscula
+@token_requerido
+def Admin(current_user):
     return render_template('menuAdmin.html')
 @app.route('/Empleado')
 @token_requerido
