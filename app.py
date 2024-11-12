@@ -1,9 +1,12 @@
 import re
 import smtplib
+import jwt
 from email.mime.multipart import MIMEMultipart
 from datetime import datetime
 from email.mime.text import MIMEText
-from flask import Flask, render_template, request, redirect, url_for, flash, session
+from datetime import datetime, timedelta
+from functools import wraps
+from flask import Flask, render_template, request, redirect, url_for, flash, session, jsonify, make_response
 from flask_sqlalchemy import SQLAlchemy
 from werkzeug.security import generate_password_hash, check_password_hash
 app = Flask(__name__)
@@ -59,12 +62,39 @@ class Registro(db.Model):
 with app.app_context():
     db.create_all()
     
+def token_requerido(f):
+    @wraps(f)
+    def decorador(*args, **kwargs):
+        token = request.cookies.get('token')  # Obtiene el token de la cookie
+
+        if not token:
+            return jsonify({"mensaje": "Token es necesario"}), 403
+
+        # Verifica si el token ha sido revocado
+        if TokenRevocado.query.filter_by(token=token).first():
+            return jsonify({"mensaje": "Token revocado. Debes iniciar sesión nuevamente."}), 401
+
+        try:
+            data = jwt.decode(token, SECRET_KEY, algorithms=["HS256"])
+            current_user = data['usuario']
+        except jwt.ExpiredSignatureError:
+            return jsonify({"mensaje": "El token ha expirado"}), 401
+        except jwt.InvalidTokenError:
+            return jsonify({"mensaje": "Token inválido"}), 403
+
+        return f(current_user, *args, **kwargs)
+    
+    return decorador
+
+   
     
 #Pantalla que se muestra con /
 @app.route('/')
 def index():
     return render_template('login.html')
 
+
+SECRET_KEY = "tu_clave_secreta"  # Cámbiala por una clave segura
 
 @app.route('/login', methods=['POST'])
 def login():
@@ -75,24 +105,27 @@ def login():
     registro = Registro.query.filter_by(usuario=usuario).first()
     
     if registro:
-        print(f"Usuario encontrado: {registro.usuario}")  # Verifica el usuario
         is_correct = check_password_hash(registro.password, password)
-        print(f"Contraseña correcta: {is_correct}")  # Imprime True si coincide
-
+        
         if is_correct:
-            # Guarda los datos del usuario en la sesión
-            session['usuario'] = registro.usuario
-            session['correo'] = registro.correo
-            session['telefono'] = registro.telefono
-            session['rol'] = registro.rol
+            # Genera el token con una expiración de 1 hora
+            token = jwt.encode(
+                {
+                    "usuario": registro.usuario,
+                    "correo": registro.correo,
+                    "rol": registro.rol,
+                    "exp": datetime.utcnow() + timedelta(hours=1)
+                },
+                SECRET_KEY,
+                algorithm="HS256"
+            )
 
-            # Redirecciona dependiendo del rol
-            if registro.rol in ['administrador', 'super_administrador']:
-                flash('Inicio de sesión exitoso - Admin')
-                return redirect(url_for('menuAdmin'))
-            else:
-                flash('Inicio de sesión exitoso - Empleado')
-                return redirect(url_for('menuEmpleado'))
+            # Crear la respuesta de inicio de sesión
+            response = make_response(redirect(url_for('menuAdmin') if registro.rol in ['administrador', 'super_administrador'] else url_for('menuEmpleado')))
+            response.set_cookie('token', token, httponly=True)  # Configura el token como una cookie segura y accesible solo por el servidor (httponly)
+            
+            flash('Inicio de sesión exitoso')
+            return response
         else:
             flash('Contraseña incorrecta. Por favor, inténtalo de nuevo.')
     else:
@@ -100,39 +133,55 @@ def login():
 
     return redirect(url_for('index'))
 
+
+class TokenRevocado(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    token = db.Column(db.String(500), unique=True, nullable=False)
+    fecha_revocacion = db.Column(db.DateTime, default=datetime.utcnow)
+
 @app.route("/agregartareas")
-def agregartareas():
+@token_requerido
+def agregartareas(current_user):
     return render_template('agregarTareas.html')
 @app.route("/Gantt")
-def Gantt():
+@token_requerido
+def Gantt(current_user):
     return render_template('Diagrama de Gantt.html')
 @app.route('/menuAdmin')
-def menuAdmin():
+@token_requerido
+def menuAdmin(current_user):
     return render_template('indexadmin.html')
-@app.route('/Admin')
-def Admin():
+@app.route('/admin')
+def Admin():  # Nombre de la función en mayúscula
     return render_template('menuAdmin.html')
 @app.route('/Empleado')
-def Empleado():
+@token_requerido
+def Empleado(current_user):
     return render_template('menuEmpleado.html')
 @app.route('/Gtareas')#Gestión tareas
-def Gtareas():
+@token_requerido
+def Gtareas(current_user):
     tareas = Tarea.query.all()
     return render_template('Gestióntareas.html', tareas=tareas)
 @app.route('/DGantt')
-def DGantt():
+@token_requerido
+def DGantt(current_user):
     return render_template('Diagrama de Gantt.html')
 @app.route('/menuEmpleado')
-def menuEmpleado():
+@token_requerido
+def menuEmpleado(current_user):
     return render_template('indexempleado.html')  # Asegúrate de tener esta plantilla creada
 @app.route('/templeado')
-def templeado():
+@token_requerido
+def templeado(current_user):
     return render_template('templeado.html')
 @app.route('/nuevo_usuario')
-def nuevo_usuario():
+@token_requerido
+def nuevo_usuario(current_user):
     return render_template('index.html')
 @app.route('/perfil')
-def perfil():
+@token_requerido
+def perfil(current_user):
     # Verificar que el usuario esté autenticado
     if 'usuario' not in session:
         flash('Debes iniciar sesión primero.')
@@ -236,15 +285,18 @@ def eliminar_tarea(id):
     return redirect(url_for('Gtareas'))
 
 @app.route('/tAdmin')
-def tAdmin():
+@token_requerido
+def tAdmin(current_user):
     return render_template('tAdmin.html')
 @app.route('/logout', methods=['POST'])
 def logout():
-    # Eliminar todos los datos de la sesión
-    session.clear()
-    flash('Has cerrado sesión exitosamente.')
-    # Redirigir a una página pública, como la de login
-    return redirect(url_for('login'))  # Asegúrate de que 'login' sea la ruta correcta
+    # Crear la respuesta de logout
+    response = make_response(redirect(url_for('index')))
+    response.set_cookie('token', '', expires=0)  # Borra la cookie configurando su expiración a 0
+
+    flash("Has cerrado sesión correctamente.")
+    return response
+
 
 # Ruta para ver todos los proyectos
 @app.route('/proyectos')
@@ -363,7 +415,8 @@ def enviar_confirmacion_correo(nombre, usuario, correo):
 
 #mostrar
 @app.route('/mostrar')
-def mostrar():
+@token_requerido
+def mostrar(current_user):
     registros = Registro.query.all()
     return render_template('Mostrar.html', registros=registros)
 
