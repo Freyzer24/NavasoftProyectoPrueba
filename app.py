@@ -146,7 +146,14 @@ def agregartareas(current_user):
 @app.route("/Gantt")
 @token_requerido
 def Gantt(current_user):
-    return render_template('Diagrama de Gantt.html')
+    # Obtén los encargados desde la tabla 'registro' en la base de datos
+    encargados = Registro.query.with_entities(Registro.id, Registro.nombre).all()
+    # Convierte los encargados en un diccionario para pasarlo al contexto
+    encargados_dict = {encargado.id: encargado.nombre for encargado in encargados}
+    
+    # Pasa encargados_dict al render_template
+    return render_template('Diagrama de Gantt.html', encargados_dict=encargados_dict)
+    
 @app.route('/menuAdmin')
 @token_requerido
 def menuAdmin(current_user):
@@ -163,10 +170,7 @@ def Empleado(current_user):
 def Gtareas(current_user):
     tareas = Tarea.query.all()
     return render_template('Gestióntareas.html', tareas=tareas)
-@app.route('/DGantt')
-@token_requerido
-def DGantt(current_user):
-    return render_template('Diagrama de Gantt.html')
+
 @app.route('/menuEmpleado')
 @token_requerido
 def menuEmpleado(current_user):
@@ -234,38 +238,39 @@ def cambiar_contrasena():
     return redirect(url_for('perfil'))
 @app.route('/editar_tarea/<int:id>', methods=['GET', 'POST'])
 def editar_tarea(id):
-    # Verifica si el usuario tiene el rol de 'visualizador'
-    if 'rol' in session and session['rol'] == 'visualizador':
-        flash('Acceso denegado: no tienes permisos para editar tareas.')
-        return redirect(url_for('Gtareas'))  # Redirige a la página principal o de tareas
+    # Verificar si el usuario tiene el rol adecuado para editar tareas
+    if 'rol' in session and session['rol'] in ['super_administrador', 'administrador', 'empleado']:
+        # Obtener la tarea de la base de datos por su ID
+        tarea = Tarea.query.get_or_404(id)
 
-    # Obtener la tarea de la base de datos por su ID
-    tarea = Tarea.query.get_or_404(id)
+        if request.method == 'GET':
+            # Mostrar el formulario con los datos de la tarea
+            return render_template('editar_tarea.html', tarea=tarea)
 
-    if request.method == 'GET':
-        # Mostrar el formulario con los datos de la tarea
+        if request.method == 'POST':
+            # Obtener los datos enviados desde el formulario
+            nombre = request.form['nombre']
+            proyecto = request.form['proyecto']
+            encargado = request.form['encargado']
+            estado = request.form['estado']
+
+            # Actualizar los atributos de la tarea
+            tarea.nombre = nombre
+            tarea.proyecto = proyecto
+            tarea.encargado = encargado
+            tarea.estado = estado
+
+            # Guardar los cambios en la base de datos
+            db.session.commit()
+
+            flash('Tarea actualizada exitosamente', 'success')
+            return redirect(url_for('Gtareas'))  # Redirigir a la página principal o de tareas
+
         return render_template('editar_tarea.html', tarea=tarea)
 
-    if request.method == 'POST':
-        # Obtener los datos enviados desde el formulario
-        nombre = request.form['nombre']
-        proyecto = request.form['proyecto']
-        encargado = request.form['encargado']
-        estado = request.form['estado']
-
-        # Actualizar los atributos de la tarea
-        tarea.nombre = nombre
-        tarea.proyecto = proyecto
-        tarea.encargado = encargado
-        tarea.estado = estado
-
-        # Guardar los cambios en la base de datos
-        db.session.commit()
-
-        flash('Tarea actualizada exitosamente', 'success')
-        return redirect(url_for('Gtareas'))  # Redirigir a la página principal o donde desees
-
-    return render_template('editar_tarea.html', tarea=tarea)
+    else:
+        flash('Acceso denegado: solo los usuarios con roles permitidos pueden editar tareas.', 'error')
+        return redirect(url_for('Gtareas'))  # Redirigir a la página principal o de tareas
 
 
 @app.route('/eliminar_tarea/<int:id>', methods=['POST'])
@@ -345,6 +350,21 @@ def eliminar_proyecto(id):
 
     return redirect(url_for('proyectos'))
 
+@app.route('/editar_proyecto/<int:id>', methods=['GET'])
+def editar_proyecto(id):
+    # Verificar si el usuario tiene el rol de 'super_administrador'
+    if 'rol' in session and session['rol'] == 'super_administrador':
+        proyecto = Proyecto.query.get(id)
+        
+        if proyecto:
+            encargados = Registro.query.all()  # Obtener todos los encargados
+            return render_template('editar_proyecto.html', proyecto=proyecto, encargados=encargados)
+        else:
+            flash('Proyecto no encontrado.', 'error')  # Mensaje único de error si el proyecto no se encuentra
+            return redirect(url_for('proyectos'))  # Redirigir a la vista de proyectos si no se encuentra el proyecto
+    else:
+        flash('Acceso denegado: solo los super administradores pueden editar proyectos.', 'error')
+        return redirect(url_for('proyectos'))  # Redirigir a la vista de proyectos si el rol no es adecuado
 
 # Ruta para actualizar un proyecto
 @app.route('/actualizar_proyecto/<int:id>', methods=['POST'])
@@ -529,7 +549,6 @@ def guardar_tarea():
     if 'rol' in session and session['rol'] == 'visualizador':
         flash('Acceso denegado: no tienes permisos para registrar nuevas tareas.')
         return redirect(url_for('proyectos'))  # Redirige a la página de proyectos o donde desees
-
     # Obtener los datos del formulario
     nombre = request.form['nombre']
     proyecto = request.form['proyecto']
@@ -553,7 +572,7 @@ def guardar_tarea():
     db.session.commit()
     
     flash('Tarea registrada exitosamente.')
-    return redirect(url_for('proyectos'))
+    return redirect(url_for('Gantt'))
 
 
 if __name__ == '__main__':

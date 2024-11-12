@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Diagrama de Gantt</title>
     <link rel="stylesheet" href="/static/diagramaDeGantt.css">
+    <script src="{{ url_for('static', filename='js/diagramaDeGantt.js') }}"></script>
     <!-- Agregar la librería SheetJS -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.6/xlsx.full.min.js"></script>
     <!-- Agregar la librería jsPDF -->
@@ -12,23 +13,50 @@
 </head>
 <body>
     <h1>Diagrama de Gantt - Proyecto {{ proyecto }}</h1>
-    <div class="container">
-        <div class="form-group">
-            <label for="nombre">Nombre del encargado</label>
-            <input type="text" id="nombre" placeholder="Nombre del encargado" required><br>
 
-            <label for="fechaInicio">Fecha de inicio</label>
-            <input type="date" id="fechaInicio" required><br>
+<!-- El Modal -->
+<div id="modal" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="cerrarModal()">&times;</span>
+        <h2>Registrar Tarea</h2>
+        <form action="{{ url_for('guardar_tarea') }}" method="POST">
+            <div class="separar"> 
+                <div class="columna">
+            
+                <label for="nombre">Nombre de la tarea:</label>
+                <input type="text" id="nombre" name="nombre" required><br>
+                
+                <label for="proyecto">Proyecto:</label>
+                <input type="text" id="proyecto" name="proyecto" required><br>
+                
+                <label for="fecha_inicio">Fecha de inicio:</label>
+                <input type="date" id="fecha_inicio" name="fecha_inicio" required><br>
+            </div>
+            <div class="columna">
+            <label for="fecha_fin">Fecha de finalización:</label>
+            <input type="date" id="fecha_fin" name="fecha_fin" required><br>
+                
+            <label for="encargado">Encargado:</label>
+            <select name="encargado" id="encargado" required>
+                <option value="" disabled selected>Selecciona un encargado</option>
+                {% for id, nombre in encargados_dict.items() %}
+                    <option value="{{ id }}">{{ nombre }}</option>
+                {% endfor %}
+            </select>
+            
+                
+            <label for="estado">Estado:</label>
+            <select id="estado" name="estado" required>
+                <option value="Iniciado">Iniciado</option>
+                <option value="Progresando">En progreso</option>
+                <option value="Avanzado">Avanzado</option>
+                <option value="Completado">Completado</option>
+            </select><br></div></div>
 
-            <label for="fechaFin">Fecha de fin</label>
-            <input type="date" id="fechaFin" required><br>
-
-            <label for="porcentaje">% de tarea</label>
-            <input type="number" id="porcentaje" placeholder="% de tarea" min="0" max="100" required><br>
-
-            <button id="agregarBtn">Agregar Tarea</button>
-        </div>
+            <button type="submit">Guardar</button>
+        </form>
     </div>
+</div>
 
     <div class="gantt-chart-container">
         <div class="gantt-header">
@@ -40,13 +68,45 @@
         <div id="tareas"></div>
         <div id="timeline"></div>
     </div>
-
-    <!-- Botón para exportar a Excel -->
-    <button id="exportarBtn">Exportar a Excel</button>
-
-    <!-- Botón para exportar a PDF -->
-    <button id="exportarPdfBtn">Exportar a PDF</button>
+    <div class="button-container">
+        <button id="openModalButton">+ Añadir Tarea</button>
+        <button id="exportarBtn">Exportar a Excel</button>
+        <button id="exportarPdfBtn">Exportar a PDF</button>
+    </div>
+    
 
     <script src="diagramaDeGantt.js"></script>
 </body>
 </html>
+
+<script>
+  // Selecciona el modal y el botón de cerrar
+const modal = document.querySelector('.modal');
+const closeButton = document.querySelector('.close');
+
+// Función para abrir el modal
+function openModal() {
+    modal.style.display = 'block';
+    // No se cambia el `overflow` del `body`, por lo que el desplazamiento sigue habilitado
+}
+
+// Función para cerrar el modal
+function closeModal() {
+    modal.style.display = 'none';
+}
+
+// Evento para abrir el modal (ajusta el ID del botón según tu HTML)
+document.getElementById('openModalButton').addEventListener('click', openModal);
+
+// Evento para cerrar el modal
+closeButton.addEventListener('click', closeModal);
+
+// Cerrar el modal si se hace clic fuera del contenido
+window.addEventListener('click', function(event) {
+    if (event.target === modal) {
+        closeModal();
+    }
+});
+
+
+    </script>
