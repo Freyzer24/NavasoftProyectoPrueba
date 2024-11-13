@@ -4,109 +4,173 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Diagrama de Gantt</title>
-    <link rel="stylesheet" href="/static/diagramaDeGantt.css">
-    <script src="{{ url_for('static', filename='js/diagramaDeGantt.js') }}"></script>
-    <!-- Agregar la librería SheetJS -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.6/xlsx.full.min.js"></script>
-    <!-- Agregar la librería jsPDF -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f8f9fa;
+            margin: 0;
+            padding: 20px;
+        }
+        h1 {
+            text-align: center;
+            color: #007bff;
+        }
+        .gantt-chart {
+            display: grid;
+            grid-template-columns: 150px 150px 150px 150px 1fr;
+            gap: 0;
+            border: 1px solid #ccc;
+            margin-top: 20px;
+        }
+        .gantt-header, .gantt-row {
+            display: contents;
+        }
+        .gantt-header span {
+            padding: 10px;
+            font-weight: bold;
+            background-color: #28a745;
+            color: white;
+            border: 1px solid #ccc;
+            text-align: center;
+        }
+        .gantt-row span {
+            padding: 8px;
+            border: 1px solid #ccc;
+            background-color: #fff;
+            text-align: center;
+            color: #333;
+        }
+        .gantt-bar {
+            background-color: #007bff;
+            color: white;
+            padding: 5px;
+            border-radius: 4px;
+            text-align: center;
+            white-space: nowrap;
+        }
+        .gantt-bar-container {
+            position: relative;
+            height: 100%;
+            display: flex;
+            align-items: center;
+        }
+        .time-axis {
+            display: flex;
+            justify-content: space-between;
+            border-top: 1px solid #ccc;
+            padding-top: 10px;
+            margin-top: 10px;
+            color: #555;
+            font-size: 14px;
+        }
+        .time-axis span {
+            flex: 1;
+            text-align: center;
+        }
+    </style>
 </head>
 <body>
-    <h1>Diagrama de Gantt - Proyecto {{ proyecto }}</h1>
 
-<!-- El Modal -->
-<div id="modal" class="modal">
-    <div class="modal-content">
-        <span class="close" onclick="cerrarModal()">&times;</span>
-        <h2>Registrar Tarea</h2>
-        <form action="{{ url_for('guardar_tarea') }}" method="POST">
-            <div class="separar"> 
-                <div class="columna">
-            
-                <label for="nombre">Nombre de la tarea:</label>
-                <input type="text" id="nombre" name="nombre" required><br>
-                
-                <label for="proyecto">Proyecto:</label>
-                <input type="text" id="proyecto" name="proyecto" required><br>
-                
-                <label for="fecha_inicio">Fecha de inicio:</label>
-                <input type="date" id="fecha_inicio" name="fecha_inicio" required><br>
-            </div>
-            <div class="columna">
-            <label for="fecha_fin">Fecha de finalización:</label>
-            <input type="date" id="fecha_fin" name="fecha_fin" required><br>
-                
-            <label for="encargado">Encargado:</label>
-            <select name="encargado" id="encargado" required>
-                <option value="" disabled selected>Selecciona un encargado</option>
-                {% for id, nombre in encargados_dict.items() %}
-                    <option value="{{ id }}">{{ nombre }}</option>
-                {% endfor %}
-            </select>
-            
-                
-            <label for="estado">Estado:</label>
-            <select id="estado" name="estado" required>
-                <option value="Iniciado">Iniciado</option>
-                <option value="Progresando">En progreso</option>
-                <option value="Avanzado">Avanzado</option>
-                <option value="Completado">Completado</option>
-            </select><br></div></div>
+    <h1>Diagrama de Gantt</h1>
 
-            <button type="submit">Guardar</button>
-        </form>
-    </div>
-</div>
-
-    <div class="gantt-chart-container">
+    <div id="gantt-chart" class="gantt-chart">
+        <!-- Encabezado -->
         <div class="gantt-header">
-            <div>Nombre</div>
-            <div>Inicio</div>
-            <div>Fin</div>
-            <div>% Completado</div>
+            <span>Tarea</span>
+            <span>Fecha de Inicio</span>
+            <span>Fecha de Fin</span>
+            <span>Encargado</span>
+            <span>Diagrama</span>
         </div>
-        <div id="tareas"></div>
-        <div id="timeline"></div>
-    </div>
-    <div class="button-container">
-        <button id="openModalButton">+ Añadir Tarea</button>
-        <button id="exportarBtn">Exportar a Excel</button>
-        <button id="exportarPdfBtn">Exportar a PDF</button>
-    </div>
-    
 
-    <script src="diagramaDeGantt.js"></script>
+        <!-- Contenedor de filas del Gantt -->
+        <div id="gantt-chart-rows"></div>
+    </div>
+
+    <!-- Eje Temporal -->
+    <div class="time-axis" id="time-axis"></div>
+
+    <script>
+        function formatDate(dateStr) {
+            const date = new Date(dateStr);
+            const day = date.getDate().toString().padStart(2, '0');
+            const month = (date.getMonth() + 1).toString().padStart(2, '0');
+            return `${day}/${month}`;
+        }
+
+        async function cargarTareas() {
+            try {
+                const response = await fetch('/tareas');
+                const tareas = await response.json();
+
+                const chart = document.getElementById('gantt-chart-rows');
+                const fechaMin = new Date(Math.min(...tareas.map(t => new Date(t.fecha_inicio))));
+                const fechaMax = new Date(Math.max(...tareas.map(t => new Date(t.fecha_fin))));
+
+                tareas.forEach(tarea => {
+                    const row = document.createElement('div');
+                    row.classList.add('gantt-row');
+
+                    // Datos de la tarea
+                    const taskName = document.createElement('span');
+                    taskName.textContent = tarea.nombre;
+
+                    const taskStart = document.createElement('span');
+                    taskStart.textContent = formatDate(tarea.fecha_inicio);
+
+                    const taskEnd = document.createElement('span');
+                    taskEnd.textContent = formatDate(tarea.fecha_fin);
+
+                    const taskOwner = document.createElement('span');
+                    taskOwner.textContent = tarea.encargado;
+
+                    // Contenedor de barra de Gantt
+                    const barContainer = document.createElement('span');
+                    barContainer.classList.add('gantt-bar-container');
+                    const bar = document.createElement('div');
+                    bar.classList.add('gantt-bar');
+
+                    // Calcular la posición y duración de la barra
+                    const fechaInicio = new Date(tarea.fecha_inicio);
+                    const fechaFin = new Date(tarea.fecha_fin);
+                    const duracion = (fechaFin - fechaInicio) / (1000 * 60 * 60 * 24);
+                    const offset = ((fechaInicio - fechaMin) / (1000 * 60 * 60 * 24)) * 20;
+                    
+                    bar.style.width = duracion * 20 + 'px';
+                    bar.style.marginLeft = offset + 'px';
+                    bar.textContent = tarea.nombre;
+
+                    barContainer.appendChild(bar);
+                    row.appendChild(taskName);
+                    row.appendChild(taskStart);
+                    row.appendChild(taskEnd);
+                    row.appendChild(taskOwner);
+                    row.appendChild(barContainer);
+
+                    chart.appendChild(row);
+                });
+
+                generarEjeTemporal(fechaMin, fechaMax);
+
+            } catch (error) {
+                console.error("Error cargando las tareas:", error);
+            }
+        }
+
+        function generarEjeTemporal(fechaInicio, fechaFin) {
+            const timeAxis = document.getElementById('time-axis');
+            const duracionTotal = (fechaFin - fechaInicio) / (1000 * 60 * 60 * 24);
+            for (let i = 0; i <= duracionTotal; i += 7) {
+                const label = document.createElement('span');
+                const fechaLabel = new Date(fechaInicio);
+                fechaLabel.setDate(fechaLabel.getDate() + i);
+                label.textContent = formatDate(fechaLabel.toISOString());
+                timeAxis.appendChild(label);
+            }
+        }
+
+        cargarTareas();
+    </script>
+
 </body>
 </html>
-
-<script>
-  // Selecciona el modal y el botón de cerrar
-const modal = document.querySelector('.modal');
-const closeButton = document.querySelector('.close');
-
-// Función para abrir el modal
-function openModal() {
-    modal.style.display = 'block';
-    // No se cambia el `overflow` del `body`, por lo que el desplazamiento sigue habilitado
-}
-
-// Función para cerrar el modal
-function closeModal() {
-    modal.style.display = 'none';
-}
-
-// Evento para abrir el modal (ajusta el ID del botón según tu HTML)
-document.getElementById('openModalButton').addEventListener('click', openModal);
-
-// Evento para cerrar el modal
-closeButton.addEventListener('click', closeModal);
-
-// Cerrar el modal si se hace clic fuera del contenido
-window.addEventListener('click', function(event) {
-    if (event.target === modal) {
-        closeModal();
-    }
-});
-
-
-    </script>

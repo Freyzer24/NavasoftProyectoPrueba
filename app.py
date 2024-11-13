@@ -1,6 +1,7 @@
 import re
 import smtplib
 import jwt
+from flask import jsonify
 from email.mime.multipart import MIMEMultipart
 from datetime import datetime
 from email.mime.text import MIMEText
@@ -155,6 +156,24 @@ def Gantt(current_user):
     
     # Pasar las tareas y encargados_dict al template
     return render_template('Diagrama de Gantt.html', tareas=tareas, encargados_dict=encargados_dict)
+
+
+@app.route('/tareas-gantt')
+def tareas_gantt():
+    tareas = Tarea.query.all()
+    datos = [
+        {
+            "id": tarea.id,
+            "name": tarea.nombre,
+            "project": tarea.proyecto,
+            "start": tarea.fecha_inicio.isoformat(),
+            "end": tarea.fecha_fin.isoformat(),
+            "encargado": tarea.encargado,
+            "estado": tarea.estado
+        }
+        for tarea in tareas
+    ]
+    return jsonify(datos)
 
 
 
@@ -564,6 +583,22 @@ def guardar_tarea():
     
     flash('Tarea registrada exitosamente.')
     return redirect(url_for('Gantt'))
+@app.route('/tareas')
+def obtener_tareas():
+    tareas = Tarea.query.all()
+    tareas_json = [
+        {
+            "id": tarea.id,
+            "nombre": tarea.nombre,
+            "proyecto": tarea.proyecto,
+            "fecha_inicio": tarea.fecha_inicio.strftime("%Y-%m-%d"),
+            "fecha_fin": tarea.fecha_fin.strftime("%Y-%m-%d"),
+            "encargado": tarea.encargado,
+            "estado": tarea.estado
+        }
+        for tarea in tareas
+    ]
+    return jsonify(tareas_json)
 if __name__ == '__main__':
     app.run(debug=True)
 # 
