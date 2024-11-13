@@ -614,4 +614,14 @@ def obtener_tareas():
     return jsonify(tareas_json)
 if __name__ == '__main__':
     app.run(debug=True)
-# 
+    
+# Definir el color de la barra basado en el porcentaje
+def obtener_color_barra(porcentaje):
+    if porcentaje == 100:
+        return 'blue'
+    elif porcentaje >= 65:
+        return 'green'
+    elif porcentaje >= 34:
+        return 'yellow'
+    else:
+        return 'red'
