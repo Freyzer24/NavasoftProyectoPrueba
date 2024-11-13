@@ -154,9 +154,16 @@ def Gantt(current_user):
     encargados = Registro.query.all()
     encargados_dict = {encargado.nombre: encargado.nombre for encargado in encargados}
     
-    # Pasar las tareas y encargados_dict al template
-    return render_template('Diagrama de Gantt.html', tareas=tareas, encargados_dict=encargados_dict)
-
+    proyectos = Proyecto.query.all()
+    proyectos_dict = {proyecto.id: proyecto.nombre for proyecto in proyectos}
+    
+    # Pasar las tareas, encargados_dict, y proyectos_dict al template
+    return render_template(
+        'Diagrama de Gantt.html', 
+        tareas=tareas, 
+        encargados_dict=encargados_dict,
+        proyectos_dict=proyectos_dict
+    )
 
 @app.route('/tareas-gantt')
 def tareas_gantt():
