@@ -7,74 +7,205 @@
     <style>
         body {
             font-family: Arial, sans-serif;
-            background-color: #f8f9fa;
-            margin: 0;
-            padding: 20px;
         }
+
         h1 {
             text-align: center;
-            color: #007bff;
+            font-size: 2em;
+            margin-bottom: 20px;
         }
-        .gantt-chart {
-            display: grid;
-            grid-template-columns: 150px 150px 150px 150px 1fr;
-            gap: 0;
-            border: 1px solid #ccc;
-            margin-top: 20px;
-        }
-        .gantt-header, .gantt-row {
-            display: contents;
-        }
-        .gantt-header span {
+
+        #gantt-chart {
+            display: flex;
+            flex-direction: column;
+            width: 80%;
+            margin: 0 auto;
+            border: 1px solid #200101;
             padding: 10px;
+        }
+
+        .gantt-header {
+            display: flex;
+            background-color: #005177;
+            color: white;
             font-weight: bold;
-            background-color: #28a745;
-            color: white;
-            border: 1px solid #ccc;
             text-align: center;
+            padding: 10px 0;
+            border-bottom: 1px solid #ccc;
         }
-        .gantt-row span {
-            padding: 8px;
-            border: 1px solid #ccc;
-            background-color: #fff;
-            text-align: center;
-            color: #333;
-        }
-        .gantt-bar {
-            background-color: #007bff;
-            color: white;
-            padding: 5px;
-            border-radius: 4px;
-            text-align: center;
-            white-space: nowrap;
-        }
-        .gantt-bar-container {
-            position: relative;
-            height: 100%;
-            display: flex;
-            align-items: center;
-        }
-        .time-axis {
-            display: flex;
-            justify-content: space-between;
-            border-top: 1px solid #ccc;
-            padding-top: 10px;
-            margin-top: 10px;
-            color: #555;
-            font-size: 14px;
-        }
-        .time-axis span {
+
+        .gantt-header span, .gantt-row span {
             flex: 1;
             text-align: center;
+            border-right: 1px solid #ccc;
+            padding: 5px;
         }
+
+        .gantt-header span:last-child, .gantt-row span:last-child {
+            border-right: none;
+        }
+
+        .gantt-row {
+            display: flex;
+            align-items: center;
+            height: 40px;
+            border-bottom: 1px solid #ddd;
+            margin-bottom: 5px;
+        }
+
+        .gantt-bar-container {
+            flex: 1;
+        }
+
+        .gantt-bar {
+            height: 100%;
+            color: white;
+            text-align: center;
+            line-height: 30px;
+            border-radius: 3px;
+            padding: 0 5px;
+        }
+
+        .gantt-bar.iniciado {
+            background-color: red;
+        }
+
+        .gantt-bar.progresando {
+            background-color: yellow;
+            color: black;
+        }
+
+        .gantt-bar.avanzado {
+            background-color: green;
+        }
+
+        .gantt-bar.completado {
+            background-color: blue;
+        }
+
+        .gantt-row:nth-child(even) {
+            background-color: #f4f4f4;
+        }
+
+        .gantt-time-axis {
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+            margin-top: 10px;
+            border-top: 2px solid #527ae6;
+            padding-top: 5px;
+        }
+
+        /* Estilo del Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgb(0,0,0);
+            background-color: rgba(0,0,0,0.4); /* Fondo semitransparente */
+            padding-top: 60px;
+        }
+
+        .modal-content {
+            background-color: #fefefe;
+            margin: 5% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%;
+            max-width: 500px;
+        }
+
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+        .close:hover,
+        .close:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        /* Estilo del botón "Agregar tarea" */
+        #agregarTareaBtn {
+            display: block;
+            width: 200px;
+            margin: 20px auto;
+            padding: 10px;
+            text-align: center;
+            background-color: #527ae6;
+            color: white;
+            font-size: 16px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        #agregarTareaBtn:hover {
+            background-color: #3e5f8a;
+        }
+    
     </style>
 </head>
 <body>
 
     <h1>Diagrama de Gantt</h1>
 
+    <!-- Enlace para abrir el modal -->
+
+
+<!-- Modal -->
+<div id="modal" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="cerrarModal()">&times;</span>
+        <h2>Registrar Tarea</h2>
+        <form action="{{ url_for('guardar_tarea') }}" method="POST">
+            <div class="separar"> 
+                <div class="columna">
+                    <label for="nombre">Nombre de la tarea:</label>
+                    <input type="text" id="nombre" name="nombre" required><br>
+
+                    <label for="proyecto">Proyecto:</label>
+                    <input type="text" id="proyecto" name="proyecto" required><br>
+
+                    <label for="fecha_inicio">Fecha de inicio:</label>
+                    <input type="date" id="fecha_inicio" name="fecha_inicio" required><br>
+                </div>
+                <div class="columna">
+                    <label for="fecha_fin">Fecha de finalización:</label>
+                    <input type="date" id="fecha_fin" name="fecha_fin" required><br>
+
+                    <select name="encargado" id="encargado" required>
+                        <option value="" disabled selected>Selecciona un encargado</option>
+                        {% for id, nombre in encargados_dict.items() %}
+                            <option value="{{ id }}">{{ nombre }}</option>
+                        {% endfor %}
+                    </select>
+
+                    <label for="estado">Estado:</label>
+                    <select id="estado" name="estado" required>
+                        <option value="Iniciado">Iniciado</option>
+                        <option value="Progresando">En progreso</option>
+                        <option value="Avanzado">Avanzado</option>
+                        <option value="Completado">Completado</option>
+                    </select><br>
+                </div>
+            </div>
+            <button type="submit">Guardar Tarea</button>
+        </form>
+    </div>
+</div>
+
+
     <div id="gantt-chart" class="gantt-chart">
-        <!-- Encabezado -->
         <div class="gantt-header">
             <span>Tarea</span>
             <span>Fecha de Inicio</span>
@@ -83,19 +214,18 @@
             <span>Diagrama</span>
         </div>
 
-        <!-- Contenedor de filas del Gantt -->
         <div id="gantt-chart-rows"></div>
     </div>
 
-    <!-- Eje Temporal -->
     <div class="time-axis" id="time-axis"></div>
-
+    <a href="#" onclick="abrirModal()">+ Añadir Proyecto</a>
     <script>
         function formatDate(dateStr) {
             const date = new Date(dateStr);
-            const day = date.getDate().toString().padStart(2, '0');
-            const month = (date.getMonth() + 1).toString().padStart(2, '0');
-            return `${day}/${month}`;
+            const day = date.getUTCDate().toString().padStart(2, '0');
+            const month = (date.getUTCMonth() + 1).toString().padStart(2, '0');
+            const year = date.getUTCFullYear();
+            return `${day}/${month}/${year}`;
         }
 
         async function cargarTareas() {
@@ -111,7 +241,6 @@
                     const row = document.createElement('div');
                     row.classList.add('gantt-row');
 
-                    // Datos de la tarea
                     const taskName = document.createElement('span');
                     taskName.textContent = tarea.nombre;
 
@@ -124,21 +253,38 @@
                     const taskOwner = document.createElement('span');
                     taskOwner.textContent = tarea.encargado;
 
-                    // Contenedor de barra de Gantt
                     const barContainer = document.createElement('span');
                     barContainer.classList.add('gantt-bar-container');
                     const bar = document.createElement('div');
                     bar.classList.add('gantt-bar');
 
-                    // Calcular la posición y duración de la barra
                     const fechaInicio = new Date(tarea.fecha_inicio);
                     const fechaFin = new Date(tarea.fecha_fin);
                     const duracion = (fechaFin - fechaInicio) / (1000 * 60 * 60 * 24);
                     const offset = ((fechaInicio - fechaMin) / (1000 * 60 * 60 * 24)) * 20;
-                    
+
                     bar.style.width = duracion * 20 + 'px';
                     bar.style.marginLeft = offset + 'px';
                     bar.textContent = tarea.nombre;
+
+                    console.log("Estado de la tarea:", tarea.estado); // Debugging
+
+                    switch (tarea.estado.trim().toLowerCase()) {
+                        case 'iniciado':
+                            bar.classList.add('iniciado');
+                            break;
+                        case 'progresando':
+                            bar.classList.add('progresando');
+                            break;
+                        case 'avanzado':
+                            bar.classList.add('avanzado');
+                            break;
+                        case 'completado':
+                            bar.classList.add('completado');
+                            break;
+                        default:
+                            bar.style.backgroundColor = '#ccc'; // Color por defecto
+                    }
 
                     barContainer.appendChild(bar);
                     row.appendChild(taskName);
@@ -159,17 +305,42 @@
 
         function generarEjeTemporal(fechaInicio, fechaFin) {
             const timeAxis = document.getElementById('time-axis');
-            const duracionTotal = (fechaFin - fechaInicio) / (1000 * 60 * 60 * 24);
+            timeAxis.innerHTML = '';
+            const duracionTotal = Math.floor((fechaFin - fechaInicio) / (1000 * 60 * 60 * 24));
+            
             for (let i = 0; i <= duracionTotal; i += 7) {
-                const label = document.createElement('span');
                 const fechaLabel = new Date(fechaInicio);
                 fechaLabel.setDate(fechaLabel.getDate() + i);
+
+                if (fechaLabel > fechaFin) break;
+
+                const label = document.createElement('span');
                 label.textContent = formatDate(fechaLabel.toISOString());
                 timeAxis.appendChild(label);
             }
         }
 
         cargarTareas();
+
+
+        // Función para abrir el modal
+function abrirModal() {
+    document.getElementById("modal").style.display = "block";
+}
+
+// Función para cerrar el modal
+function cerrarModal() {
+    document.getElementById("modal").style.display = "none";
+}
+
+// Cerrar el modal si el usuario hace clic fuera del modal-content
+window.onclick = function(event) {
+    var modal = document.getElementById("modal");
+    if (event.target == modal) {
+        modal.style.display = "none";
+    }
+}
+
     </script>
 
 </body>

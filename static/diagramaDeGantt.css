@@ -18,7 +18,6 @@ h1 {
 
 button {
     align-items: center;
-    
     padding: 10px 15px;
     background-color: #4a90e2;
     color: white;
@@ -139,6 +138,89 @@ button:hover {
     display: flex;
     flex: 1;
     margin-top: 10px;
+}
+.modal {
+    display: none; /* Ocultar el modal por defecto */
+    position: fixed; /* Fijar el modal en la pantalla */
+    z-index: 1; /* Asegura que el modal esté encima del contenido */
+    left: 0;
+    top: 0;
+    width: 100%; /* Ancho completo */
+    height: 100%; /* Alto completo */
+    background-color: rgba(0, 0, 0, 0.4); /* Fondo semitransparente */
+}
+.modal-content h2 {
+    text-align: center;
+    margin-bottom: 20px; /* Espacio debajo del título */
+}
+
+.modal-content {
+    background-color: #fff;
+    margin: 5% auto 0;; /* Centra el contenido */
+    padding: 20px;
+    border: 1px solid #888;
+    width: 50%;
+}
+
+.close {
+    color: #aaa;
+    font-size: 28px;
+    font-weight: bold;
+    position: absolute;
+    top: 10px;
+    right: 25px;
+}
+
+.close:hover,
+.close:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+/* Estilo para los inputs y botones */
+.container label,
+.container input,
+.container select {
+    display: block;
+    margin: 10px 0;
+}
+
+.container input,
+.container select {
+    width: 100%;
+    padding: 8px;
+}
+
+button[type="submit"] {
+    margin-top: 20px; /* Espacio superior al botón */
+    padding: 10px 20px;
+    background-color: #527ae6; /* Azul principal del botón */
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+button[type="submit"]:hover {
+    background-color: #357ab8; /* Azul más oscuro para el efecto hover */
+}
+
+.separar {
+    margin-top: 1%; /* Margen superior pequeño */
+    display: flex; /* Usa flexbox para dividir en columnas */
+    justify-content: center; /* Centra las columnas horizontalmente */
+    align-items: center; /* Centra las columnas verticalmente */
+}
+
+/* Estilo de las columnas del formulario */
+.columna {
+    display: flex; /* Usa flexbox dentro de la columna */
+    flex-direction: column; /* Elementos uno debajo del otro */
+    justify-content: center; /* Centra el contenido verticalmente */
+    align-items: center; /* Centra el contenido horizontalmente */
+    flex: 9; /* Flexibilidad para ajustar el ancho */
 }
 .modal {
     display: none; /* Ocultar el modal por defecto */
