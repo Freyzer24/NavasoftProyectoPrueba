@@ -72,12 +72,12 @@
             {% endfor %}
         </tbody>
     </table>
-    <div class="Ingreso">
-        <!-- Enlace para abrir el modal -->
-        <a href="#" onclick="abrirModal()">+ Añadir Proyecto</a>
-    </div>
-    
-    
+    {% if rol == 'super_administrador' %}
+        <div class="Ingreso">
+            <!-- Enlace para abrir el modal -->
+            <a href="#" onclick="abrirModal()">+ Añadir Proyecto</a>
+        </div>
+    {% endif %}
 </div>
 
     
