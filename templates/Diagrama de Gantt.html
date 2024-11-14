@@ -99,14 +99,6 @@
             background-color: #f4f4f4;
         }
 
-        .gantt-time-axis {
-            display: flex;
-            flex-direction: row;
-            justify-content: space-between;
-            margin-top: 10px;
-            border-top: 2px solid #527ae6;
-            padding-top: 5px;
-        }
 
         /* Estilo del Modal */
         .modal {
@@ -164,6 +156,27 @@
         #agregarTareaBtn:hover {
             background-color: #3e5f8a;
         }
+        .gantt-time-axis {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            margin-top: 10px;
+            border-top: 2px solid #527ae6;
+            padding-top: 5px;
+        }
+
+        .gantt-months, .gantt-days {
+            display: flex;
+            flex-direction: row;
+        }
+
+        .gantt-months span, .gantt-days span {
+            text-align: center;
+            padding: 5px;
+            border-right: 1px solid #ccc;
+        }
+
+        
     
     </style>
 </head>
@@ -228,12 +241,16 @@
             <span>Fecha de Inicio</span>
             <span>Fecha de Fin</span>
             <span>Encargado</span>
-            <span>Diagrama</span>
+            <span></span>
+            
         </div>
-
-        <div id="gantt-chart-rows"></div>
-    </div>
-
+        <div id="gantt-chart" class="gantt-chart">
+            <div class="gantt-time-axis">
+                <div id="gantt-months" class="gantt-months"></div>
+                <div id="gantt-days" class="gantt-days"></div>
+            </div>
+            <div id="gantt-chart-rows"></div>
+        </div>
 
     <a href="#" onclick="abrirModal()">+ Añadir Proyecto</a>
     <div id="tooltip" class="tooltip"></div>
@@ -330,19 +347,38 @@
         }
 
         function generarEjeTemporal(fechaInicio, fechaFin) {
-            const timeAxis = document.getElementById('time-axis');
-            timeAxis.innerHTML = '';
-            const duracionTotal = Math.floor((fechaFin - fechaInicio) / (1000 * 60 * 60 * 24));
-            
-            for (let i = 0; i <= duracionTotal; i += 7) {
-                const fechaLabel = new Date(fechaInicio);
-                fechaLabel.setDate(fechaLabel.getDate() + i);
+            const monthsContainer = document.getElementById('gantt-months');
+            const daysContainer = document.getElementById('gantt-days');
+            monthsContainer.innerHTML = '';
+            daysContainer.innerHTML = '';
 
-                if (fechaLabel > fechaFin) break;
+            let currentMonth = fechaInicio.getMonth();
+            let monthSpan = document.createElement('span');
+            monthSpan.textContent = new Intl.DateTimeFormat('es', { month: 'long' }).format(fechaInicio);
+            monthsContainer.appendChild(monthSpan);
 
-                const label = document.createElement('span');
-                label.textContent = formatDate(fechaLabel.toISOString());
-                timeAxis.appendChild(label);
+            let daysInMonth = 0;
+            let currentDate = new Date(fechaInicio+1);
+
+            while (currentDate <= fechaFin) {
+                const daySpan = document.createElement('span');
+                daySpan.textContent = currentDate.getDate();
+                daysContainer.appendChild(daySpan);
+                daysInMonth++;
+
+                currentDate.setDate(currentDate.getDate() + 1);
+
+                if (currentDate.getMonth() !== currentMonth || currentDate > fechaFin) {
+                    monthSpan.style.flex = daysInMonth;
+                    daysInMonth = 0;
+                    currentMonth = currentDate.getMonth();
+
+                    if (currentDate <= fechaFin) {
+                        monthSpan = document.createElement('span');
+                        monthSpan.textContent = new Intl.DateTimeFormat('es', { month: 'long' }).format(currentDate);
+                        monthsContainer.appendChild(monthSpan);
+                    }
+                }
             }
         }
 
