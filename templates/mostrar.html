@@ -28,17 +28,24 @@
                     <td>{{ registro.usuario }}</td>
                     <td>
                         <!-- Enlace para mostrar el modal -->
-<!-- Enlace para mostrar el modal -->
-<!-- Aplica la clase 'icon-link' a los enlaces -->
-<a href="#modal-{{ registro.id }}" class="icon-link" onclick="document.getElementById('modal-{{ registro.id }}').style.display='block'; return false;">
-    <i class="fa fa-info-circle" style="color: blue;"></i>
-</a>
-<a href="{{ url_for('editar', id=registro.id) }}" class="icon-link">
-    <i class="fa fa-edit" style="color: darkgreen;"></i>
-</a>
-<a href="{{ url_for('eliminar_usuario', id=registro.id) }}" class="icon-link" onclick="return confirm('¿Estás seguro de que deseas eliminar este usuario?');">
-    <i class="fa fa-trash" style="color: rgb(153, 8, 8);"></i>
-</a>
+                    <!-- Enlace para mostrar el modal -->
+                    <!-- Aplica la clase 'icon-link' a los enlaces -->
+                    {% if rol == 'super_administrador' %}
+                    <a href="#modal-{{ registro.id }}" class="icon-link" onclick="document.getElementById('modal-{{ registro.id }}').style.display='block'; return false;">
+                        <i class="fa fa-info-circle" style="color: blue;"></i>
+                    </a>
+                    <a href="{{ url_for('editar', id=registro.id) }}" class="icon-link">
+                        <i class="fa fa-edit" style="color: darkgreen;"></i>
+                    </a>
+                    <a href="{{ url_for('eliminar_usuario', id=registro.id) }}" class="icon-link" onclick="return confirm('¿Estás seguro de que deseas eliminar este usuario?');">
+                        <i class="fa fa-trash" style="color: rgb(153, 8, 8);"></i>
+                    </a>
+                    {% endif %}
+                    {% if rol == 'administrador' %}
+                    <a href="#modal-{{ registro.id }}" class="icon-link" onclick="document.getElementById('modal-{{ registro.id }}').style.display='block'; return false;">
+                        <i class="fa fa-info-circle" style="color: blue;"></i>
+                    </a>
+                    {% endif %}
 
 <!-- Agrega este CSS en tu archivo de estilos o dentro de una etiqueta <style> -->
 <style>
@@ -75,9 +82,11 @@
             </tbody>
         </table>
         
+        {% if rol == 'super_administrador' %}
         <div class="add-user">
             <a href="/nuevo_usuario">+ Añadir usuario</a>
         </div>
+        {% endif %}
     </div>
 
     

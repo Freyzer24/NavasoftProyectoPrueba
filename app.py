@@ -62,6 +62,20 @@ class Registro(db.Model):
 # Crear la base de datos y las tablas
 with app.app_context():
     db.create_all()
+
+def obtener_rol_desde_token():
+    token = request.cookies.get('token')
+    if not token:
+        return None
+    try:
+        decoded_token = jwt.decode(token, SECRET_KEY, algorithms=["HS256"])
+        return decoded_token.get("rol")
+    except jwt.ExpiredSignatureError:
+        flash("La sesión ha expirado, por favor inicia sesión nuevamente.")
+        return redirect(url_for('login'))
+    except jwt.InvalidTokenError:
+        flash("Token inválido, por favor inicia sesión nuevamente.")
+        return redirect(url_for('login'))
     
 def token_requerido(f):
     @wraps(f)
@@ -143,10 +157,16 @@ class TokenRevocado(db.Model):
 @app.route("/agregartareas")
 @token_requerido
 def agregartareas(current_user):
+    rol = obtener_rol_desde_token()
+    if rol is None:
+        return redirect(url_for('login'))
     return render_template('agregarTareas.html')
 @app.route("/Gantt")
 @token_requerido
 def Gantt(current_user):
+    rol = obtener_rol_desde_token()
+    if rol is None:
+        return redirect(url_for('login'))
     # Obtener todas las tareas
     tareas = Tarea.query.all()
     
@@ -167,6 +187,9 @@ def Gantt(current_user):
 
 @app.route('/tareas-gantt')
 def tareas_gantt():
+    rol = obtener_rol_desde_token()
+    if rol is None:
+        return redirect(url_for('login'))
     tareas = Tarea.query.all()
     datos = [
         {
@@ -189,35 +212,57 @@ def tareas_gantt():
 @app.route('/menuAdmin')
 @token_requerido
 def menuAdmin(current_user):
+    rol = obtener_rol_desde_token()
+    if rol is None:
+        return redirect(url_for('login'))
     return render_template('indexadmin.html')
 @app.route('/admin')
 @token_requerido
 def Admin(current_user):
+    rol = obtener_rol_desde_token()
+    if rol is None:
+        return redirect(url_for('login'))
     return render_template('menuAdmin.html')
 @app.route('/Empleado')
 @token_requerido
 def Empleado(current_user):
+    rol = obtener_rol_desde_token()
+    if rol is None:
+        return redirect(url_for('login'))
     return render_template('menuEmpleado.html')
 @app.route('/Gtareas')#Gestión tareas
 @token_requerido
 def Gtareas(current_user):
+    rol = obtener_rol_desde_token()
+    if rol is None:
+        return redirect(url_for('login'))
     tareas = Tarea.query.all()
     return render_template('Gestióntareas.html', tareas=tareas)
 
 @app.route('/menuEmpleado')
 @token_requerido
 def menuEmpleado(current_user):
+    rol = obtener_rol_desde_token()
+    if rol is None:
+        return redirect(url_for('login'))
     return render_template('indexempleado.html')  # Asegúrate de tener esta plantilla creada
 @app.route('/templeado')
 @token_requerido
 def templeado(current_user):
+    rol = obtener_rol_desde_token()
+    if rol is None:
+        return redirect(url_for('login'))
     return render_template('templeado.html')
 @app.route('/nuevo_usuario')
 @token_requerido
 def nuevo_usuario(current_user):
+    rol = obtener_rol_desde_token()
+    if rol is None:
+        return redirect(url_for('login'))
     return render_template('index.html')
 @app.route('/perfil', methods=['GET', 'POST'])
 def perfil():
+    
     # Obtener el token de la cookie
     token = request.cookies.get('token')
 
@@ -467,8 +512,11 @@ def enviar_confirmacion_correo(nombre, usuario, correo):
 @app.route('/mostrar')
 @token_requerido
 def mostrar(current_user):
+    rol = obtener_rol_desde_token()
+    if rol is None:
+        return redirect(url_for('login'))
     registros = Registro.query.all()
-    return render_template('Mostrar.html', registros=registros)
+    return render_template('Mostrar.html', registros=registros, rol=rol)
 
 def validar_contrasena(contrasena):
     if (len(contrasena) < 8 or 
