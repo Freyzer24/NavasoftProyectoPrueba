@@ -444,7 +444,6 @@ def editar_proyecto(id):
             flash('Proyecto no encontrado.', 'error')  # Mensaje único de error si el proyecto no se encuentra
             return redirect(url_for('proyectos'))  # Redirigir a la vista de proyectos si no se encuentra el proyecto
     
-        return redirect(url_for('proyectos'))  # Redirigir a la vista de proyectos si el rol no es adecuado
 
 # Ruta para actualizar un proyecto
 @app.route('/actualizar_proyecto/<int:id>', methods=['POST'])
