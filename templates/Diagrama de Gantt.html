@@ -8,6 +8,18 @@
         body {
             font-family: Arial, sans-serif;
         }
+        .tooltip {
+            position: absolute;
+            background-color: #f9f9f9;
+            border: 1px solid #ccc;
+            padding: 10px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+            display: none;
+            z-index: 10;
+            font-size: 0.9em;
+            color: #333;
+        }
 
         h1 {
             text-align: center;
@@ -224,6 +236,7 @@
 
 
     <a href="#" onclick="abrirModal()">+ Añadir Proyecto</a>
+    <div id="tooltip" class="tooltip"></div>
     <script>
         function formatDate(dateStr) {
             const date = new Date(dateStr);
@@ -262,7 +275,9 @@
                     barContainer.classList.add('gantt-bar-container');
                     const bar = document.createElement('div');
                     bar.classList.add('gantt-bar');
+                    bar.textContent = tarea.nombre;
 
+                    // Configuración de la barra de tarea
                     const fechaInicio = new Date(tarea.fecha_inicio);
                     const fechaFin = new Date(tarea.fecha_fin);
                     const duracion = (fechaFin - fechaInicio) / (1000 * 60 * 60 * 24);
@@ -270,10 +285,8 @@
 
                     bar.style.width = duracion * 20 + 'px';
                     bar.style.marginLeft = offset + 'px';
-                    bar.textContent = tarea.nombre;
 
-                    console.log("Estado de la tarea:", tarea.estado); // Debugging
-
+                    // Color según el estado
                     switch (tarea.estado.trim().toLowerCase()) {
                         case 'iniciado':
                             bar.classList.add('iniciado');
@@ -288,8 +301,16 @@
                             bar.classList.add('completado');
                             break;
                         default:
-                            bar.style.backgroundColor = '#ccc'; // Color por defecto
+                            bar.style.backgroundColor = '#ccc';
                     }
+
+                    // Evento para mostrar el tooltip
+                    bar.addEventListener('mouseover', function (event) {
+                        mostrarTooltip(event, tarea);
+                    });
+
+                    // Evento para ocultar el tooltip
+                    bar.addEventListener('mouseout', ocultarTooltip);
 
                     barContainer.appendChild(bar);
                     row.appendChild(taskName);
@@ -325,28 +346,28 @@
             }
         }
 
+        // Función para mostrar el tooltip
+        function mostrarTooltip(event, tarea) {
+            const tooltip = document.getElementById('tooltip');
+            tooltip.innerHTML = `
+                <strong>${tarea.nombre}</strong><br>
+                <strong>Fecha de Inicio:</strong> ${formatDate(tarea.fecha_inicio)}<br>
+                <strong>Fecha de Fin:</strong> ${formatDate(tarea.fecha_fin)}<br>
+                <strong>Encargado:</strong> ${tarea.encargado}<br>
+                <strong>Estado:</strong> ${tarea.estado}
+            `;
+            tooltip.style.display = 'block';
+            tooltip.style.left = event.pageX + 'px';
+            tooltip.style.top = event.pageY + 'px';
+        }
+
+        // Función para ocultar el tooltip
+        function ocultarTooltip() {
+            const tooltip = document.getElementById('tooltip');
+            tooltip.style.display = 'none';
+        }
+
         cargarTareas();
-
-
-        // Función para abrir el modal
-function abrirModal() {
-    document.getElementById("modal").style.display = "block";
-}
-
-// Función para cerrar el modal
-function cerrarModal() {
-    document.getElementById("modal").style.display = "none";
-}
-
-// Cerrar el modal si el usuario hace clic fuera del modal-content
-window.onclick = function(event) {
-    var modal = document.getElementById("modal");
-    if (event.target == modal) {
-        modal.style.display = "none";
-    }
-}
-
     </script>
-
 </body>
 </html>
