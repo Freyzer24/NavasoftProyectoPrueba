@@ -13,18 +13,17 @@
     
         <label for="proyecto">Proyecto:</label>
         <input type="text" id="proyecto" name="proyecto" value="{{ tarea.proyecto }}" required><br>
-    
-            
+
         <label for="encargado">Encargado:</label>
         <select name="encargado" id="encargado" required>
             <option value="" disabled selected>Selecciona un encargado</option>
             {% for encargado in encargados %}
-                <option value="{{ encargado.id }}" {% if proyecto.encargado == encargado.nombre %}selected{% endif %}>
+                <option value="{{ encargado.id }}" {% if tarea.encargado_id == encargado.id %}selected{% endif %}>
                     {{ encargado.nombre }}
                 </option>
             {% endfor %}
         </select>
-        
+        <br>
         <label for="estado">Estado:</label> <br>
         <select id="estado" name="estado" required>
             <option value="Iniciado" {% if tarea.estado == 'Iniciado' %}selected{% endif %}>Iniciado</option>

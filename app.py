@@ -333,37 +333,41 @@ def editar_tarea(id):
     tarea = Tarea.query.get_or_404(id)
 
     if request.method == 'GET':
-        # Obtener todos los encargados (suponiendo que tienes un modelo 'Registro' con los encargados)
-        encargados = Registro.query.all()  # Obtener todos los encargados
-
-        # Mostrar el formulario con los datos de la tarea y la lista de encargados
+        # Obtener todos los encargados
+        encargados = Registro.query.all()
         return render_template('editar_tarea.html', tarea=tarea, encargados=encargados)
 
     if request.method == 'POST':
         # Obtener los datos enviados desde el formulario
         nombre = request.form['nombre']
         proyecto = request.form['proyecto']
-        encargado_id = request.form['encargado']  # El id del encargado seleccionado en el select
+        encargado_id = request.form['encargado']
         estado = request.form['estado']
 
-        # Buscar el encargado por su id
-        encargado = Registro.query.get(encargado_id)
+        # Imprimir valores para verificar
+        print("Nombre:", nombre)
+        print("Proyecto:", proyecto)
+        print("Encargado ID:", encargado_id)
+        print("Estado:", estado)
 
         # Actualizar los atributos de la tarea
         tarea.nombre = nombre
-        tarea.proyecto = proyecto
-        tarea.encargado = encargado  # Asignar el objeto encargado completo
+        tarea.proyecto = proyecto  # Asegúrate de que este campo esté en el modelo Tarea
+        tarea.encargado_id = encargado_id  # Asignar el id del encargado
         tarea.estado = estado
 
-        # Guardar los cambios en la base de datos
-        db.session.commit()
+        # Intentar guardar en la base de datos
+        try:
+            db.session.flush()  # Aplicar los cambios en la sesión
+            db.session.commit()
+            print("Cambios guardados en la base de datos")
+            flash('Tarea actualizada exitosamente', 'success')
+        except Exception as e:
+            db.session.rollback()  # Revertir los cambios si ocurre un error
+            print("Error al guardar en la base de datos:", e)
+            flash('Ocurrió un error al actualizar la tarea.', 'danger')
 
-        flash('Tarea actualizada exitosamente', 'success')
-        return redirect(url_for('Gtareas'))  # Redirigir a la página principal o de tareas
-
-
-    
-
+        return redirect(url_for('Gtareas'))
 
 @app.route('/eliminar_tarea/<int:id>', methods=['POST'])
 def eliminar_tarea(id):
