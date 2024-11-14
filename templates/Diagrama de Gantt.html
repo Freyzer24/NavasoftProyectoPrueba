@@ -252,8 +252,8 @@
             <div id="gantt-chart-rows"></div>
         </div>
 
-    <a href="#" onclick="abrirModal()">+ Añadir Tarea</a>
-    <div id="tooltip" class="tooltip"></div>
+   
+    <div id="tooltip" class="tooltip"></div> <a href="#" onclick="abrirModal()">+ Añadir Tarea</a>
     <script>
         function abrirModal() {
     document.getElementById("modal").style.display = "flex";
@@ -356,40 +356,51 @@ function cerrarModal() {
         }
 
         function generarEjeTemporal(fechaInicio, fechaFin) {
-            const monthsContainer = document.getElementById('gantt-months');
-            const daysContainer = document.getElementById('gantt-days');
-            monthsContainer.innerHTML = '';
-            daysContainer.innerHTML = '';
+    const monthsContainer = document.getElementById('gantt-months');
+    const daysContainer = document.getElementById('gantt-days');
+    
+    // Limpiamos los contenedores de meses y días para regenerar el contenido
+    monthsContainer.innerHTML = '';
+    daysContainer.innerHTML = '';
 
-            let currentMonth = fechaInicio.getMonth();
-            let monthSpan = document.createElement('span');
-            monthSpan.textContent = new Intl.DateTimeFormat('es', { month: 'long' }).format(fechaInicio);
-            monthsContainer.appendChild(monthSpan);
+    let currentMonth = fechaInicio.getMonth();
+    let monthSpan = document.createElement('span');
+    monthSpan.textContent = new Intl.DateTimeFormat('es', { month: 'long' }).format(fechaInicio);
+    monthsContainer.appendChild(monthSpan);
 
-            let daysInMonth = 0;
-            let currentDate = new Date(fechaInicio+1);
+    let daysInMonth = 0;
+    let currentDate = new Date(fechaInicio);
 
-            while (currentDate <= fechaFin) {
-                const daySpan = document.createElement('span');
-                daySpan.textContent = currentDate.getDate();
-                daysContainer.appendChild(daySpan);
-                daysInMonth++;
+    // Generar días dentro del rango
+    while (currentDate <= fechaFin) {
+        const daySpan = document.createElement('span');
+        daySpan.textContent = currentDate.getDate();
+        daysContainer.appendChild(daySpan);
+        daysInMonth++;
 
-                currentDate.setDate(currentDate.getDate() + 1);
+        currentDate.setDate(currentDate.getDate() + 1);
 
-                if (currentDate.getMonth() !== currentMonth || currentDate > fechaFin) {
-                    monthSpan.style.flex = daysInMonth;
-                    daysInMonth = 0;
-                    currentMonth = currentDate.getMonth();
+        if (currentDate.getMonth() !== currentMonth || currentDate > fechaFin) {
+            monthSpan.style.flex = daysInMonth;
+            daysInMonth = 0;
+            currentMonth = currentDate.getMonth();
 
-                    if (currentDate <= fechaFin) {
-                        monthSpan = document.createElement('span');
-                        monthSpan.textContent = new Intl.DateTimeFormat('es', { month: 'long' }).format(currentDate);
-                        monthsContainer.appendChild(monthSpan);
-                    }
-                }
+            if (currentDate <= fechaFin) {
+                monthSpan = document.createElement('span');
+                monthSpan.textContent = new Intl.DateTimeFormat('es', { month: 'long' }).format(currentDate);
+                monthsContainer.appendChild(monthSpan);
             }
         }
+    }
+
+    // Agregar el día adicional (el día siguiente al último día de fechaFin)
+    const extraDay = document.createElement('span');
+    const nextDay = new Date(fechaFin);
+    nextDay.setDate(fechaFin.getDate() + 1);  // Establecer al día siguiente de fechaFin
+    extraDay.textContent = nextDay.getDate(); // Mostrar el siguiente día
+    daysContainer.appendChild(extraDay);
+}
+
 
         // Función para mostrar el tooltip
         function mostrarTooltip(event, tarea) {
