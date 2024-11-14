@@ -393,9 +393,12 @@ def logout():
 # Ruta para ver todos los proyectos
 @app.route('/proyectos')
 def proyectos():
+    rol = obtener_rol_desde_token()
+    if rol is None:
+        return redirect(url_for('login'))
     proyectos = Proyecto.query.all()
     encargados_dict = {encargado.id: encargado.nombre for encargado in Registro.query.all()}
-    return render_template('proyectos.html', proyectos=proyectos, encargados_dict=encargados_dict)
+    return render_template('proyectos.html', proyectos=proyectos, encargados_dict=encargados_dict, rol=rol)
 
 
 # Ruta para agregar un nuevo proyecto
