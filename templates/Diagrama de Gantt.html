@@ -200,8 +200,8 @@
 
                     <select name="proyecto" id="proyecto" required>
                         <option value="" disabled selected>Selecciona un proyecto</option>
-                        {% for id, nombre in proyectos_dict.items() %}
-                            <option value="{{ id }}">{{ nombre }}</option>
+                        {% for nombre, nombre_proyecto in proyectos_dict.items() %}
+                            <option value="{{ nombre_proyecto }}">{{ nombre_proyecto }}</option>
                         {% endfor %}
                     </select>
                     
@@ -252,9 +252,18 @@
             <div id="gantt-chart-rows"></div>
         </div>
 
-    <a href="#" onclick="abrirModal()">+ Añadir Proyecto</a>
+    <a href="#" onclick="abrirModal()">+ Añadir Tarea</a>
     <div id="tooltip" class="tooltip"></div>
     <script>
+        function abrirModal() {
+    document.getElementById("modal").style.display = "flex";
+}
+
+// Función para cerrar el modal
+function cerrarModal() {
+    document.getElementById("modal").style.display = "none";
+}
+
         function formatDate(dateStr) {
             const date = new Date(dateStr);
             const day = date.getUTCDate().toString().padStart(2, '0');

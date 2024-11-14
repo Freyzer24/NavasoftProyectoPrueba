@@ -167,17 +167,18 @@ def Gantt(current_user):
     rol = obtener_rol_desde_token()
     if rol is None:
         return redirect(url_for('login'))
-    # Obtener todas las tareas
+    
     tareas = Tarea.query.all()
     
-    # Obtener todos los encargados desde la tabla 'registro' y crear el diccionario
     encargados = Registro.query.all()
     encargados_dict = {encargado.nombre: encargado.nombre for encargado in encargados}
     
     proyectos = Proyecto.query.all()
     proyectos_dict = {proyecto.id: proyecto.nombre for proyecto in proyectos}
     
-    # Pasar las tareas, encargados_dict, y proyectos_dict al template
+    # Imprimir para ver qué contiene proyectos_dict
+    print("Proyectos dict:", proyectos_dict)
+    
     return render_template(
         'Diagrama de Gantt.html', 
         tareas=tareas, 
@@ -398,7 +399,10 @@ def proyectos():
         return redirect(url_for('login'))
     proyectos = Proyecto.query.all()
     encargados_dict = {encargado.id: encargado.nombre for encargado in Registro.query.all()}
-    return render_template('proyectos.html', proyectos=proyectos, encargados_dict=encargados_dict, rol=rol)
+    proyectos_dict = {proyecto.id: proyecto.nombre for proyecto in proyectos}  # Diccionario de proyectos
+    return render_template('proyectos.html', proyectos=proyectos, encargados_dict=encargados_dict, proyectos_dict=proyectos_dict,rol=rol)
+
+
 
 
 # Ruta para agregar un nuevo proyecto
@@ -444,7 +448,6 @@ def editar_proyecto(id):
             flash('Proyecto no encontrado.', 'error')  # Mensaje único de error si el proyecto no se encuentra
             return redirect(url_for('proyectos'))  # Redirigir a la vista de proyectos si no se encuentra el proyecto
     
-        return redirect(url_for('proyectos'))  # Redirigir a la vista de proyectos si el rol no es adecuado
 
 # Ruta para actualizar un proyecto
 @app.route('/actualizar_proyecto/<int:id>', methods=['POST'])
@@ -676,3 +679,43 @@ def obtener_color_barra(porcentaje):
         return 'yellow'
     else:
         return 'red'
+
+from datetime import datetime, timedelta
+
+# Inicializar variables
+current_month = minDate
+months = []
+current_month_days = []
+
+# Recorremos todos los días entre las fechas de inicio y fin
+for i in range(totalDays):
+    day = minDate + timedelta(days=i)
+
+    # Si cambiamos de mes o de año, agregamos el mes anterior y reiniciamos el array de días
+    if day.month != current_month.month or day.year != current_month.year:
+        months.append({
+            'month': current_month.month,
+            'year': current_month.year,
+            'days': current_month_days
+        })
+        current_month_days = []  # Reiniciar los días del mes
+        current_month = day  # Cambiar al nuevo mes
+
+    # Agregar el día al mes correspondiente
+    current_month_days.append(day)
+
+# Asegurarse de agregar el último mes
+if current_month_days:
+    months.append({
+        'month': current_month.month,
+        'year': current_month.year,
+        'days': current_month_days
+    })
+
+# Mostrar los meses
+for month in months:
+    month_name = month['days'][0].strftime('%B')
+    year = month['year']
+    print(f"{month_name} {year}")
+    for day in month['days']:
+        print(f"  Día: {day.day}")
