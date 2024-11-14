@@ -167,17 +167,18 @@ def Gantt(current_user):
     rol = obtener_rol_desde_token()
     if rol is None:
         return redirect(url_for('login'))
-    # Obtener todas las tareas
+    
     tareas = Tarea.query.all()
     
-    # Obtener todos los encargados desde la tabla 'registro' y crear el diccionario
     encargados = Registro.query.all()
     encargados_dict = {encargado.nombre: encargado.nombre for encargado in encargados}
     
     proyectos = Proyecto.query.all()
     proyectos_dict = {proyecto.id: proyecto.nombre for proyecto in proyectos}
     
-    # Pasar las tareas, encargados_dict, y proyectos_dict al template
+    # Imprimir para ver qué contiene proyectos_dict
+    print("Proyectos dict:", proyectos_dict)
+    
     return render_template(
         'Diagrama de Gantt.html', 
         tareas=tareas, 
@@ -395,7 +396,9 @@ def logout():
 def proyectos():
     proyectos = Proyecto.query.all()
     encargados_dict = {encargado.id: encargado.nombre for encargado in Registro.query.all()}
-    return render_template('proyectos.html', proyectos=proyectos, encargados_dict=encargados_dict)
+    proyectos_dict = {proyecto.id: proyecto.nombre for proyecto in proyectos}  # Diccionario de proyectos
+    return render_template('proyectos.html', proyectos=proyectos, encargados_dict=encargados_dict, proyectos_dict=proyectos_dict)
+
 
 
 # Ruta para agregar un nuevo proyecto
