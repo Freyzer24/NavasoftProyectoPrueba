@@ -261,70 +261,67 @@ def nuevo_usuario(current_user):
     return render_template('index.html')
 @app.route('/perfil', methods=['GET', 'POST'])
 def perfil():
-    
     # Obtener el token de la cookie
     token = request.cookies.get('token')
 
     if not token:
         flash('Debes iniciar sesión primero.')
         return redirect(url_for('login'))  # Redirige a login si no hay token
-     # Pasar los datos del usuario a la plantilla
 
     try:
-        # Decodificar el token (sin verificar expiración en este ejemplo, pero puedes hacerlo)
+        # Decodificar el token
         payload = jwt.decode(token, SECRET_KEY, algorithms=["HS256"])
 
-        # Los datos del usuario se extraen del payload del token
+        # Extraer datos del usuario desde el token
         datos_usuario = {
             'usuario': payload.get('usuario'),
             'correo': payload.get('correo'),
-            'telefono': payload.get('telefono', 'No disponible'),  # 'telefono' puede ser opcional
+            'telefono': payload.get('telefono', 'No disponible'),
             'rol': payload.get('rol')
         }
     except jwt.ExpiredSignatureError:
         flash('Tu sesión ha expirado. Por favor, inicia sesión nuevamente.')
-        return redirect(url_for('login'))  # Token expirado, redirige al login
+        return redirect(url_for('login'))
     except jwt.InvalidTokenError:
         flash('Token inválido. Por favor, inicia sesión nuevamente.')
-        return redirect(url_for('login'))  # Token inválido, redirige al login
+        return redirect(url_for('login'))
 
     return render_template('Perfil.html', datos=datos_usuario)
 
 @app.route('/cambiar_contrasena', methods=['POST'])
 def cambiar_contrasena():
-    # Verifica si el usuario ha iniciado sesión
-    user_id = session.get('user_id')
-    if not user_id:
-        flash("Por favor, inicia sesión para cambiar tu contraseña.")
-        return redirect(url_for('index'))
+    # Obtener datos del formulario
+    usuario = request.form.get('usuario')
+    contrasena_actual = request.form['contrasena_actual']
+    nueva_contrasena = request.form['nueva_contrasena']
+    confirmar_contrasena = request.form['confirmar_contrasena']
 
-    # Obtiene la nueva contraseña del formulario
-    nueva_contrasena = request.form.get('nueva_contrasena').strip()
-
-    # Validaciones de la nueva contraseña (puedes ajustar según tus requisitos)
-    if len(nueva_contrasena) < 8:
-        flash("La nueva contraseña debe tener al menos 8 caracteres.")
-        return redirect(url_for('perfil'))
-    if not any(char.isdigit() for char in nueva_contrasena):
-        flash("La nueva contraseña debe contener al menos un número.")
-        return redirect(url_for('perfil'))
-    if not any(char.isupper() for char in nueva_contrasena):
-        flash("La nueva contraseña debe contener al menos una letra mayúscula.")
-        return redirect(url_for('perfil'))
-    if not any(char in "!@#$%^&*()-_+=" for char in nueva_contrasena):
-        flash("La nueva contraseña debe contener al menos un carácter especial.")
+    # Buscar al usuario en la base de datos
+    usuario = Registro.query.filter_by(usuario=usuario).first()
+    if not usuario:
+        flash('Usuario no encontrado.')
         return redirect(url_for('perfil'))
 
-    # Encripta la nueva contraseña
-    nueva_contrasena_hash = generate_password_hash(nueva_contrasena)
+    # Verificar la contraseña actual
+    if not check_password_hash(usuario.password, contrasena_actual):
+        flash('La contraseña actual es incorrecta.')
+        return redirect(url_for('perfil'))
 
-    # Actualiza la contraseña en la base de datos
-    usuario = Registro.query.get(user_id)
-    usuario.password = nueva_contrasena_hash
+    # Validar la nueva contraseña
+    if nueva_contrasena != confirmar_contrasena:
+        flash('Las contraseñas no coinciden.')
+        return redirect(url_for('perfil'))
+    if not validar_contrasena(nueva_contrasena):
+        flash('La nueva contraseña debe tener al menos 8 caracteres, una letra mayúscula, una letra minúscula, un número y un carácter especial.')
+        return redirect(url_for('perfil'))
+
+    # Encriptar y actualizar la nueva contraseña
+    usuario.password = generate_password_hash(nueva_contrasena)
     db.session.commit()
 
-    flash("Contraseña actualizada exitosamente.")
+    flash('Contraseña actualizada con éxito.')
     return redirect(url_for('perfil'))
+
 @app.route('/editar_tarea/<int:id>', methods=['GET', 'POST'])
 def editar_tarea(id):
     # Obtener la tarea de la base de datos por su ID

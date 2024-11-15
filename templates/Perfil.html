@@ -26,11 +26,21 @@
                 <div class="admin-badge">{{ datos.rol }}</div>
     
                 <!-- Formulario para cambiar la contraseña -->
-                <form method="post" action="/cambiar_contrasena">
-                    <label for="nueva_contrasena">Nueva Contraseña:</label>
-                    <input type="password" id="nueva_contrasena" name="nueva_contrasena" required>
-                    <button type="submit">Guardar Contraseña</button>
+                <form action="{{ url_for('cambiar_contrasena') }}" method="POST">
+                    <input type="hidden" name="usuario" value="{{ datos['usuario'] }}">  <!-- Nombre de usuario del token -->
+                
+                    <label>Contraseña Actual:</label>
+                    <input type="password" name="contrasena_actual" required>
+                
+                    <label>Nueva Contraseña:</label>
+                    <input type="password" name="nueva_contrasena" required>
+                
+                    <label>Confirmar Nueva Contraseña:</label>
+                    <input type="password" name="confirmar_contrasena" required>
+                
+                    <button type="submit">Cambiar Contraseña</button>
                 </form>
+                
             </div>
         </div>
     </div>
