@@ -56,3 +56,68 @@ body {
 }
 
 
+@media (max-width: 1210px) {
+
+    .navbar {
+        background-color: #5c7e98; /* Color de fondo de la barra de navegación */
+        color: #ffffff; /* Color del texto */
+        padding: 12px; /* Espaciado interno */
+        display: flex; /* Utiliza un contenedor flex para alineación */
+        align-items: center; /* Alinea los elementos verticalmente */
+        text-align: center; /* Alinea el texto al centro */
+    }
+
+    .nav-links li {
+        margin-left: 35px; /* Reduce el margen en pantallas pequeñas */
+    }
+
+    .nav-links a {
+        font-family: 'Averta', sans-serif; /* Aplica la fuente personalizada a los enlaces */
+        font-size: 25px; /* Tamaño de fuente de los enlaces */
+        color: rgb(255, 255, 255); /* Color del texto de los enlaces */
+        text-decoration: none; /* Sin subrayado en los enlaces */
+    }
+
+    .navbar img {
+        width: 35px; /* Ancho de la imagen del logo */
+        transition: transform 0.3s ease; /* Transición suave para el efecto de escalado */
+    }
+
+    .logo {
+        margin-left: 10px; /* Espacio a la izquierda del logo */
+        width: 8px; /* Ancho del logo */
+    }
+}
+
+@media (max-width: 768px) {
+
+    .navbar {
+        background-color: #5c7e98; /* Color de fondo de la barra de navegación */
+        color: #ffffff; /* Color del texto */
+        padding: 15px; /* Espaciado interno */
+        display: flex; /* Utiliza un contenedor flex para alineación */
+        align-items: center; /* Alinea los elementos verticalmente */
+        text-align: center; /* Alinea el texto al centro */
+    }
+
+    .nav-links li {
+        margin-left: 45px; /* Reduce el margen en pantallas pequeñas */
+    }
+
+    .nav-links a {
+        font-family: 'Averta', sans-serif; /* Aplica la fuente personalizada a los enlaces */
+        font-size: 10px; /* Tamaño de fuente de los enlaces */
+        color: rgb(255, 255, 255); /* Color del texto de los enlaces */
+        text-decoration: none; /* Sin subrayado en los enlaces */
+    }
+
+    .navbar img {
+        width: 35px; /* Ancho de la imagen del logo */
+        transition: transform 0.3s ease; /* Transición suave para el efecto de escalado */
+    }
+
+    .logo {
+        margin-left: 20px; /* Espacio a la izquierda del logo */
+        width: 8px; /* Ancho del logo */
+    }
+}
