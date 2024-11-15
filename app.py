@@ -1,5 +1,6 @@
 import re
 import smtplib
+import base64
 import jwt
 from flask import jsonify
 from email.mime.multipart import MIMEMultipart
@@ -46,7 +47,6 @@ class Tarea(db.Model):
         self.estado = estado
 
 
-# Modelo para los registros
 class Registro(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     nombre = db.Column(db.String(100), nullable=False)
@@ -55,6 +55,7 @@ class Registro(db.Model):
     usuario = db.Column(db.String(50), unique=True, nullable=False)
     rol = db.Column(db.String(50), nullable=False)
     password = db.Column(db.String(128), nullable=False)
+    imagen = db.Column(db.LargeBinary, nullable=True)  # Columna para la imagen en binario
 
     def __repr__(self):
         return f'<Registro {self.nombre}>'
@@ -101,7 +102,27 @@ def token_requerido(f):
     
     return decorador
 
-   
+@app.route('/subir_imagen', methods=['POST'])
+def subir_imagen():
+    if 'imagen' not in request.files:
+        return 'No se ha subido ninguna imagen', 400
+
+    imagen = request.files['imagen']
+    if imagen.filename != '':
+        img_data = imagen.read()  # Leer la imagen como datos binarios
+        registro = Registro(
+            nombre=request.form['nombre'],
+            telefono=request.form['telefono'],
+            correo=request.form['correo'],
+            usuario=request.form['usuario'],
+            rol=request.form['rol'],
+            password=request.form['password'],
+            imagen=img_data  # Guardar los datos binarios de la imagen
+        )
+        db.session.add(registro)
+        db.session.commit()
+
+    return 'Imagen subida con éxito', 200   
     
 #Pantalla que se muestra con /
 @app.route('/')
@@ -259,6 +280,8 @@ def nuevo_usuario(current_user):
     if rol is None:
         return redirect(url_for('login'))
     return render_template('index.html')
+import base64
+
 @app.route('/perfil', methods=['GET', 'POST'])
 def perfil():
     # Obtener el token de la cookie
@@ -272,11 +295,27 @@ def perfil():
         # Decodificar el token
         payload = jwt.decode(token, SECRET_KEY, algorithms=["HS256"])
 
-        # Extraer datos del usuario desde el token
+        # Extraer el nombre de usuario desde el token
+        usuario = payload.get('usuario')
+
+        # Buscar el registro del usuario en la base de datos
+        registro = Registro.query.filter_by(usuario=usuario).first()
+
+        if not registro:
+            flash('Usuario no encontrado.')
+            return redirect(url_for('login'))
+
+        # Convertir la imagen binaria a base64 si existe
+        imagen_base64 = None
+        if registro.imagen:
+            imagen_base64 = base64.b64encode(registro.imagen).decode('utf-8')
+
+        # Preparar los datos del usuario para la plantilla
         datos_usuario = {
-            'usuario': payload.get('usuario'),
-            'correo': payload.get('correo'),
-            'rol': payload.get('rol')
+            'usuario': registro.usuario,
+            'correo': registro.correo,
+            'rol': registro.rol,
+            'imagen': imagen_base64  # Imagen en base64 para mostrar en HTML
         }
     except jwt.ExpiredSignatureError:
         flash('Tu sesión ha expirado. Por favor, inicia sesión nuevamente.')
@@ -532,6 +571,10 @@ def validar_contrasena(contrasena):
     return True
     
 # Ruta para agregar un nuevo registro
+from flask import request, redirect, url_for, flash
+from werkzeug.utils import secure_filename
+import os
+
 @app.route('/guardar', methods=['POST'])
 def guardar():
     nombre = request.form['nombre']
@@ -539,29 +582,37 @@ def guardar():
     correo = request.form['correo']
     usuario = request.form['usuario']
     rol = request.form['rol']
-    password = request.form['password'] or 'Navasoft$0'  # Asigna la contraseña predeterminada si está vacía
+    password = request.form['password'] or 'Navasoft$0'
 
     # Validar la contraseña
     if password != 'Navasoft$0' and not validar_contrasena(password):
         flash('La contraseña debe tener al menos 8 caracteres, una letra mayúscula, una letra minúscula, un número y un carácter especial.')
         return redirect(url_for('nuevo_usuario'))
+
     # Verificar si el usuario ya existe
     usuario_existente = Registro.query.filter_by(usuario=usuario).first()
     if usuario_existente:
         flash('El nombre de usuario ya existe. Por favor, elige otro.')
         return redirect(url_for('nuevo_usuario'))
 
-    # Hash de la contraseña antes de guardarla
+    # Hashear la contraseña antes de guardarla
     hashed_password = generate_password_hash(password)
-    print(f"Hash de la contraseña guardada: {hashed_password}")  # Verifica el hash
 
+    # Leer el archivo de imagen en formato binario
+    imagen = request.files['imagen']
+    imagen_binaria = None
+    if imagen:
+        imagen_binaria = imagen.read()  # Lee el archivo y guarda su contenido binario
+
+    # Crear el nuevo registro
     nuevo_registro = Registro(
         nombre=nombre,
         telefono=telefono,
         correo=correo,
         usuario=usuario,
         rol=rol,
-        password=hashed_password
+        password=hashed_password,
+        imagen=imagen_binaria  # Guarda el contenido binario de la imagen
     )
 
     db.session.add(nuevo_registro)
@@ -572,6 +623,7 @@ def guardar():
 
     flash('Registro guardado con éxito')
     return redirect(url_for('mostrar'))
+
 
 # Nueva ruta para obtener detalles del usuario
 @app.route('/detalles_usuario/<int:id>')

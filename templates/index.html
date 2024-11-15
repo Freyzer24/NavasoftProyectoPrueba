@@ -7,8 +7,8 @@
 </head>
 <body> 
    
-    <form action="{{ url_for('guardar') }}" method="POST">
-      <h1>Formulario de Registro</h1>
+    <form action="{{ url_for('guardar') }}" method="POST" enctype="multipart/form-data">
+        <h1>Formulario de Registro</h1>
         <div class="separar"> 
           
             <!-- Primera columna del formulario -->
@@ -35,7 +35,11 @@
                 </select><br>
             
                 <label for="password">Contraseña:</label>
-            <input type="password" id="password" name="password" value="Navasoft$0" required><br>
+                <input type="password" id="password" name="password" value="Navasoft$0" required><br>
+                
+                <!-- Campo para subir una imagen -->
+                <label for="imagen">Subir imagen:</label>
+                <input type="file" id="imagen" name="imagen" accept="image/*"><br>
             </div>
         </div>
         <button type="submit">Guardar</button> <!-- El botón ahora está dentro del formulario -->

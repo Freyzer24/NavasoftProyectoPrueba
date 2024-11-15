@@ -12,11 +12,11 @@
         <div class="profile-card">
             <div class="profile-left">
                 <form method="post" action="#" enctype="multipart/form-data">
-                    <div>
-                        <img src="/imagenes/logo 1.jpeg" alt="avatar" id="img" />
-                        <input type="file" name="foto" id="foto" accept="image/*" />
-                        <label for="foto">Cambiar foto</label>
-                    </div>
+                    {% if datos.imagen %}
+        <img src="data:image/png;base64,{{ datos.imagen }}" alt="Imagen de perfil de {{ datos.usuario }}">
+    {% else %}
+        <p>No hay imagen de perfil disponible.</p>
+    {% endif %}
                 </form>
             </div>
             <div class="profile-right">
