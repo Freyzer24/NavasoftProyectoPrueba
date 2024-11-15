@@ -22,13 +22,12 @@
             <div class="profile-right">
                 <h2>{{ datos.usuario }}</h2>
                 <div><i class="fas fa-envelope"></i> Correo electrónico: {{ datos.correo }}</div>
-                <div><i class="fas fa-phone"></i> Teléfono: {{ datos.telefono }}</div>
-                <div class="admin-badge">{{ datos.rol }}</div>
+                <div class="admin-badge">Rol: {{ datos.rol }}</div>
     
                 <!-- Formulario para cambiar la contraseña -->
                 <form action="{{ url_for('cambiar_contrasena') }}" method="POST">
                     <input type="hidden" name="usuario" value="{{ datos['usuario'] }}">  <!-- Nombre de usuario del token -->
-                
+
                     <label>Contraseña Actual:</label>
                     <input type="password" name="contrasena_actual" required><br>
                 
@@ -46,10 +45,11 @@
     </div>
     
     
-   
-    <form action="{{ url_for('logout') }}" method="post" style="display: inline;">
-        <button type="submit">Cerrar sesión</button>
-    </form>
+   <center>
+        <form action="{{ url_for('logout') }}" method="post" style="display: inline;">
+            <button type="submit">Cerrar sesión</button>
+        </form>
+    </center>
     
     
 

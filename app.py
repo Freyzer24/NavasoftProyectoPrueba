@@ -276,7 +276,6 @@ def perfil():
         datos_usuario = {
             'usuario': payload.get('usuario'),
             'correo': payload.get('correo'),
-            'telefono': payload.get('telefono', 'No disponible'),
             'rol': payload.get('rol')
         }
     except jwt.ExpiredSignatureError:
