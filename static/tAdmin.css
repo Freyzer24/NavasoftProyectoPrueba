@@ -23,8 +23,9 @@ body {
 }
 
 .navbar img {
-    width: 95px; /* Ancho de la imagen del logo */
+    width: 75px; /* Ancho de la imagen del logo */
     transition: transform 0.3s ease; /* Transición suave para el efecto de escalado */
+    padding-bottom: 20%;
 }
 
 .navbar img:hover {
@@ -39,7 +40,7 @@ body {
 }
 
 .nav-links li {
-    margin-left: 95px; /* Espacio a la izquierda de cada enlace */
+    margin-left: 65px; /* Espacio a la izquierda de cada enlace */
     transition: background-color 0.8s ease, color 0.8s ease; /* Transición suave para cambios de color */
 }
 
