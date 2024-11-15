@@ -52,9 +52,11 @@
                 <td>{{ encargados_dict[proyecto.encargado] }}</td>  <!-- Muestra el nombre del encargado usando el diccionario -->
                 <td>
                     <div class="icon-container">
-                        <a href="{{ url_for('Gantt') }}" class="icon-link">
+                        <a href="{{ url_for('Gantt', nombre_proyecto=proyecto.nombre) }}" class="icon-link">
                             <i class="fa fa-sign-in icon-large" style="color: blue;"></i>
                         </a>
+                        
+                        
                        
                         <a href="{{ url_for('editar_proyecto', id=proyecto.id) }}" class="icon-link">
                             <i class="fa fa-edit icon-large" style="color: darkgreen;"></i>

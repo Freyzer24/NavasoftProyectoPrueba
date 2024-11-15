@@ -161,50 +161,48 @@ def agregartareas(current_user):
     if rol is None:
         return redirect(url_for('login'))
     return render_template('agregarTareas.html')
-@app.route("/Gantt")
-@token_requerido
-def Gantt(current_user):
+@app.route("/Gantt/<string:nombre_proyecto>")
+def Gantt(nombre_proyecto):
+    # tu código aquí
     rol = obtener_rol_desde_token()
     if rol is None:
         return redirect(url_for('login'))
     
-    tareas = Tarea.query.all()
-    
+    tareas = Tarea.query.filter_by(proyecto=nombre_proyecto).all()
     encargados = Registro.query.all()
     encargados_dict = {encargado.nombre: encargado.nombre for encargado in encargados}
-    
     proyectos = Proyecto.query.all()
-    proyectos_dict = {proyecto.id: proyecto.nombre for proyecto in proyectos}
-    
-    # Imprimir para ver qué contiene proyectos_dict
-    print("Proyectos dict:", proyectos_dict)
-    
+    proyectos_dict = {proyecto.nombre: proyecto.id for proyecto in proyectos}
+
     return render_template(
         'Diagrama de Gantt.html', 
         tareas=tareas, 
         encargados_dict=encargados_dict,
-        proyectos_dict=proyectos_dict
+        proyectos_dict=proyectos_dict,
+        proyecto_id=nombre_proyecto
     )
 
-@app.route('/tareas-gantt')
-def tareas_gantt():
-    rol = obtener_rol_desde_token()
-    if rol is None:
-        return redirect(url_for('login'))
-    tareas = Tarea.query.all()
-    datos = [
+
+@app.route("/tareas/<string:nombre_proyecto>")
+@token_requerido
+def obtener_tareas_por_proyecto(current_user, nombre_proyecto):
+    # Filtra las tareas según el nombre del proyecto
+    tareas = Tarea.query.filter_by(proyecto=nombre_proyecto).all()
+    
+    # Convierte las tareas a JSON
+    tareas_json = [
         {
-            "id": tarea.id,
-            "name": tarea.nombre,
-            "project": tarea.proyecto,
-            "start": tarea.fecha_inicio.isoformat(),
-            "end": tarea.fecha_fin.isoformat(),
-            "encargado": tarea.encargado,
-            "estado": tarea.estado
+            'nombre': tarea.nombre,
+            'fecha_inicio': tarea.fecha_inicio.strftime('%Y-%m-%d'),
+            'fecha_fin': tarea.fecha_fin.strftime('%Y-%m-%d'),
+            'encargado': tarea.encargado,
+            'estado': tarea.estado,
+            'proyecto': tarea.proyecto  # Asegúrate de que esté presente para el filtrado en JS
         }
         for tarea in tareas
     ]
-    return jsonify(datos)
+    
+    return jsonify(tareas_json)
 
 
 

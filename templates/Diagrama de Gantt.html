@@ -179,10 +179,14 @@
         
     
     </style>
+    <script>
+        const nombreProyecto = "{{ proyecto_id }}";  // Asegúrate de que 'proyecto_id' es el valor correcto en el backend
+    </script>
+    
 </head>
 <body>
 
-    <h1>Diagrama de Gantt</h1>
+    <h1>Diagrama de Gantt para el Proyecto {{ proyecto_id }}</h1>
 
     <!-- Enlace para abrir el modal -->
 
@@ -244,7 +248,7 @@
             <span></span>
             
         </div>
-        <div id="gantt-chart" class="gantt-chart">
+        <div id="gantt-charts" class="gantt-chart">
             <div class="gantt-time-axis">
                 <div id="gantt-months" class="gantt-months"></div>
                 <div id="gantt-days" class="gantt-days"></div>
@@ -255,15 +259,6 @@
    
     <div id="tooltip" class="tooltip"></div> <a href="#" onclick="abrirModal()">+ Añadir Tarea</a>
     <script>
-        function abrirModal() {
-    document.getElementById("modal").style.display = "flex";
-}
-
-// Función para cerrar el modal
-function cerrarModal() {
-    document.getElementById("modal").style.display = "none";
-}
-
         function formatDate(dateStr) {
             const date = new Date(dateStr);
             const day = date.getUTCDate().toString().padStart(2, '0');
@@ -273,88 +268,97 @@ function cerrarModal() {
         }
 
         async function cargarTareas() {
-            try {
-                const response = await fetch('/tareas');
-                const tareas = await response.json();
+    try {
+        // Usar nombreProyecto, que está definido desde el backend
+        const response = await fetch('/tareas/' + nombreProyecto);
+        const tareas = await response.json();
 
-                const chart = document.getElementById('gantt-chart-rows');
-                const fechaMin = new Date(Math.min(...tareas.map(t => new Date(t.fecha_inicio))));
-                const fechaMax = new Date(Math.max(...tareas.map(t => new Date(t.fecha_fin))));
+        const chart = document.getElementById('gantt-chart-rows');
+        const fechaMin = new Date(Math.min(...tareas.map(t => new Date(t.fecha_inicio))));
+        const fechaMax = new Date(Math.max(...tareas.map(t => new Date(t.fecha_fin))));
 
-                tareas.forEach(tarea => {
-                    const row = document.createElement('div');
-                    row.classList.add('gantt-row');
+        tareas.forEach(tarea => {
+            const row = document.createElement('div');
+            row.classList.add('gantt-row');
 
-                    const taskName = document.createElement('span');
-                    taskName.textContent = tarea.nombre;
+            const taskName = document.createElement('span');
+            taskName.textContent = tarea.nombre;
 
-                    const taskStart = document.createElement('span');
-                    taskStart.textContent = formatDate(tarea.fecha_inicio);
+            const taskStart = document.createElement('span');
+            taskStart.textContent = formatDate(tarea.fecha_inicio);
 
-                    const taskEnd = document.createElement('span');
-                    taskEnd.textContent = formatDate(tarea.fecha_fin);
+            const taskEnd = document.createElement('span');
+            taskEnd.textContent = formatDate(tarea.fecha_fin);
 
-                    const taskOwner = document.createElement('span');
-                    taskOwner.textContent = tarea.encargado;
+            const taskOwner = document.createElement('span');
+            taskOwner.textContent = tarea.encargado;
 
-                    const barContainer = document.createElement('span');
-                    barContainer.classList.add('gantt-bar-container');
-                    const bar = document.createElement('div');
-                    bar.classList.add('gantt-bar');
-                    bar.textContent = tarea.nombre;
+            const barContainer = document.createElement('span');
+            barContainer.classList.add('gantt-bar-container');
+            const bar = document.createElement('div');
+            bar.classList.add('gantt-bar');
+            bar.textContent = tarea.nombre;
 
-                    // Configuración de la barra de tarea
-                    const fechaInicio = new Date(tarea.fecha_inicio);
-                    const fechaFin = new Date(tarea.fecha_fin);
-                    const duracion = (fechaFin - fechaInicio) / (1000 * 60 * 60 * 24);
-                    const offset = ((fechaInicio - fechaMin) / (1000 * 60 * 60 * 24)) * 20;
+            // Configuración de la barra de tarea
+            const fechaInicio = new Date(tarea.fecha_inicio);
+            const fechaFin = new Date(tarea.fecha_fin);
+            const duracion = (fechaFin - fechaInicio) / (1000 * 60 * 60 * 24);
+            const offset = ((fechaInicio - fechaMin) / (1000 * 60 * 60 * 24)) * 20;
 
-                    bar.style.width = duracion * 20 + 'px';
-                    bar.style.marginLeft = offset + 'px';
+            bar.style.width = duracion * 20 + 'px';
+            bar.style.marginLeft = offset + 'px';
 
-                    // Color según el estado
-                    switch (tarea.estado.trim().toLowerCase()) {
-                        case 'iniciado':
-                            bar.classList.add('iniciado');
-                            break;
-                        case 'progresando':
-                            bar.classList.add('progresando');
-                            break;
-                        case 'avanzado':
-                            bar.classList.add('avanzado');
-                            break;
-                        case 'completado':
-                            bar.classList.add('completado');
-                            break;
-                        default:
-                            bar.style.backgroundColor = '#ccc';
-                    }
-
-                    // Evento para mostrar el tooltip
-                    bar.addEventListener('mouseover', function (event) {
-                        mostrarTooltip(event, tarea);
-                    });
-
-                    // Evento para ocultar el tooltip
-                    bar.addEventListener('mouseout', ocultarTooltip);
-
-                    barContainer.appendChild(bar);
-                    row.appendChild(taskName);
-                    row.appendChild(taskStart);
-                    row.appendChild(taskEnd);
-                    row.appendChild(taskOwner);
-                    row.appendChild(barContainer);
-
-                    chart.appendChild(row);
-                });
-
-                generarEjeTemporal(fechaMin, fechaMax);
-
-            } catch (error) {
-                console.error("Error cargando las tareas:", error);
+            // Color según el estado
+            switch (tarea.estado.trim().toLowerCase()) {
+                case 'iniciado':
+                    bar.classList.add('iniciado');
+                    break;
+                case 'progresando':
+                    bar.classList.add('progresando');
+                    break;
+                case 'avanzado':
+                    bar.classList.add('avanzado');
+                    break;
+                case 'completado':
+                    bar.classList.add('completado');
+                    break;
+                default:
+                    bar.style.backgroundColor = '#ccc';
             }
-        }
 
+            // Evento para mostrar el tooltip
+            bar.addEventListener('mouseover', function (event) {
+                mostrarTooltip(event, tarea);
+            });
+
+            // Evento para ocultar el tooltip
+            bar.addEventListener('mouseout', ocultarTooltip);
+
+            barContainer.appendChild(bar);
+            row.appendChild(taskName);
+            row.appendChild(taskStart);
+            row.appendChild(taskEnd);
+            row.appendChild(taskOwner);
+            row.appendChild(barContainer);
+
+            chart.appendChild(row);
+        });
+
+        generarEjeTemporal(fechaMin, fechaMax);
+
+    } catch (error) {
+        console.error("Error cargando las tareas:", error);
+    }
+}
+
+        function abrirModal() {
+    document.getElementById("modal").style.display = "flex";
+}
+
+// Función para cerrar el modal
+function cerrarModal() {
+    document.getElementById("modal").style.display = "none";
+}
         function generarEjeTemporal(fechaInicio, fechaFin) {
     const monthsContainer = document.getElementById('gantt-months');
     const daysContainer = document.getElementById('gantt-days');
@@ -423,7 +427,10 @@ function cerrarModal() {
             tooltip.style.display = 'none';
         }
 
-        cargarTareas();
+        window.onload = function() {
+    cargarTareas();
+};
+
     </script>
 </body>
 </html>
