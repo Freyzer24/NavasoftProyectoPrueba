@@ -168,6 +168,7 @@
         .gantt-months, .gantt-days {
             display: flex;
             flex-direction: row;
+            font-size: 8px
         }
 
         .gantt-months span, .gantt-days span {
@@ -176,6 +177,10 @@
             border-right: 1px solid #ccc;
         }
 
+        span{
+            height: 12%;
+            width: 10%;
+        }
         
     
     </style>
@@ -245,14 +250,16 @@
             <span>Fecha de Inicio</span>
             <span>Fecha de Fin</span>
             <span>Encargado</span>
-            <span></span>
+            <span>
+                <h4>Gantt</h4>
+                <div class="gantt-time-axis">
+                    <div id="gantt-months" class="gantt-months"></div>
+                    <div id="gantt-days" class="gantt-days"></div>
+                </div>
+            </span>
             
         </div>
         <div id="gantt-charts" class="gantt-chart">
-            <div class="gantt-time-axis">
-                <div id="gantt-months" class="gantt-months"></div>
-                <div id="gantt-days" class="gantt-days"></div>
-            </div>
             <div id="gantt-chart-rows"></div>
         </div>
 
