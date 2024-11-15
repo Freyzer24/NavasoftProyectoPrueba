@@ -236,7 +236,7 @@ def Gtareas(current_user):
     if rol is None:
         return redirect(url_for('login'))
     tareas = Tarea.query.all()
-    return render_template('Gestióntareas.html', tareas=tareas)
+    return render_template('Gestióntareas.html', tareas=tareas, rol=rol)
 
 @app.route('/menuEmpleado')
 @token_requerido

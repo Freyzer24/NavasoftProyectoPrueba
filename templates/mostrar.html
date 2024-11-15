@@ -45,6 +45,9 @@
                     <a href="#modal-{{ registro.id }}" class="icon-link" onclick="document.getElementById('modal-{{ registro.id }}').style.display='block'; return false;">
                         <i class="fa fa-info-circle" style="color: blue;"></i>
                     </a>
+                    <a href="{{ url_for('editar', id=registro.id) }}" class="icon-link">
+                        <i class="fa fa-edit" style="color: darkgreen;"></i>
+                    </a>
                     {% endif %}
 
 <!-- Agrega este CSS en tu archivo de estilos o dentro de una etiqueta <style> -->

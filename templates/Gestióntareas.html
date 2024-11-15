@@ -44,7 +44,9 @@ window.onclick = function(event) {
                     <th>Fecha de finalización</th>
                     <th>Encargado</th>
                     <th>Estado</th>
+                    {% if rol in ['super_administrador', 'administrador','empleado'] %}
                     <th>Acciones</th> <!-- Nueva columna para los botones -->
+                    {% endif %}
                 </tr>
             </thead>
             <tbody>
@@ -58,18 +60,21 @@ window.onclick = function(event) {
                     <td>
                         <span class="status-circle {{ tarea.estado | lower }}"></span> {{ tarea.estado }}
                     </td>
+                    {% if rol in ['super_administrador', 'administrador','empleado'] %}
                     <td>
                         <!-- Botón de Editar -->
                         <a href="{{ url_for('editar_tarea', id=tarea.id) }}" class="icon-btn edit">
                             <i class="fa fa-edit" style="color: darkgreen;"></i>
                         </a>
-                        
+                        {% if rol in ['super_administrador', 'administrador'] %}
                         <!-- Icono de Eliminar con confirmación -->
                         <form action="{{ url_for('eliminar_tarea', id=tarea.id) }}" method="POST" style="display:inline;">
                             <button type="submit" class="icon-btn delete" onclick="return confirm('¿Estás seguro de que deseas eliminar esta tarea?');">
                                 <i class="fa fa-trash" style="color: rgb(153, 8, 8);"></i>
                             </button>
                         </form>
+                        {% endif %}
+                    {% endif %}
                     </td>
                 </tr>
                 {% endfor %}
