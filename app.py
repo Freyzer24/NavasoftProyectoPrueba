@@ -571,9 +571,6 @@ def validar_contrasena(contrasena):
     return True
     
 # Ruta para agregar un nuevo registro
-from flask import request, redirect, url_for, flash
-from werkzeug.utils import secure_filename
-import os
 
 @app.route('/guardar', methods=['POST'])
 def guardar():
@@ -647,6 +644,10 @@ def editar(id):
         # Si se proporciona una nueva contraseña, se actualiza el hash
         if password:
             registro.password = generate_password_hash(password)  # Hashea la nueva contraseña
+            imagen = request.files.get('imagen')
+    if imagen:
+        registro.imagen = imagen.read()  # Guardar la imagen como binario en la base de datos
+
 
         db.session.commit()  # Guarda los cambios en la base de datos
 
