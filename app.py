@@ -412,6 +412,54 @@ def editar_tarea(id):
             flash('Ocurrió un error al actualizar la tarea.', 'danger')
 
         return redirect(url_for('Gtareas'))
+@app.route('/cambiarfoto', methods=['POST'])
+def cambiarfoto():
+    # Obtener el token de la cookie
+    token = request.cookies.get('token')
+
+    if not token:
+        flash('Debes iniciar sesión primero.')
+        return redirect(url_for('login'))  # Redirige a login si no hay token
+
+    try:
+        # Decodificar el token
+        payload = jwt.decode(token, SECRET_KEY, algorithms=["HS256"])
+
+        # Extraer el nombre de usuario desde el token
+        usuario = payload.get('usuario')
+
+        # Buscar el registro del usuario en la base de datos
+        registro = Registro.query.filter_by(usuario=usuario).first()
+
+        if not registro:
+            flash('Usuario no encontrado.')
+            return redirect(url_for('login'))
+
+        # Verificar si se subió una nueva imagen
+        if 'foto' in request.files:
+            foto = request.files['foto']
+            if foto:
+                # Validar que el archivo sea una imagen (por extensión)
+                filename = foto.filename
+                if filename.lower().endswith(('png', 'jpg', 'jpeg')):
+                    # Leer el archivo de la imagen y almacenarlo en la base de datos
+                    img_bytes = foto.read()
+                    registro.imagen = img_bytes
+                    db.session.commit()  # Guardar los cambios en la base de datos
+                    flash('Imagen de perfil actualizada con éxito.')
+                    # Convertir la imagen a base64 para mostrarla inmediatamente
+                    imagen_base64 = base64.b64encode(img_bytes).decode('utf-8')
+                    return redirect(url_for('perfil'))  # Redirigir al perfil para mostrar la imagen actualizada
+
+        flash('No se ha seleccionado ninguna imagen.')
+        return redirect(url_for('perfil'))  # Si no hay imagen seleccionada
+
+    except jwt.ExpiredSignatureError:
+        flash('Tu sesión ha expirado. Por favor, inicia sesión nuevamente.')
+        return redirect(url_for('login'))
+    except jwt.InvalidTokenError:
+        flash('Token inválido. Por favor, inicia sesión nuevamente.')
+        return redirect(url_for('login'))
 
 
 

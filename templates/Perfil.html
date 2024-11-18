@@ -17,10 +17,14 @@
                     {% else %}
                         <p>No hay imagen de perfil disponible.</p>
                     {% endif %}
-                    <input type="file" name="foto" id="foto" style="display:none;">
+                
+                    <!-- Campo para cargar la nueva imagen -->
+                    <input type="file" name="foto" id="foto" style="display:none;" onchange="this.form.submit();">
+                    
+                    <!-- Botón que activa la carga de la imagen -->
                     <label for="foto" class="btn-foto">Cambiar foto</label>
-                    <button type="submit">Guardar Cambios</button> <!-- Botón para guardar cambios -->
                 </form>
+                
             </div>
             <div class="profile-right">
                 <h2>{{ datos.usuario }}</h2>
