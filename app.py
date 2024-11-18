@@ -644,32 +644,47 @@ def editar(id):
         registro.usuario = request.form['usuario']
         registro.rol = request.form['rol']
         password = request.form['password']
-        
+
         # Si se proporciona una nueva contraseña, se actualiza el hash
         if password:
             registro.password = generate_password_hash(password)  # Hashea la nueva contraseña
-            imagen = request.files.get('imagen')
-    if imagen:
-        registro.imagen = imagen.read()  # Guardar la imagen como binario en la base de datos
-
+        
+        # Manejar la imagen
+        imagen = request.files.get('imagen')
+        if imagen:
+            registro.imagen = imagen.read()  # Guardar la imagen como binario en la base de datos
 
         db.session.commit()  # Guarda los cambios en la base de datos
 
         flash('Registro actualizado con éxito')
         return redirect(url_for('mostrar'))  # Redirigir a la vista de mostrar registros
-    else:
-        # Manejar la solicitud GET para mostrar el formulario
-        return render_template('editar.html', registro=registro)  # Asegúrate de tener esta plantilla
+
+    # Manejar la solicitud GET para mostrar el formulario
+    return render_template('editar.html', registro=registro)  # Asegúrate de tener esta plantilla
+
 
 # Ruta para eliminar un registro
-@app.route('/eliminar/<int:id>')
+@app.route('/eliminar/<int:id>', methods=['GET'])
 def eliminar_usuario(id):
-
+    # Buscar el registro por ID
     registro = Registro.query.get_or_404(id)
+
+    # Actualizar los proyectos asociados a este registro
+    proyectos = Proyecto.query.filter_by(encargado=id).all()
+    for proyecto in proyectos:
+        proyecto.encargado = None  # o algún valor que indique que no tiene encargado
+
+    # Eliminar el registro de la tabla `registro`
     db.session.delete(registro)
     db.session.commit()
+
+    # Mensaje de éxito
     flash('Registro eliminado con éxito', 'success')
+
+    # Redirigir a la vista principal
     return redirect(url_for('mostrar'))
+
+
 
 # Ruta para mostrar una lista de usuarios específicos
 @app.route('/usuarios')
