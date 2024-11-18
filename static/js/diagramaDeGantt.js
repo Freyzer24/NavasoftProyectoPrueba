@@ -1,6 +1,7 @@
+// Escuchar eventos de los botones
 document.getElementById('agregarBtn').addEventListener('click', agregarTarea);
-document.getElementById('exportarBtn').addEventListener('click', exportarAExcel); // Agregamos el evento del botón de exportación
-document.getElementById('exportarPdfBtn').addEventListener('click', exportarAPdf); // Evento para exportar a PDF
+document.getElementById('exportarBtn').addEventListener('click', exportarXLSX); // Agregamos el evento del botón de exportación
+document.getElementById('exportarPdfBtn').addEventListener('click', exportarPDF); // Evento para exportar a PDF
 
 const tareas = [];
 
@@ -124,59 +125,55 @@ function limpiarCampos() {
     document.getElementById('porcentaje').value = '';
 }
 
-function exportarAExcel() {
-    // Definir los encabezados de la tabla
-    const encabezados = ['Nombre', 'Fecha de Inicio', 'Fecha de Fin', 'Porcentaje'];
-
-    // Crear los datos que se exportarán
-    const datos = tareas.map(tarea => [
-        tarea.nombre,
-        tarea.fechaInicio.toLocaleDateString(),
-        tarea.fechaFin.toLocaleDateString(),
-        tarea.porcentaje + '%'
-    ]);
-
-    // Agregar los encabezados al principio de los datos
-    const hoja = [encabezados, ...datos];
-
-    // Crear un libro de trabajo con los datos
-    const wb = XLSX.utils.book_new();
-    const ws = XLSX.utils.aoa_to_sheet(hoja);
-    XLSX.utils.book_append_sheet(wb, ws, 'Tareas');
-
-    // Generar y descargar el archivo Excel
-    XLSX.writeFile(wb, 'diagrama_gantt.xlsx');
-}
-
-function exportarAPdf() {
-    // Crear un nuevo documento PDF
+// Función para exportar a PDF
+function exportarPDF() {
     const { jsPDF } = window.jspdf;
     const doc = new jsPDF();
 
-    // Agregar un título
     doc.setFontSize(18);
-    doc.text("Diagrama de Gantt", 14, 20);
+    doc.text(`Diagrama de Gantt - Proyecto`, 20, 20);
 
-    // Agregar la tabla de tareas
-    let yPosition = 30; // Posición inicial en Y
-    doc.setFontSize(12);
+    // Datos de las tareas
+    const tareas = Array.from(document.querySelectorAll('.gantt-row'));
+    let yPosition = 30;
+    
+    tareas.forEach((row, index) => {
+        const taskName = row.querySelector('span').textContent;
+        const startDate = row.querySelectorAll('span')[1].textContent;
+        const endDate = row.querySelectorAll('span')[2].textContent;
+        const assigned = row.querySelectorAll('span')[3].textContent;
+        const status = row.querySelector('.gantt-bar').classList[1];
 
-    // Encabezados de la tabla
-    doc.text("Nombre", 14, yPosition);
-    doc.text("Fecha Inicio", 60, yPosition);
-    doc.text("Fecha Fin", 110, yPosition);
-    doc.text("% Completado", 160, yPosition);
-    yPosition += 10;
-
-    // Imprimir las tareas
-    tareas.forEach(tarea => {
-        doc.text(tarea.nombre, 14, yPosition);
-        doc.text(tarea.fechaInicio.toLocaleDateString(), 60, yPosition);
-        doc.text(tarea.fechaFin.toLocaleDateString(), 110, yPosition);
-        doc.text(tarea.porcentaje + "%", 160, yPosition);
+        doc.setFontSize(12);
+        doc.text(`${taskName} - ${startDate} - ${endDate} - ${assigned} - ${status}`, 20, yPosition);
         yPosition += 10;
+        
+        if (yPosition > 270) {
+            doc.addPage();
+            yPosition = 20;
+        }
     });
 
-    // Descargar el archivo PDF
-    doc.save('diagrama_gantt.pdf');
+    doc.save('Gantt_Proyecto.pdf');
+}
+
+// Función para exportar a XLSX
+function exportarXLSX() {
+    const tareas = Array.from(document.querySelectorAll('.gantt-row'));
+    
+    const data = tareas.map(row => {
+        const taskName = row.querySelector('span').textContent;
+        const startDate = row.querySelectorAll('span')[1].textContent;
+        const endDate = row.querySelectorAll('span')[2].textContent;
+        const assigned = row.querySelectorAll('span')[3].textContent;
+        const status = row.querySelector('.gantt-bar').classList[1];
+
+        return [taskName, startDate, endDate, assigned, status];
+    });
+
+    const ws = XLSX.utils.aoa_to_sheet([['Tarea', 'Fecha de Inicio', 'Fecha de Fin', 'Encargado', 'Estado'], ...data]);
+    const wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, "Gantt");
+
+    XLSX.writeFile(wb, 'Gantt_Proyecto.xlsx');
 }
