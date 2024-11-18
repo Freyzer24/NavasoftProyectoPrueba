@@ -373,11 +373,12 @@ def editar_tarea(id):
         return redirect(url_for('login'))
     # Obtener la tarea de la base de datos por su ID
     tarea = Tarea.query.get_or_404(id)
+    proyectos = Proyecto.query.all() 
 
     if request.method == 'GET':
         # Obtener todos los encargados
         encargados = Registro.query.all()
-        return render_template('editar_tarea.html', tarea=tarea, encargados=encargados, rol=rol)
+        return render_template('editar_tarea.html', tarea=tarea, encargados=encargados, rol=rol, proyectos=proyectos)
 
 
 
