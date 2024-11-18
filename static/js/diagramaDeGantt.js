@@ -124,7 +124,7 @@ function limpiarCampos() {
     document.getElementById('porcentaje').value = '';
 }
 
-function exportarAExcel() {
+function exportarXLSX() {
     // Definir los encabezados de la tabla
     const encabezados = ['Nombre', 'Fecha de Inicio', 'Fecha de Fin', 'Porcentaje'];
 
@@ -148,7 +148,7 @@ function exportarAExcel() {
     XLSX.writeFile(wb, 'diagrama_gantt.xlsx');
 }
 
-function exportarAPdf() {
+function exportarPDF() {
     // Crear un nuevo documento PDF
     const { jsPDF } = window.jspdf;
     const doc = new jsPDF();
