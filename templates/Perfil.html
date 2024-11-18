@@ -1,59 +1,56 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Editar Perfil</title>
     <link rel="stylesheet" href="/static/Perfil.css">
 </head>
 <body>
     <h1>EDITAR PERFIL</h1>
-    <div class="profile-container"> <!-- Contenedor para las tarjetas -->
+    <div class="profile-container">
         <div class="profile-card">
             <div class="profile-left">
-                <form method="post" action="#" enctype="multipart/form-data">
+                <form method="POST" action="{{ url_for('cambiarfoto') }}" enctype="multipart/form-data">
                     {% if datos.imagen %}
-        <img src="data:image/png;base64,{{ datos.imagen }}" alt="Imagen de perfil de {{ datos.usuario }}">
-    {% else %}
-        <p>No hay imagen de perfil disponible.</p>
-    {% endif %}
+                        <img src="data:image/png;base64,{{ datos.imagen }}" alt="Imagen de perfil de {{ datos.usuario }}">
+                    {% else %}
+                        <p>No hay imagen de perfil disponible.</p>
+                    {% endif %}
+                    <input type="file" name="foto" id="foto" style="display:none;">
+                    <label for="foto" class="btn-foto">Cambiar foto</label>
+                    <button type="submit">Guardar Cambios</button> <!-- Botón para guardar cambios -->
                 </form>
             </div>
             <div class="profile-right">
                 <h2>{{ datos.usuario }}</h2>
                 <div><i class="fas fa-envelope"></i> Correo electrónico: {{ datos.correo }}</div>
                 <div class="admin-badge">Rol: {{ datos.rol }}</div>
-    
+                
                 <!-- Formulario para cambiar la contraseña -->
                 <form action="{{ url_for('cambiar_contrasena') }}" method="POST">
-                    <input type="hidden" name="usuario" value="{{ datos['usuario'] }}">  <!-- Nombre de usuario del token -->
+                    <input type="hidden" name="usuario" value="{{ datos['usuario'] }}">
 
                     <label>Contraseña Actual:</label>
                     <input type="password" name="contrasena_actual" required><br>
-                
+                    
                     <label>Nueva Contraseña:</label>
                     <input type="password" name="nueva_contrasena" required><br>
-                
+                    
                     <label>Confirmar Nueva Contraseña:</label>
                     <input type="password" name="confirmar_contrasena" required>
-                
+                    
                     <button type="submit">Cambiar Contraseña</button>
                 </form>
-                
             </div>
         </div>
     </div>
-    
-    
-   <center>
+
+    <center>
         <form action="{{ url_for('logout') }}" method="post" style="display: inline;">
             <button type="submit">Cerrar sesión</button>
         </form>
     </center>
-    
-    
-
 
 </body>
-<script src="/Empleados.js"></script>
 </html>
