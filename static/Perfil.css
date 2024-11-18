@@ -216,4 +216,25 @@ form button {
   transform: scale(1.05);
   box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
 }
+/* Estilo para el label como botón */
+.btn-foto {
+  display: inline-block;
+  padding: 10px 20px;
+  background-color: #527ae6; /* Color de fondo */
+  color: white; /* Color del texto */
+  font-size: 16px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.btn-foto:hover {
+  background-color: #405f9d; /* Color al pasar el mouse */
+}
+
+/* Asegura que el input de archivo esté oculto */
+input[type="file"] {
+  display: none;
+}
+
 
