@@ -126,7 +126,7 @@ function limpiarCampos() {
 
 function exportarXLSX() {
     // Definir los encabezados de la tabla
-    const encabezados = ['Nombre', 'Fecha de Inicio', 'Fecha de Fin', 'Porcentaje'];
+    const encabezados = ['nombre', 'fechaInicio', 'fechaFin', 'porcentaje'];
 
     // Crear los datos que se exportarán
     const datos = tareas.map(tarea => [
