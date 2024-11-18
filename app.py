@@ -371,52 +371,43 @@ def editar_tarea(id):
     rol = obtener_rol_desde_token()
     if rol is None:
         return redirect(url_for('login'))
-    # Obtener la tarea de la base de datos por su ID
+
     tarea = Tarea.query.get_or_404(id)
-    proyectos = Proyecto.query.all() 
+    proyectos = Proyecto.query.all()
 
     if request.method == 'GET':
-        # Obtener todos los encargados
         encargados = Registro.query.all()
         return render_template('editar_tarea.html', tarea=tarea, encargados=encargados, rol=rol, proyectos=proyectos)
 
-
-
     if request.method == 'POST':
-        # Obtener los datos enviados desde el formulario
+        # Obtener datos del formulario
         nombre = request.form['nombre']
-        proyecto = request.form['proyecto']
+        proyecto_id = request.form['proyecto']
         encargado_id = request.form['encargado']
         estado = request.form['estado']
+        fecha_inicio = request.form['fecha_inicio']
+        fecha_fin = request.form['fecha_fin']
 
-
-
-        # Imprimir valores para verificar
-        print("Nombre:", nombre)
-        print("Proyecto:", proyecto)
-        print("Encargado ID:", encargado_id)
-        print("Estado:", estado)
-
-        # Actualizar los atributos de la tarea
+        # Actualizar tarea
         tarea.nombre = nombre
-        tarea.proyecto = proyecto  # Asegúrate de que este campo esté en el modelo Tarea
-        tarea.encargado_id = encargado_id  # Asignar el id del encargado
+        tarea.proyecto_id = proyecto_id
+        tarea.encargado_id = encargado_id
         tarea.estado = estado
+        tarea.fecha_inicio = datetime.strptime(fecha_inicio, '%Y-%m-%d')
+        tarea.fecha_fin = datetime.strptime(fecha_fin, '%Y-%m-%d')
 
-
-
-        # Intentar guardar en la base de datos
+        # Guardar en la base de datos
         try:
-            db.session.flush()  # Aplicar los cambios en la sesión
             db.session.commit()
-            print("Cambios guardados en la base de datos")
             flash('Tarea actualizada exitosamente', 'success')
         except Exception as e:
-            db.session.rollback()  # Revertir los cambios si ocurre un error
+            db.session.rollback()
             print("Error al guardar en la base de datos:", e)
             flash('Ocurrió un error al actualizar la tarea.', 'danger')
 
         return redirect(url_for('Gtareas'))
+
+
 @app.route('/cambiarfoto', methods=['POST'])
 def cambiarfoto():
     # Obtener el token de la cookie
