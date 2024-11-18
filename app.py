@@ -200,7 +200,8 @@ def Gantt(nombre_proyecto):
         tareas=tareas, 
         encargados_dict=encargados_dict,
         proyectos_dict=proyectos_dict,
-        proyecto_id=nombre_proyecto
+        proyecto_id=nombre_proyecto,
+        rol=rol
     )
 
 
@@ -362,13 +363,16 @@ def cambiar_contrasena():
 
 @app.route('/editar_tarea/<int:id>', methods=['GET', 'POST'])
 def editar_tarea(id):
+    rol = obtener_rol_desde_token()
+    if rol is None:
+        return redirect(url_for('login'))
     # Obtener la tarea de la base de datos por su ID
     tarea = Tarea.query.get_or_404(id)
 
     if request.method == 'GET':
         # Obtener todos los encargados
         encargados = Registro.query.all()
-        return render_template('editar_tarea.html', tarea=tarea, encargados=encargados)
+        return render_template('editar_tarea.html', tarea=tarea, encargados=encargados, rol=rol)
 
     if request.method == 'POST':
         # Obtener los datos enviados desde el formulario
