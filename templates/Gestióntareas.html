@@ -75,11 +75,13 @@
                         </a>
                         {% if rol in ['super_administrador', 'administrador'] %}
                         <!-- Icono de Eliminar con confirmación -->
-                        <form action="{{ url_for('eliminar_tarea', id=tarea.id) }}" method="POST" style="display:inline;">
-                            <button type="submit" class="icon-btn delete" onclick="return confirm('¿Estás seguro de que deseas eliminar esta tarea?');">
-                                <i class="fa fa-trash" style="color: rgb(153, 8, 8);"></i>
-                            </button>
-                        </form>
+                        <a href="{{ url_for('eliminar_tarea', id=tarea.id) }}" 
+   class="icon-btn delete" 
+   onclick="return confirm('¿Estás seguro de que deseas eliminar esta tarea?');" 
+   style="display:inline;">
+    <i class="fa fa-trash" style="color: rgb(153, 8, 8);"></i>
+</a>
+
                         {% endif %}
                     </td>
                     {% endif %}
@@ -144,15 +146,5 @@
         }
     </script>
 
-    <!-- Mostrar los mensajes flash -->
-    {% with messages = get_flashed_messages(with_categories=True) %}
-    {% if messages %}
-    <div class="flash-messages">
-        {% for category, message in messages %}
-        <div class="alert {{ category }}">{{ message }}</div>
-        {% endfor %}
-    </div>
-    {% endif %}
-    {% endwith %}
 </body>
 </html>
