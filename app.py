@@ -725,9 +725,9 @@ def editar(id):
     return render_template('editar.html', registro=registro)  # Asegúrate de tener esta plantilla
 
 
-# Ruta para eliminar un registro
 @app.route('/eliminar/<int:id>', methods=['GET'])
 def eliminar_usuario(id):
+
     # Buscar el registro por ID
     registro = Registro.query.get_or_404(id)
 
