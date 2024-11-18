@@ -96,3 +96,9 @@ button {
 button:hover {
     background-color: #3f64c2;
 }
+
+@media (max-width: 710px) {
+    body{
+        width:400px;
+    }
+}

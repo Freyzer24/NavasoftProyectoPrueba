@@ -95,19 +95,19 @@ body {
     .navbar {
         background-color: #5c7e98; /* Color de fondo de la barra de navegación */
         color: #ffffff; /* Color del texto */
-        padding: 15px; /* Espaciado interno */
+        padding: 10px; /* Espaciado interno */
         display: flex; /* Utiliza un contenedor flex para alineación */
         align-items: center; /* Alinea los elementos verticalmente */
         text-align: center; /* Alinea el texto al centro */
     }
 
     .nav-links li {
-        margin-left: 45px; /* Reduce el margen en pantallas pequeñas */
+        margin-left: 25px; /* Reduce el margen en pantallas pequeñas */
     }
 
     .nav-links a {
         font-family: 'Averta', sans-serif; /* Aplica la fuente personalizada a los enlaces */
-        font-size: 10px; /* Tamaño de fuente de los enlaces */
+        font-size: 9px; /* Tamaño de fuente de los enlaces */
         color: rgb(255, 255, 255); /* Color del texto de los enlaces */
         text-decoration: none; /* Sin subrayado en los enlaces */
     }
