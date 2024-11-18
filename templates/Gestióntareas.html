@@ -53,7 +53,7 @@ window.onclick = function(event) {
                 {% for tarea in tareas %}
                 <tr>
                     <td>{{ tarea.nombre }}</td>
-                    <td>{{ tarea.proyecto }}</td>
+                    <td>{{ tarea.proyecto.nombre }}</td>
                     <td>{{ tarea.fecha_inicio.strftime('%d/%m/%Y') }}</td>
                     <td>{{ tarea.fecha_fin.strftime('%d/%m/%Y') }}</td>
                     <td>{{ tarea.encargado }}</td>

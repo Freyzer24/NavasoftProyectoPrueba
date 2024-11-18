@@ -24,6 +24,7 @@ class Proyecto(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     nombre = db.Column(db.String(100), nullable=False)
     encargado=db.Column(db.String(100),nullable=False)
+    
 
     def __init__(self, nombre, encargado):
         self.nombre = nombre
@@ -32,19 +33,23 @@ class Proyecto(db.Model):
 class Tarea(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     nombre = db.Column(db.String(100), nullable=False)
-    proyecto = db.Column(db.String(100), nullable=False)
+    proyecto_id = db.Column(db.Integer, db.ForeignKey('proyecto.id'), nullable=False)
     fecha_inicio = db.Column(db.Date, nullable=False)
     fecha_fin = db.Column(db.Date, nullable=False)
-    encargado = db.Column(db.String(100), nullable=False)
+    encargado_id = db.Column(db.Integer, db.ForeignKey('registro.id'), nullable=False)  # Cambio aquí
     estado = db.Column(db.String(50), nullable=False)
 
-    def __init__(self, nombre, proyecto, fecha_inicio, fecha_fin, encargado, estado):
+    proyecto = db.relationship('Proyecto', backref='tareas')  # Relación con Proyecto
+    encargado = db.relationship('Registro', backref='tareas')  # Relación con Registro
+
+    def __init__(self, nombre, proyecto, fecha_inicio, fecha_fin, encargado_id, estado):
         self.nombre = nombre
         self.proyecto = proyecto
         self.fecha_inicio = fecha_inicio
         self.fecha_fin = fecha_fin
-        self.encargado = encargado
+        self.encargado_id = encargado_id  # Usar ID en lugar de string
         self.estado = estado
+
 
 
 class Registro(db.Model):
@@ -366,45 +371,49 @@ def editar_tarea(id):
     rol = obtener_rol_desde_token()
     if rol is None:
         return redirect(url_for('login'))
-    # Obtener la tarea de la base de datos por su ID
+
     tarea = Tarea.query.get_or_404(id)
 
     if request.method == 'GET':
         # Obtener todos los encargados
         encargados = Registro.query.all()
-        return render_template('editar_tarea.html', tarea=tarea, encargados=encargados, rol=rol)
+        # Obtener todos los proyectos
+        proyectos = Proyecto.query.all()  # Aquí obtenemos todos los proyectos
+        return render_template('editar_tarea.html', tarea=tarea, encargados=encargados, proyectos=proyectos, rol=rol)
 
     if request.method == 'POST':
-        # Obtener los datos enviados desde el formulario
         nombre = request.form['nombre']
-        proyecto = request.form['proyecto']
+        proyecto_id = request.form['proyecto']
         encargado_id = request.form['encargado']
         estado = request.form['estado']
+        fecha_inicio = request.form['fecha_inicio']
+        fecha_fin = request.form['fecha_fin']
 
-        # Imprimir valores para verificar
         print("Nombre:", nombre)
-        print("Proyecto:", proyecto)
+        print("Proyecto:", proyecto_id)
         print("Encargado ID:", encargado_id)
         print("Estado:", estado)
 
-        # Actualizar los atributos de la tarea
+        # Asegurarse de que encargado_id sea un entero
         tarea.nombre = nombre
-        tarea.proyecto = proyecto  # Asegúrate de que este campo esté en el modelo Tarea
-        tarea.encargado_id = encargado_id  # Asignar el id del encargado
+        tarea.proyecto_id = int(proyecto_id)  # Asignar el ID del proyecto
+        tarea.encargado_id = int(encargado_id)
         tarea.estado = estado
+        tarea.fecha_inicio = fecha_inicio
+        tarea.fecha_fin = fecha_fin
 
-        # Intentar guardar en la base de datos
         try:
-            db.session.flush()  # Aplicar los cambios en la sesión
+            db.session.flush()
             db.session.commit()
-            print("Cambios guardados en la base de datos")
             flash('Tarea actualizada exitosamente', 'success')
         except Exception as e:
-            db.session.rollback()  # Revertir los cambios si ocurre un error
+            db.session.rollback()
             print("Error al guardar en la base de datos:", e)
             flash('Ocurrió un error al actualizar la tarea.', 'danger')
 
         return redirect(url_for('Gtareas'))
+
+
 
 @app.route('/eliminar_tarea/<int:id>', methods=['POST'])
 def eliminar_tarea(id):

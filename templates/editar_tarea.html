@@ -12,7 +12,14 @@
         <input type="text" id="nombre" name="nombre" value="{{ tarea.nombre }}" required><br>
     
         <label for="proyecto">Proyecto:</label>
-        <input type="text" id="proyecto" name="proyecto" value="{{ tarea.proyecto }}" required><br>
+        <select name="proyecto" id="proyecto" required>
+            <option value="" disabled selected>Selecciona un proyecto</option>
+            {% for proyecto in proyectos %}
+                <option value="{{ proyecto.id }}" {% if tarea.proyecto_id == proyecto.id %}selected{% endif %}>
+                    {{ proyecto.nombre }}
+                </option>
+            {% endfor %}
+        </select><br>
     
         <label for="encargado">Encargado:</label>
         <select name="encargado" id="encargado" required>
