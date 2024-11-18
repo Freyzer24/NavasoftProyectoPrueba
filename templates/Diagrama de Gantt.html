@@ -251,7 +251,7 @@
             <span>Fecha de Fin</span>
             <span>Encargado</span>
             <span>
-              
+                <h4>Gantt</h4>
                 <div class="gantt-time-axis">
                     <div id="gantt-months" class="gantt-months"></div>
                     <div id="gantt-days" class="gantt-days"></div>
@@ -262,7 +262,6 @@
         <div id="gantt-charts" class="gantt-chart">
             <div id="gantt-chart-rows"></div>
         </div>
-
 
     {% if rol in ['super_administrador', 'administrador','empleado'] %}
     <div id="tooltip" class="tooltip"></div> <a href="#" onclick="abrirModal()">+ Añadir Tarea</a>
@@ -306,7 +305,7 @@
             barContainer.classList.add('gantt-bar-container');
             const bar = document.createElement('div');
             bar.classList.add('gantt-bar');
-           
+            bar.textContent = tarea.nombre;
 
             // Configuración de la barra de tarea
             const fechaInicio = new Date(tarea.fecha_inicio);
@@ -419,7 +418,7 @@ function cerrarModal() {
         function mostrarTooltip(event, tarea) {
             const tooltip = document.getElementById('tooltip');
             tooltip.innerHTML = `
-                <strong>${tarea.nombre}</strong><br>
+                <strong>${tarea.id}</strong><br>
                 <strong>Fecha de Inicio:</strong> ${formatDate(tarea.fecha_inicio)}<br>
                 <strong>Fecha de Fin:</strong> ${formatDate(tarea.fecha_fin)}<br>
                 <strong>Encargado:</strong> ${tarea.encargado}<br>
