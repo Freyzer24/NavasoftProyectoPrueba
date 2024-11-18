@@ -13,7 +13,7 @@
     
         <label for="proyecto">Proyecto:</label>
         <input type="text" id="proyecto" name="proyecto" value="{{ tarea.proyecto }}" required><br>
-
+    
         <label for="encargado">Encargado:</label>
         <select name="encargado" id="encargado" required>
             <option value="" disabled selected>Selecciona un encargado</option>
@@ -22,9 +22,9 @@
                     {{ encargado.nombre }}
                 </option>
             {% endfor %}
-        </select>
-        <br>
-        <label for="estado">Estado:</label> <br>
+        </select><br>
+    
+        <label for="estado">Estado:</label>
         <select id="estado" name="estado" required>
             <option value="Iniciado" {% if tarea.estado == 'Iniciado' %}selected{% endif %}>Iniciado</option>
             <option value="En progreso" {% if tarea.estado == 'En progreso' %}selected{% endif %}>En progreso</option>
@@ -32,8 +32,16 @@
             <option value="Completado" {% if tarea.estado == 'Completado' %}selected{% endif %}>Completado</option>
         </select><br>
     
+        <!-- Campos de fecha -->
+        <label for="fecha_inicio">Fecha de inicio:</label>
+        <input type="date" id="fecha_inicio" name="fecha_inicio" value="{{ tarea.fecha_inicio.strftime('%Y-%m-%d') }}" required><br>
+    
+        <label for="fecha_fin">Fecha de fin:</label>
+        <input type="date" id="fecha_fin" name="fecha_fin" value="{{ tarea.fecha_fin.strftime('%Y-%m-%d') }}" required><br>
+    
         <button type="submit">Guardar cambios</button>
     </form>
+    
     
 </body>
 </html>
