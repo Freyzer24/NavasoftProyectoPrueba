@@ -34,7 +34,7 @@
                     <a href="#modal-{{ registro.id }}" class="icon-link" onclick="document.getElementById('modal-{{ registro.id }}').style.display='block'; return false;">
                         <i class="fa fa-info-circle" style="color: blue;"></i>
                     </a>
-                    <a href="{{ url_for('editar', id=registro.id) }}" class="icon-link">
+                    <a href="{{ url_for('editar_usuario', id=registro.id) }}" class="icon-link">
                         <i class="fa fa-edit" style="color: darkgreen;"></i>
                     </a>
                     <a href="{{ url_for('eliminar_usuario', id=registro.id) }}" class="icon-link" onclick="return confirm('¿Estás seguro de que deseas eliminar este usuario?');">

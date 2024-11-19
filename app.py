@@ -201,7 +201,7 @@ def Gantt(nombre_proyecto):
     proyectos_dict = {proyecto.nombre: proyecto.id for proyecto in proyectos}
 
     return render_template(
-        'Diagrama de Gantt.html', 
+        'DGantt.html', 
         tareas=tareas, 
         encargados_dict=encargados_dict,
         proyectos_dict=proyectos_dict,
@@ -263,7 +263,7 @@ def Gtareas(current_user):
     if rol is None:
         return redirect(url_for('login'))
     tareas = Tarea.query.all()
-    return render_template('Gestióntareas.html', tareas=tareas, rol=rol)
+    return render_template('Gestión_tareas.html', tareas=tareas, rol=rol)
 
 @app.route('/menuEmpleado')
 @token_requerido
@@ -285,7 +285,7 @@ def nuevo_usuario(current_user):
     rol = obtener_rol_desde_token()
     if rol is None:
         return redirect(url_for('login'))
-    return render_template('index.html')
+    return render_template('añadir_usuario.html')
 import base64
 
 @app.route('/perfil', methods=['GET', 'POST'])
@@ -494,7 +494,7 @@ def proyectos():
     proyectos = Proyecto.query.all()
     encargados_dict = {encargado.id: encargado.nombre for encargado in Registro.query.all()}
     proyectos_dict = {proyecto.id: proyecto.nombre for proyecto in proyectos}  # Diccionario de proyectos
-    return render_template('proyectos.html', proyectos=proyectos, encargados_dict=encargados_dict, proyectos_dict=proyectos_dict,rol=rol)
+    return render_template('Proyectos.html', proyectos=proyectos, encargados_dict=encargados_dict, proyectos_dict=proyectos_dict,rol=rol)
 
 
 
@@ -616,7 +616,7 @@ def mostrar(current_user):
     if rol is None:
         return redirect(url_for('login'))
     registros = Registro.query.all()
-    return render_template('Mostrar.html', registros=registros, rol=rol)
+    return render_template('Gestión_usuarios.html', registros=registros, rol=rol)
 
 def validar_contrasena(contrasena):
     if (len(contrasena) < 8 or 
@@ -685,8 +685,8 @@ def detalles_usuario(id):
     registro = Registro.query.get_or_404(id)
     return render_template('detalles_modal.html', registro=registro)
 # Ruta para editar un registro
-@app.route('/editar/<int:id>', methods=['GET', 'POST'])
-def editar(id):
+@app.route('/editar_usuario/<int:id>', methods=['GET', 'POST'])
+def editar_usuario(id):
     registro = Registro.query.get_or_404(id)  # Obtiene el registro o devuelve un error 404
 
     if request.method == 'POST':
@@ -713,7 +713,7 @@ def editar(id):
         return redirect(url_for('mostrar'))  # Redirigir a la vista de mostrar registros
 
     # Manejar la solicitud GET para mostrar el formulario
-    return render_template('editar.html', registro=registro)  # Asegúrate de tener esta plantilla
+    return render_template('editar_usuario.html', registro=registro)  # Asegúrate de tener esta plantilla
 
 
 @app.route('/eliminar/<int:id>', methods=['GET'])
