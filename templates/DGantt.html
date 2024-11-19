@@ -185,13 +185,13 @@
     
     </style>
     <script>
-        const nombreProyecto = "{{ proyecto_id }}";  // Asegúrate de que 'proyecto_id' es el valor correcto en el backend
+        const nombreProyecto = "{{ nombre_proyecto }}";  // Asegúrate de que 'proyecto_id' es el valor correcto en el backend
     </script>
     
 </head>
 <body>
 
-    <h1>Diagrama de Gantt para el Proyecto {{ proyecto_id }}</h1>
+    <h1>Diagrama de Gantt para el Proyecto {{ nombre_proyecto }}</h1>
 
     <!-- Enlace para abrir el modal -->
 
@@ -201,19 +201,14 @@
     <div class="modal-content">
         <span class="close" onclick="cerrarModal()">&times;</span>
         <h2>Registrar Tarea</h2>
-        <form action="{{ url_for('guardar_tarea') }}" method="POST">
+        <form action="{{ url_for('guardar_tarea', nombre_proyecto=nombre_proyecto) }}" method="POST">
             <div class="separar"> 
                 <div class="columna">
                     <label for="nombre">Nombre de la tarea:</label>
                     <input type="text" id="nombre" name="nombre" required><br>
 
-                    <select name="proyecto" id="proyecto" required>
-                        <option value="" disabled selected>Selecciona un proyecto</option>
-                        {% for nombre, nombre_proyecto in proyectos_dict.items() %}
-                            <option value="{{ nombre_proyecto }}">{{ nombre_proyecto }}</option>
-                        {% endfor %}
-                    </select>
-                    
+                    <label for="proyecto">Proyecto:</label>
+                    <input type="text" id="proyecto" name="proyecto" value="{{ nombre_proyecto }}" ><br>
 
                     <label for="fecha_inicio">Fecha de inicio:</label>
                     <input type="date" id="fecha_inicio" name="fecha_inicio" required><br>
@@ -222,12 +217,13 @@
                     <label for="fecha_fin">Fecha de finalización:</label>
                     <input type="date" id="fecha_fin" name="fecha_fin" required><br>
 
+                    <label for="encargado">Encargado:</label>
                     <select name="encargado" id="encargado" required>
                         <option value="" disabled selected>Selecciona un encargado</option>
                         {% for id, nombre in encargados_dict.items() %}
                             <option value="{{ id }}">{{ nombre }}</option>
                         {% endfor %}
-                    </select>
+                    </select><br>
 
                     <label for="estado">Estado:</label>
                     <select id="estado" name="estado" required>
@@ -242,7 +238,6 @@
         </form>
     </div>
 </div>
-
 
     <div id="gantt-chart" class="gantt-chart">
         <div class="gantt-header">

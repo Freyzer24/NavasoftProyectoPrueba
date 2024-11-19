@@ -180,16 +180,8 @@ class TokenRevocado(db.Model):
     token = db.Column(db.String(500), unique=True, nullable=False)
     fecha_revocacion = db.Column(db.DateTime, default=datetime.utcnow)
 
-@app.route("/agregartareas")
-@token_requerido
-def agregartareas(current_user):
-    rol = obtener_rol_desde_token()
-    if rol is None:
-        return redirect(url_for('login'))
-    return render_template('agregarTareas.html')
-@app.route("/Gantt/<string:nombre_proyecto>")
+@app.route('/gantt/<string:nombre_proyecto>')
 def Gantt(nombre_proyecto):
-    # tu código aquí
     rol = obtener_rol_desde_token()
     if rol is None:
         return redirect(url_for('login'))
@@ -205,9 +197,10 @@ def Gantt(nombre_proyecto):
         tareas=tareas, 
         encargados_dict=encargados_dict,
         proyectos_dict=proyectos_dict,
-        proyecto_id=nombre_proyecto,
+        nombre_proyecto=nombre_proyecto,  # Asegúrate de que esta variable sea pasada
         rol=rol
     )
+
 
 
 @app.route("/tareas/<string:nombre_proyecto>")
@@ -772,7 +765,10 @@ def guardar_tarea():
     db.session.commit()
     
     flash('Tarea registrada exitosamente.')
-    return redirect(url_for('Gantt'))
+    nombre_proyecto = request.form.get('proyecto')  # Asumiendo que el campo en el formulario es 'nombre_proyecto'
+    return redirect(url_for('Gantt', nombre_proyecto=nombre_proyecto))
+
+
 @app.route('/tareas')
 def obtener_tareas():
     tareas = Tarea.query.all()
