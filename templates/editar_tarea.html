@@ -11,26 +11,19 @@
         <label for="nombre">Tarea:</label>
         <input type="text" id="nombre" name="nombre" value="{{ tarea.nombre }}" required><br>
     
-        <label for="proyecto">Proyecto:</label>
-        <select name="proyecto" id="proyecto" required>
-            <option value="" disabled selected>Selecciona un proyecto</option>
+        <label for="proyecto">Proyecto</label>
+        <select name="proyecto" id="proyecto">
             {% for proyecto in proyectos %}
-                <option value="{{ proyecto.id }}" {% if tarea.proyecto_id == proyecto.id %}selected{% endif %}>
-                    {{ proyecto.nombre }}
-                </option>
-            {% endfor %}
-        </select><br>
-    
-        <label for="encargado">Encargado:</label>
-        <select name="encargado" id="encargado" required>
-            <option value="" disabled selected>Selecciona un encargado</option>
-            {% for encargado in encargados %}
-                <option value="{{ encargado.id }}" {% if tarea.encargado_id == encargado.id %}selected{% endif %}>
-                    {{ encargado.nombre }}
-                </option>
+                <option value="{{ proyecto.nombre }}" {% if proyecto.nombre == tarea.proyecto %}selected{% endif %}>{{ proyecto.nombre }}</option>
             {% endfor %}
         </select>
-        <br>
+    
+        <label for="encargado">Encargado</label>
+    <select name="encargado" id="encargado">
+        {% for encargado in encargados %}
+            <option value="{{ encargado.nombre }}" {% if encargado.nombre == tarea.encargado %}selected{% endif %}>{{ encargado.nombre }}</option>
+        {% endfor %}
+    </select>
     
         <label for="estado">Estado:</label>
         <select id="estado" name="estado" required>

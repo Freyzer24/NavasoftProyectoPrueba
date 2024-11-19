@@ -367,24 +367,32 @@ def editar_tarea(id):
 
     tarea = Tarea.query.get_or_404(id)
     proyectos = Proyecto.query.all()
+    encargados = Registro.query.all()
 
     if request.method == 'GET':
-        encargados = Registro.query.all()
         return render_template('editar_tarea.html', tarea=tarea, encargados=encargados, rol=rol, proyectos=proyectos)
 
     if request.method == 'POST':
-        # Obtener datos del formulario
+        # Obtener los datos del formulario
         nombre = request.form['nombre']
-        proyecto_id = request.form['proyecto']
-        encargado_id = request.form['encargado']
+        proyecto_nombre = request.form['proyecto']
+        encargado_nombre = request.form['encargado']
         estado = request.form['estado']
         fecha_inicio = request.form['fecha_inicio']
         fecha_fin = request.form['fecha_fin']
 
+        # Buscar el proyecto y encargado por su nombre
+        proyecto = Proyecto.query.filter_by(nombre=proyecto_nombre).first()
+        encargado = Registro.query.filter_by(nombre=encargado_nombre).first()
+
+        if not proyecto or not encargado:
+            flash('Proyecto o encargado no válidos.', 'danger')
+            return redirect(url_for('editar_tarea', id=id))
+
         # Actualizar tarea
         tarea.nombre = nombre
-        tarea.proyecto_id = proyecto_id
-        tarea.encargado_id = encargado_id
+        tarea.proyecto = proyecto.nombre  # Se guarda el nombre
+        tarea.encargado = encargado.nombre  # Se guarda el nombre
         tarea.estado = estado
         tarea.fecha_inicio = datetime.strptime(fecha_inicio, '%Y-%m-%d')
         tarea.fecha_fin = datetime.strptime(fecha_fin, '%Y-%m-%d')
@@ -399,7 +407,6 @@ def editar_tarea(id):
             flash('Ocurrió un error al actualizar la tarea.', 'danger')
 
         return redirect(url_for('Gtareas'))
-
 
 @app.route('/cambiarfoto', methods=['POST'])
 def cambiarfoto():
