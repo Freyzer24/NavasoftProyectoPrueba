@@ -408,6 +408,7 @@ def editar_tarea(id):
 
         return redirect(url_for('Gtareas'))
 
+
 @app.route('/cambiarfoto', methods=['POST'])
 def cambiarfoto():
     # Obtener el token de la cookie
@@ -520,16 +521,29 @@ from flask import flash, redirect, url_for, session
 @app.route('/eliminar_proyecto/<int:id>', methods=['POST'])
 def eliminar_proyecto(id):
     # Verifica si el usuario tiene el rol de 'super_administrador'
-  
-        proyecto = Proyecto.query.get(id)
-        if proyecto:
+    proyecto = Proyecto.query.get(id)
+    
+    if proyecto:
+        try:
+            # Buscar y eliminar todas las tareas asociadas al proyecto
+            tareas_asociadas = Tarea.query.filter_by(proyecto=proyecto.nombre).all()
+            for tarea in tareas_asociadas:
+                db.session.delete(tarea)
+
+            # Eliminar el proyecto
             db.session.delete(proyecto)
             db.session.commit()
-            flash('Proyecto eliminado correctamente.', 'success')
-        else:
-            flash('Proyecto no encontrado.', 'error')
+            
+            flash('Proyecto y sus tareas asociadas eliminados correctamente.', 'success')
+        except Exception as e:
+            db.session.rollback()
+            print("Error al eliminar el proyecto y tareas asociadas:", e)
+            flash('Ocurrió un error al eliminar el proyecto.', 'danger')
+    else:
+        flash('Proyecto no encontrado.', 'error')
 
-        return redirect(url_for('proyectos'))
+    return redirect(url_for('proyectos'))
+
 
 @app.route('/editar_proyecto/<int:id>', methods=['GET'])
 def editar_proyecto(id):
