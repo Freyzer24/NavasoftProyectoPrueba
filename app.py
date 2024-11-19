@@ -616,7 +616,7 @@ def mostrar(current_user):
     if rol is None:
         return redirect(url_for('login'))
     registros = Registro.query.all()
-    return render_template('Gestión_usuarios.html', registros=registros, rol=rol)
+    return render_template('Gestión_usuario.html', registros=registros, rol=rol)
 
 def validar_contrasena(contrasena):
     if (len(contrasena) < 8 or 
