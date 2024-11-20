@@ -100,43 +100,119 @@
         }
 
 
-        /* Estilo del Modal */
-        .modal {
-            display: none;
-            position: fixed;
-            z-index: 1;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            overflow: auto;
-            background-color: rgb(0,0,0);
-            background-color: rgba(0,0,0,0.4); /* Fondo semitransparente */
-            padding-top: 60px;
-        }
+        /* Estilo general para el modal */
+.modal {
+    display: none; /* Oculto por defecto */
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.5); /* Fondo oscuro semitransparente */
+    justify-content: center;
+    align-items: center;
+}
 
-        .modal-content {
-            background-color: #fefefe;
-            margin: 5% auto;
-            padding: 20px;
-            border: 1px solid #888;
-            width: 80%;
-            max-width: 500px;
-        }
+/* Contenedor del contenido del modal */
+.modal-content {
+    background-color: #fff;
+    margin: auto;
+    padding: 20px;
+    border-radius: 8px;
+    max-width: 600px; /* Ancho máximo del modal */
+    width: 90%;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    animation: fadeIn 0.3s ease-in-out;
+}
 
-        .close {
-            color: #aaa;
-            float: right;
-            font-size: 28px;
-            font-weight: bold;
-        }
+/* Botón de cierre */
+.close {
+    font-size: 20px;
+    font-weight: bold;
+    color: #333;
+    float: right;
+    cursor: pointer;
+    transition: color 0.2s ease;
+}
+.close:hover {
+    color: #e74c3c;
+}
 
-        .close:hover,
-        .close:focus {
-            color: black;
-            text-decoration: none;
-            cursor: pointer;
-        }
+/* Encabezado del modal */
+.modal-content h2 {
+    text-align: center;
+    margin-bottom: 10px;
+    font-size: 1.5rem;
+}
+
+/* Contenedor de las columnas */
+.separar {
+    display: flex;
+    justify-content: space-between;
+    gap: 20px;
+    flex-wrap: wrap; /* Ajustar las columnas si el espacio es limitado */
+}
+
+/* Cada columna */
+.columna {
+    flex: 1 1 calc(50% - 10px); /* Dos columnas iguales con espacio entre ellas */
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+/* Estilos para los inputs y selects */
+label {
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+input, select {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 14px;
+    outline: none;
+}
+input:focus, select:focus {
+    border-color: #007BFF;
+    box-shadow: 0 0 3px rgba(0, 123, 255, 0.5);
+}
+
+/* Botón */
+button[type="submit"] {
+    margin-top: 20px;
+    padding: 10px 20px;
+    background-color: #007BFF;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+    align-self: center; /* Centrar el botón */
+    transition: background-color 0.2s ease;
+}
+button[type="submit"]:hover {
+    background-color: #0056b3;
+}
+
+/* Animación de entrada */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: scale(0.9);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
 
         /* Estilo del botón "Agregar tarea" */
         #agregarTareaBtn {
@@ -181,139 +257,7 @@
             height: 12%;
             width: 10%;
         }
-
-/* Modal background */
-.modal {
-    display: none;
-    position: fixed;
-    z-index: 1;
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent background */
-    padding-top: 50px;
-}
-
-/* Modal content */
-.modal-content {
-    background-color: #fff;
-    margin: 5% auto;
-    padding: 20px;
-    border-radius: 8px;
-    width: 60%;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-    font-family: Arial, sans-serif;
-}
-
-/* Modal header: title and close button aligned horizontally */
-.modal-header {
-    display: flex;
-    justify-content: space-between; /* Spread out title and close button */
-    align-items: center; /* Vertically center the title and button */
-    margin-bottom: 20px; /* Space below the header */
-}
-
-/* Title */
-.modal-header h2 {
-    color: #333;
-    font-size: 24px;
-    margin: 0;
-}
-
-/* Close button */
-.close {
-    color: #bd0505; /* Blanco para destacarse sobre el fondo oscuro */
-    font-size: 32px; /* Aumentar el tamaño para que sea más visible */
-    font-weight: bold;
-    cursor: pointer;
-    background-color: transparent; /* Fondo transparente */
-    border: none;
-    padding: 5px;
-    border-radius: 50%; /* Forma redondeada */
-    transition: background-color 0.3s; /* Efecto de transición para el hover */
-}
-
-.close:hover,
-.close:focus {
-    color: #ff0000; /* Rojo al pasar el mouse */
-    background-color: rgba(255, 255, 255, 0.3); /* Fondo semi-transparente */
-}
-
-/* Input fields and labels */
-.input-group {
-    margin-bottom: 15px;
-    width: 100%;
-}
-
-/* Flexbox for two columns */
-.form-row {
-    display: flex;
-    justify-content: space-between;
-    gap: 20px;
-}
-
-.input-group label {
-    font-size: 14px;
-    font-weight: bold;
-    display: block;
-    margin-bottom: 5px;
-    color: #555;
-}
-
-.input-group input,
-.input-group select {
-    width: 100%;
-    padding: 10px;
-    margin: 5px 0;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    font-size: 14px;
-}
-
-/* Focus effect on input and select */
-.input-group input:focus,
-.input-group select:focus {
-    border-color: #007bff;
-    outline: none;
-}
-
-/* Submit button */
-.btn-submit {
-    background-color: #007bff;
-    color: #fff;
-    padding: 10px 20px;
-    border: none;
-    border-radius: 4px;
-    font-size: 16px;
-    cursor: pointer;
-    width: 100%;
-    transition: background-color 0.3s;
-}
-
-.btn-submit:hover {
-    background-color: #0056b3;
-}
-
-/* Modal responsive adjustments */
-@media (max-width: 768px) {
-    .modal-content {
-        width: 80%;
-    }
-
-    .form-row {
-        flex-direction: column;
-    }
-
-    .input-group {
-        margin-bottom: 10px;
-    }
-
-    .btn-submit {
-        font-size: 14px;
-    }
-}
-     
+        
     
     </style>
     <script>
@@ -323,71 +267,53 @@
 </head>
 <body>
 
-    <h1>Diagrama de Gantt para el Proyecto: {{ nombre_proyecto }}</h1>
+    <h1>Diagrama de Gantt para el Proyecto {{ nombre_proyecto }}</h1>
 
     <!-- Enlace para abrir el modal -->
+
 
 <!-- Modal -->
 <div id="modal" class="modal">
     <div class="modal-content">
-        <div class="modal-header">
-            <h2>Registrar Tarea</h2>
-            <span class="close" onclick="cerrarModal()">&times;</span>
-        </div>
+        <span class="close" onclick="cerrarModal()">&times;</span>
+        <h2>Registrar Tarea</h2>
         <form action="{{ url_for('guardar_tarea', nombre_proyecto=nombre_proyecto) }}" method="POST">
-            <div class="modal-body">
-                <div class="form-row">
-                    <!-- Columna 1 -->
-                    <div class="input-group">
-                        <label for="nombre">Nombre de la tarea:</label>
-                        <input type="text" id="nombre" name="nombre" required><br>
-                    </div>
+            <div class="separar"> 
+                <div class="columna">
+                    <label for="nombre">Nombre de la tarea:</label>
+                    <input type="text" id="nombre" name="nombre" required><br>
 
-                    <div class="input-group">
-                        <label for="proyecto">Proyecto:</label>
-                        <input type="text" id="proyecto" name="proyecto" value="{{ nombre_proyecto }}" readonly><br>
-                    </div>
+                    <label for="proyecto">Proyecto:</label>
+                    <input type="text" id="proyecto" name="proyecto" value="{{ nombre_proyecto }}" ><br>
 
-                    <div class="input-group">
-                        <label for="fecha_inicio">Fecha de inicio:</label>
-                        <input type="date" id="fecha_inicio" name="fecha_inicio" required><br>
-                    </div>
+                    <label for="fecha_inicio">Fecha de inicio:</label>
+                    <input type="date" id="fecha_inicio" name="fecha_inicio" required><br>
                 </div>
+                <div class="columna">
+                    <label for="fecha_fin">Fecha de finalización:</label>
+                    <input type="date" id="fecha_fin" name="fecha_fin" required><br>
 
-                <div class="form-row">
-                    <!-- Columna 2 -->
-                    <div class="input-group">
-                        <label for="fecha_fin">Fecha de finalización:</label>
-                        <input type="date" id="fecha_fin" name="fecha_fin" required><br>
-                    </div>
+                    <label for="encargado">Encargado:</label>
+                    <select name="encargado" id="encargado" required>
+                        <option value="" disabled selected>Selecciona un encargado</option>
+                        {% for id, nombre in encargados_dict.items() %}
+                            <option value="{{ id }}">{{ nombre }}</option>
+                        {% endfor %}
+                    </select><br>
 
-                    <div class="input-group">
-                        <label for="encargado">Encargado:</label>
-                        <select name="encargado" id="encargado" required>
-                            <option value="" disabled selected>Selecciona un encargado</option>
-                            {% for id, nombre in encargados_dict.items() %}
-                                <option value="{{ id }}">{{ nombre }}</option>
-                            {% endfor %}
-                        </select><br>
-                    </div>
-
-                    <div class="input-group">
-                        <label for="estado">Estado:</label>
-                        <select id="estado" name="estado" required>
-                            <option value="Iniciado">Iniciado</option>
-                            <option value="Progresando">En progreso</option>
-                            <option value="Avanzado">Avanzado</option>
-                            <option value="Completado">Completado</option>
-                        </select><br>
-                    </div>
+                    <label for="estado">Estado:</label>
+                    <select id="estado" name="estado" required>
+                        <option value="Iniciado">Iniciado</option>
+                        <option value="Progresando">En progreso</option>
+                        <option value="Avanzado">Avanzado</option>
+                        <option value="Completado">Completado</option>
+                    </select><br>
                 </div>
             </div>
-            <button type="submit" class="btn-submit">Guardar Tarea</button>
+            <button type="submit">Guardar Tarea</button>
         </form>
     </div>
 </div>
-
-
 
     <div id="gantt-chart" class="gantt-chart">
         <div class="gantt-header">
@@ -510,62 +436,9 @@
     }
 }
 
-// Calcula la fecha actual y la fecha límite (dos meses después)
-function obtenerFechaLimite() {
-    const hoy = new Date();
-    const fechaLimite = new Date(hoy);
-    fechaLimite.setMonth(hoy.getMonth() + 2);  // Agregar dos meses a la fecha actual
-    return fechaLimite;
-}
-
-
-// Función para abrir el modal con validación de fechas
-function abrirModal() {
-    const fechaLimite = obtenerFechaLimite();
-    const fechaHoy = new Date();
-
-    // Establecer la fecha de inicio predeterminada como la fecha de hoy
-    document.getElementById("fecha_inicio").setAttribute("min", fechaHoy.toISOString().split('T')[0]);
-
-    // Establecer la fecha de finalización predeterminada como la fecha límite
-    document.getElementById("fecha_fin").setAttribute("max", fechaLimite.toISOString().split('T')[0]);
-
+        function abrirModal() {
     document.getElementById("modal").style.display = "flex";
 }
-
-
-// Validar la fecha antes de enviar el formulario
-function validarFechas(form) {
-    const fechaInicio = new Date(form.fecha_inicio.value);
-    const fechaFin = new Date(form.fecha_fin.value);
-    const fechaLimite = obtenerFechaLimite();
-
-    // Verificar que la fecha de inicio no exceda la fecha límite
-    if (fechaInicio > fechaLimite) {
-        alert("La fecha de inicio no puede ser posterior a dos meses desde hoy.");
-        return false; // Impide que el formulario se envíe
-    }
-
-    // Verificar que la fecha de fin no exceda la fecha límite
-    if (fechaFin > fechaLimite) {
-        alert("La fecha de finalización no puede ser posterior a dos meses desde hoy.");
-        return false; // Impide que el formulario se envíe
-    }
-
-    return true; // Permite que el formulario se envíe si las fechas son válidas
-}
-
-// Asocia la validación a la acción del formulario
-document.querySelector("form").onsubmit = function() {
-    return validarFechas(this);
-};
-
-
-// Asocia la validación a la acción del formulario
-document.querySelector("form").onsubmit = function() {
-    return validarFechas(this);
-};
-
 
 // Función para cerrar el modal
 function cerrarModal() {
