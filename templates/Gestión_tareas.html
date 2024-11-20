@@ -18,23 +18,7 @@
     border-radius: 5px; /* Bordes redondeados */
     transition: background-color 0.3s ease; /* Transición suave para el cambio de color de fondo */
 }
-.iniciado {
-    background-color: red;
-}
-
-.progresando {
-    background-color: yellow;
-}
-
-.avanzado {
-    background-color: green;
-}
-
-.completado {
-    background-color: blue;
-}
 </style>
-
 </head>
 
 <body>
@@ -77,9 +61,10 @@
                         <!-- Icono de Eliminar con confirmación -->
                         <form action="{{ url_for('eliminar_tarea', id=tarea.id) }}" method="POST" style="display:inline;">
                             <button type="submit" class="icon-btn delete" onclick="return confirm('¿Estás seguro de que deseas eliminar esta tarea?');">
-                                <i class="fa fa-trash" style="color: rgb(153, 8, 8);"></i>
+                                <i class="fa fa-trash" style="color: rgb(153, 8, 8); font-size: 20px;"></i>
                             </button>
                         </form>
+                        
 
                         {% endif %}
                     </td>
