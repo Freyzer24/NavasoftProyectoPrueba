@@ -244,6 +244,50 @@ button[type="submit"]:hover {
             height: 12%;
             width: 10%;
         }
+
+        .acciones {
+        display: flex;
+        justify-content: center; /* Centra los botones horizontalmente */
+        gap: 15px; /* Espaciado entre los botones */
+        margin-top: 20px; /* Margen superior para separación */
+    }
+    .enlaces {
+    display: flex;
+    flex-direction: row; /* Cambiado para alinearlos en fila */
+    gap: 15px; /* Espacio entre los enlaces */
+    justify-content: center; /* Centrar los enlaces horizontalmente */
+    margin-top: 20px;
+}
+
+.enlace {
+    text-decoration: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    font-size: 16px;
+    color: white;
+    font-weight: bold;
+    display: inline-block;
+    transition: background-color 0.3s, transform 0.3s, box-shadow 0.3s;
+    text-align: center;
+}
+
+.enlace:hover {
+    transform: translateY(-3px);
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+.enlace.rojo {
+    background-color: #e74c3c;
+}
+
+.enlace.azul {
+    background-color: #3498db;
+}
+
+.enlace.verde {
+    background-color: #2ecc71;
+}
+
         
     
     </style>
@@ -328,11 +372,12 @@ button[type="submit"]:hover {
 
 
 {% if rol in ['super_administrador', 'administrador','empleado'] %}
-<div class="acciones">
-    <a href="#" onclick="abrirModal()">+ Añadir Tarea</a>
-    <a href="#" onclick="exportarPDF()">+ Exportar como PDF</a>
-    <a href="#" onclick="exportarXLSX()">+ Exportar como XLSX o Excel</a>
+<div class="enlaces">
+    <a href="#" class="enlace rojo" onclick="abrirModal()">+ Añadir Tarea</a>
+    <a href="#" class="enlace azul" onclick="exportarPDF()">+ Exportar como PDF</a>
+    <a href="#" class="enlace verde" onclick="exportarXLSX()">+ Exportar como XLSX o Excel</a>
 </div>
+
 {% endif %}
     <script>
         function formatDate(dateStr) {
