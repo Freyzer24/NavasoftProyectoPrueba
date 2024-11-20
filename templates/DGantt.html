@@ -213,31 +213,45 @@ button[type="submit"]:hover {
 .gantt-months {
     display: flex;
     border-bottom: 1px solid #ccc;
+    justify-content: start; /* Evita la distribución automática del espacio */
+    gap: 0; /* Elimina cualquier separación entre los meses */
 }
 
 .gantt-months span {
     display: inline-block; /* Asegura que el tamaño sea proporcional */
     text-align: center;
     border-right: 1px solid #ccc;
-    padding: 5px;
+    padding: 1px; /* Reduce el espacio interno */
     font-weight: bold;
-    background-color: #f9f9f9;
-    flex: 1; /* Cada mes ocupa su espacio proporcional */
+    margin: 0; /* Elimina márgenes adicionales */
+    background-color: #f9f9f9; /* Fondo para diferenciar meses */
+    width: 20px; /* Define un ancho fijo para cada mes */
+    font-size: 12px; /* Reduce el tamaño del texto */
+    box-sizing: border-box;
 }
 
 .gantt-days {
     display: flex;
     border-bottom: 1px solid #ccc;
+    line-height: 1; /* Reduce la altura de línea */
+    height: auto; /* Asegúrate de que se ajuste al contenido */
+    justify-content: start; /* Evita la distribución automática del espacio */
+    gap: 0; /* Elimina cualquier espacio entre los elementos */
 }
 
 .gantt-days span {
-    display: inline-block; /* Asegura una distribución uniforme */
+    display: inline-block; /* Asegura distribución uniforme */
     text-align: center;
     border-right: 1px solid #eee;
-    padding: 5px;
+    padding: 1px; /* Reduce el espacio interno */
+    margin: 0; /* Elimina márgenes adicionales */
     background-color: #ffffff; /* Fondo para diferenciar días */
-    flex: 1; /* Cada día ocupa un espacio igual */
+    width: 19px; /* Controla explícitamente el ancho de cada día */
+    font-size: 10px; /* Reduce el tamaño del texto para ajustar */
+    box-sizing: border-box; /* Incluye bordes y rellenos en el tamaño total */
 }
+
+
 
 
         span{
@@ -471,8 +485,13 @@ async function exportarXLSX() {
         const taskTableBody = document.getElementById('task-table-body');
         const ganttChart = document.getElementById('gantt-chart');
 
-        const fechaMin = new Date(Math.min(...tareas.map(t => new Date(t.fecha_inicio))));
+        const fechaMin = new Date(Math.min(...tareas.map(t => {
+            const [year, month, day] = t.fecha_inicio.split('-');
+            return new Date(year, month - 1, day); // Mes comienza en 0 (enero)
+        })));
         const fechaMax = new Date(Math.max(...tareas.map(t => new Date(t.fecha_fin))));
+            // Aumentamos un día a la fecha máxima
+            fechaMax.setDate(fechaMax.getDate() + 1);
 
         tareas.forEach(tarea => {
             // Crear fila de la tabla
