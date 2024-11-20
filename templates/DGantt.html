@@ -375,11 +375,84 @@ button[type="submit"]:hover {
 <div class="enlaces">
     <a href="#" class="enlace rojo" onclick="abrirModal()">+ Añadir Tarea</a>
     <a href="#" class="enlace azul" onclick="exportarPDF()">+ Exportar como PDF</a>
-    <a href="#" class="enlace verde" onclick="exportarXLSX()">+ Exportar como XLSX o Excel</a>
+<a href="#" class="enlace verde" onclick="exportarXLSX()">+ Exportar como XLSX o Excel</a>
+
 </div>
 
 {% endif %}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+
     <script>
+       async function exportarPDF() {
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF();
+
+    // Agregar título
+    doc.text("Lista de Tareas", 10, 10);
+
+    // Obtener datos de la tabla
+    const table = document.getElementById("task-table-body");
+    const rows = table.querySelectorAll("tr");
+
+    // Agregar encabezados
+    let y = 20;
+    doc.text("Nombre", 10, y);
+    doc.text("Fecha de Inicio", 60, y);
+    doc.text("Fecha de Fin", 110, y);
+    doc.text("Encargado", 160, y);
+    y += 10;
+
+    // Agregar las filas de la tabla
+    rows.forEach(row => {
+        const cells = row.querySelectorAll("td");
+        doc.text(cells[0].textContent, 10, y);
+        doc.text(cells[1].textContent, 60, y);
+        doc.text(cells[2].textContent, 110, y);
+        doc.text(cells[3].textContent, 160, y);
+        y += 10;
+    });
+
+    // Agregar un salto de página antes de incluir el diagrama de Gantt (si es necesario)
+    doc.addPage();
+    doc.text("Diagrama de Gantt", 10, 10);
+
+    // Aquí puedes agregar una representación visual del diagrama de Gantt si lo deseas.
+    // Por ejemplo, puedes incluir el gráfico o las barras de progreso de las tareas si has generado imágenes con canvas u otros medios.
+
+    // Si tienes un gráfico generado en un canvas, puedes agregarlo al PDF de la siguiente manera:
+    // doc.addImage(canvasElement, 'PNG', 10, 20, 180, 120);
+
+    // Finalmente, se descarga el archivo PDF
+    doc.save("Diagrama_Gantt.pdf");
+}
+
+
+async function exportarXLSX() {
+    const table = document.getElementById("task-table-body");
+    const rows = table.querySelectorAll("tr");
+
+    // Crear un array con los datos
+    const data = [["Nombre", "Fecha de Inicio", "Fecha de Fin", "Encargado"]];
+    rows.forEach(row => {
+        const cells = row.querySelectorAll("td");
+        data.push([
+            cells[0].textContent,
+            cells[1].textContent,
+            cells[2].textContent,
+            cells[3].textContent
+        ]);
+    });
+
+    // Crear workbook y hoja
+    const wb = XLSX.utils.book_new();
+    const ws = XLSX.utils.aoa_to_sheet(data);
+    XLSX.utils.book_append_sheet(wb, ws, "Tareas");
+
+    // Descargar el archivo
+    XLSX.writeFile(wb, "Diagrama_Gantt.xlsx");
+}
+
         function formatDate(dateStr) {
             const date = new Date(dateStr);
             const day = date.getUTCDate().toString().padStart(2, '0');
