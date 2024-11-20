@@ -5,98 +5,68 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Diagrama de Gantt</title>
     <style>
-        body {
+       body {
             font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f4f4f9;
         }
-        .tooltip {
-            position: absolute;
-            background-color: #f9f9f9;
-            border: 1px solid #ccc;
-            padding: 10px;
-            border-radius: 5px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
-            display: none;
-            z-index: 10;
-            font-size: 0.9em;
-            color: #333;
-        }
-
-        h1 {
-            text-align: center;
-            font-size: 2em;
+        table {
+            width: 100%;
+            border-collapse: collapse;
             margin-bottom: 20px;
         }
-
+        th, td {
+            border: 1px solid #ccc;
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #527ae6;
+            color: #fff;
+        }
         #gantt-chart {
-            display: flex;
-            flex-direction: column;
-            width: 80%;
-            margin: 0 auto;
-            border: 1px solid #200101;
-            padding: 10px;
+            position: relative;
+            width: 100%;
+            height: 300px;
+            border: 1px solid #ccc;
+            overflow-x: auto;
+            overflow-y: hidden;
         }
-
-        .gantt-header {
-            display: flex;
-            background-color: #005177;
-            color: white;
-            font-weight: bold;
-            text-align: center;
-            padding: 10px 0;
-            border-bottom: 1px solid #ccc;
-        }
-
-        .gantt-header span, .gantt-row span {
-            flex: 1;
-            text-align: center;
-            border-right: 1px solid #ccc;
-            padding: 5px;
-        }
-
-        .gantt-header span:last-child, .gantt-row span:last-child {
-            border-right: none;
-        }
-
-        .gantt-row {
-            display: flex;
-            align-items: center;
-            height: 40px;
-            border-bottom: 1px solid #ddd;
-            margin-bottom: 5px;
-        }
-
         .gantt-bar-container {
-            flex: 1;
+            position: relative;
+            height: 20px;
+            margin-bottom: 10px;
         }
-
         .gantt-bar {
+            position: absolute;
             height: 100%;
-            color: white;
-            text-align: center;
-            line-height: 30px;
-            border-radius: 3px;
-            padding: 0 5px;
+            background-color: #527ae6;
+            border-radius: 4px;
         }
-
         .gantt-bar.iniciado {
-            background-color: red;
+            background-color: #ffcc00;
         }
-
         .gantt-bar.progresando {
-            background-color: yellow;
-            color: black;
+            background-color: #ffa500;
         }
-
         .gantt-bar.avanzado {
-            background-color: green;
+            background-color: #00ccff;
         }
-
         .gantt-bar.completado {
-            background-color: blue;
+            background-color: #28a745;
         }
-
-        .gantt-row:nth-child(even) {
-            background-color: #f4f4f4;
+        #timeline {
+            display: flex;
+            position: relative;
+            margin-bottom: 10px;
+        }
+        .timeline-label {
+            flex: 1;
+            text-align: center;
+            font-size: 12px;
+            padding: 5px;
+            background-color: #f0f0f0;
+            border-right: 1px solid #ccc;
         }
 
 
@@ -233,25 +203,42 @@ button[type="submit"]:hover {
             background-color: #3e5f8a;
         }
         .gantt-time-axis {
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            margin-top: 10px;
-            border-top: 2px solid #527ae6;
-            padding-top: 5px;
-        }
+    display: flex;
+    flex-direction: column;
+    margin-top: 10px;
+    border-top: 2px solid #527ae6;
+    padding-top: 5px;
+}
 
-        .gantt-months, .gantt-days {
-            display: flex;
-            flex-direction: row;
-            font-size: 8px
-        }
+.gantt-months {
+    display: flex;
+    border-bottom: 1px solid #ccc;
+}
 
-        .gantt-months span, .gantt-days span {
-            text-align: center;
-            padding: 5px;
-            border-right: 1px solid #ccc;
-        }
+.gantt-months span {
+    display: inline-block; /* Asegura que el tamaño sea proporcional */
+    text-align: center;
+    border-right: 1px solid #ccc;
+    padding: 5px;
+    font-weight: bold;
+    background-color: #f9f9f9;
+    flex: 1; /* Cada mes ocupa su espacio proporcional */
+}
+
+.gantt-days {
+    display: flex;
+    border-bottom: 1px solid #ccc;
+}
+
+.gantt-days span {
+    display: inline-block; /* Asegura una distribución uniforme */
+    text-align: center;
+    border-right: 1px solid #eee;
+    padding: 5px;
+    background-color: #ffffff; /* Fondo para diferenciar días */
+    flex: 1; /* Cada día ocupa un espacio igual */
+}
+
 
         span{
             height: 12%;
@@ -313,36 +300,40 @@ button[type="submit"]:hover {
             <button type="submit">Guardar Tarea</button>
         </form>
     </div>
+</div><table>
+    <thead>
+        <tr>
+            <th>Nombre</th>
+            <th>Fecha de Inicio</th>
+            <th>Fecha de Fin</th>
+            <th>Encargado</th>
+        </tr>
+    </thead>
+    <tbody id="task-table-body">
+        <!-- Aquí se insertarán las tareas con JavaScript -->
+    </tbody>
+</table>
+
+<!-- Diagrama de Gantt -->
+<div id="timeline">
+    <!-- Aquí se generará el eje temporal con JavaScript -->
 </div>
 
-    <div id="gantt-chart" class="gantt-chart">
-        <div class="gantt-header">
-            <span>Tarea</span>
-            <span>Fecha de Inicio</span>
-            <span>Fecha de Fin</span>
-            <span>Encargado</span>
-            <span>
-              
-                <div class="gantt-time-axis">
-                    <div id="gantt-months" class="gantt-months"></div>
-                    <div id="gantt-days" class="gantt-days"></div>
-                </div>
-            </span>
-            
-        </div>
-        <div id="gantt-charts" class="gantt-chart">
-            <div id="gantt-chart-rows"></div>
-        </div>
+<div id="gantt-chart">
+    <div class="gantt-time-axis">
+        <div id="gantt-months" class="gantt-months"></div>
+        <div id="gantt-days" class="gantt-days"></div>
+    </div>
+</div>
 
 
-    {% if rol in ['super_administrador', 'administrador','empleado'] %}
-    <div id="tooltip" class="tooltip"></div> <a href="#" onclick="abrirModal()">+ Añadir Tarea</a>
-
-    <div id="tooltip" class="tooltip"></div> 
+{% if rol in ['super_administrador', 'administrador','empleado'] %}
+<div class="acciones">
+    <a href="#" onclick="abrirModal()">+ Añadir Tarea</a>
     <a href="#" onclick="exportarPDF()">+ Exportar como PDF</a>
-    <div id="tooltip" class="tooltip"></div> 
     <a href="#" onclick="exportarXLSX()">+ Exportar como XLSX o Excel</a>
-    {% endif %}
+</div>
+{% endif %}
     <script>
         function formatDate(dateStr) {
             const date = new Date(dateStr);
@@ -358,33 +349,44 @@ button[type="submit"]:hover {
         const response = await fetch('/tareas/' + nombreProyecto);
         const tareas = await response.json();
 
-        const chart = document.getElementById('gantt-chart-rows');
+        // Referencias a los elementos HTML
+        const taskTableBody = document.getElementById('task-table-body');
+        const ganttChart = document.getElementById('gantt-chart');
+
         const fechaMin = new Date(Math.min(...tareas.map(t => new Date(t.fecha_inicio))));
         const fechaMax = new Date(Math.max(...tareas.map(t => new Date(t.fecha_fin))));
 
         tareas.forEach(tarea => {
-            const row = document.createElement('div');
-            row.classList.add('gantt-row');
+            // Crear fila de la tabla
+            const row = document.createElement('tr');
 
-            const taskName = document.createElement('span');
-            taskName.textContent = tarea.nombre;
+            const taskNameCell = document.createElement('td');
+            taskNameCell.textContent = tarea.nombre;
 
-            const taskStart = document.createElement('span');
-            taskStart.textContent = formatDate(tarea.fecha_inicio);
+            const taskStartCell = document.createElement('td');
+            taskStartCell.textContent = formatDate(tarea.fecha_inicio);
 
-            const taskEnd = document.createElement('span');
-            taskEnd.textContent = formatDate(tarea.fecha_fin);
+            const taskEndCell = document.createElement('td');
+            taskEndCell.textContent = formatDate(tarea.fecha_fin);
 
-            const taskOwner = document.createElement('span');
-            taskOwner.textContent = tarea.encargado;
+            const taskOwnerCell = document.createElement('td');
+            taskOwnerCell.textContent = tarea.encargado;
 
-            const barContainer = document.createElement('span');
+            // Agregar celdas a la fila
+            row.appendChild(taskNameCell);
+            row.appendChild(taskStartCell);
+            row.appendChild(taskEndCell);
+            row.appendChild(taskOwnerCell);
+
+            // Agregar fila a la tabla
+            taskTableBody.appendChild(row);
+
+            // Crear barra del diagrama de Gantt
+            const barContainer = document.createElement('div');
             barContainer.classList.add('gantt-bar-container');
             const bar = document.createElement('div');
             bar.classList.add('gantt-bar');
-           
 
-            // Configuración de la barra de tarea
             const fechaInicio = new Date(tarea.fecha_inicio);
             const fechaFin = new Date(tarea.fecha_fin);
             const duracion = (fechaFin - fechaInicio) / (1000 * 60 * 60 * 24);
@@ -411,24 +413,17 @@ button[type="submit"]:hover {
                     bar.style.backgroundColor = '#ccc';
             }
 
-            // Evento para mostrar el tooltip
+            // Eventos de tooltip
             bar.addEventListener('mouseover', function (event) {
                 mostrarTooltip(event, tarea);
             });
-
-            // Evento para ocultar el tooltip
             bar.addEventListener('mouseout', ocultarTooltip);
 
             barContainer.appendChild(bar);
-            row.appendChild(taskName);
-            row.appendChild(taskStart);
-            row.appendChild(taskEnd);
-            row.appendChild(taskOwner);
-            row.appendChild(barContainer);
-
-            chart.appendChild(row);
+            ganttChart.appendChild(barContainer);
         });
 
+        // Generar eje temporal
         generarEjeTemporal(fechaMin, fechaMax);
 
     } catch (error) {
@@ -444,51 +439,49 @@ button[type="submit"]:hover {
 function cerrarModal() {
     document.getElementById("modal").style.display = "none";
 }
-        function generarEjeTemporal(fechaInicio, fechaFin) {
+function generarEjeTemporal(fechaInicio, fechaFin) {
     const monthsContainer = document.getElementById('gantt-months');
     const daysContainer = document.getElementById('gantt-days');
-    
-    // Limpiamos los contenedores de meses y días para regenerar el contenido
+
+    // Limpiar los contenedores antes de regenerar
     monthsContainer.innerHTML = '';
     daysContainer.innerHTML = '';
 
-    let currentMonth = fechaInicio.getMonth();
+    let currentDate = new Date(fechaInicio);
+    let currentMonth = currentDate.getMonth();
+    let monthDays = 0;
     let monthSpan = document.createElement('span');
-    monthSpan.textContent = new Intl.DateTimeFormat('es', { month: 'long' }).format(fechaInicio);
+    monthSpan.textContent = new Intl.DateTimeFormat('es', { month: 'long' }).format(currentDate);
     monthsContainer.appendChild(monthSpan);
 
-    let daysInMonth = 0;
-    let currentDate = new Date(fechaInicio);
-
-    // Generar días dentro del rango
     while (currentDate <= fechaFin) {
+        // Crear un span para cada día
         const daySpan = document.createElement('span');
         daySpan.textContent = currentDate.getDate();
         daysContainer.appendChild(daySpan);
-        daysInMonth++;
+        monthDays++;
 
+        // Avanzar al día siguiente
         currentDate.setDate(currentDate.getDate() + 1);
 
+        // Si cambia de mes o se llega al final del rango
         if (currentDate.getMonth() !== currentMonth || currentDate > fechaFin) {
-            monthSpan.style.flex = daysInMonth;
-            daysInMonth = 0;
-            currentMonth = currentDate.getMonth();
+            // Ajustar el ancho del mes basado en el número de días
+            monthSpan.style.flex = monthDays;
+            monthDays = 0; // Reiniciar contador de días para el nuevo mes
 
+            // Crear un nuevo span para el siguiente mes si aún está dentro del rango
             if (currentDate <= fechaFin) {
                 monthSpan = document.createElement('span');
                 monthSpan.textContent = new Intl.DateTimeFormat('es', { month: 'long' }).format(currentDate);
                 monthsContainer.appendChild(monthSpan);
             }
+
+            currentMonth = currentDate.getMonth();
         }
     }
-
-    // Agregar el día adicional (el día siguiente al último día de fechaFin)
-    const extraDay = document.createElement('span');
-    const nextDay = new Date(fechaFin);
-    nextDay.setDate(fechaFin.getDate() + 1);  // Establecer al día siguiente de fechaFin
-    extraDay.textContent = nextDay.getDate(); // Mostrar el siguiente día
-    daysContainer.appendChild(extraDay);
 }
+
 
 
         // Función para mostrar el tooltip
