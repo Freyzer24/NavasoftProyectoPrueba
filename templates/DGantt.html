@@ -231,6 +231,7 @@ button[type="submit"]:hover {
 }
 
 .gantt-days {
+    width: 20px;
     display: flex;
     border-bottom: 1px solid #ccc;
     line-height: 1; /* Reduce la altura de línea */
@@ -246,7 +247,7 @@ button[type="submit"]:hover {
     padding: 1px; /* Reduce el espacio interno */
     margin: 0; /* Elimina márgenes adicionales */
     background-color: #ffffff; /* Fondo para diferenciar días */
-    width: 19.3px; /* Controla explícitamente el ancho de cada día */
+    width: 80px; /* Controla explícitamente el ancho de cada día */
     font-size: 10px; /* Reduce el tamaño del texto para ajustar */
     box-sizing: border-box; /* Incluye bordes y rellenos en el tamaño total */
 }
@@ -529,7 +530,7 @@ async function exportarXLSX() {
             const duracion = (fechaFin - fechaInicio) / (1000 * 60 * 60 * 24);
             const offset = ((fechaInicio - fechaMin) / (1000 * 60 * 60 * 24)) * 20;
 
-            bar.style.width = duracion * 20 + 'px';
+            bar.style.width = duracion * 19.2 + 'px';
             bar.style.marginLeft = offset + 'px';
 
             // Color según el estado
@@ -595,6 +596,11 @@ function generarEjeTemporal(fechaInicio, fechaFin) {
         // Crear un span para cada día
         const daySpan = document.createElement('span');
         daySpan.textContent = currentDate.getDate();
+
+        // Estilos dinámicos para el ancho de los días
+        daySpan.style.width = '19.25px'; // Ancho fijo para cada día
+        daySpan.style.display = 'inline-block'; // Para alinearlos horizontalmente
+
         daysContainer.appendChild(daySpan);
         monthDays++;
 
@@ -605,6 +611,7 @@ function generarEjeTemporal(fechaInicio, fechaFin) {
         if (currentDate.getMonth() !== currentMonth || currentDate > fechaFin) {
             // Ajustar el ancho del mes basado en el número de días
             monthSpan.style.flex = monthDays;
+            monthSpan.style.width = (monthDays * 20) + 'px'; // Ancho basado en los días
             monthDays = 0; // Reiniciar contador de días para el nuevo mes
 
             // Crear un nuevo span para el siguiente mes si aún está dentro del rango
@@ -617,7 +624,11 @@ function generarEjeTemporal(fechaInicio, fechaFin) {
             currentMonth = currentDate.getMonth();
         }
     }
+
+    // Asignar ancho total al contenedor de días
+    daysContainer.style.width = ((fechaFin - fechaInicio) / (1000 * 60 * 60 * 24) + 1) * 20 + 'px';
 }
+
 
 
 
