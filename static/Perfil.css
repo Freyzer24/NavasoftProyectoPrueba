@@ -1,240 +1,137 @@
+/* Estilos Generales */
 body {
-  font-family: Arial, sans-serif; /* Fuente predeterminada */
-  background-color: #a0b7ca; /* Color de fondo */
-  color: white; /* Color del texto */
+  font-family: Arial, sans-serif;
+  background-color: #f5f5f5;
+  color: rgb(255, 255, 255);
+  margin: 0;
+  padding: 0;
 }
 
 h1 {
-  text-align: center; /* Alineación centrada del encabezado */
-}
-.profile-card {
-  display: flex; /* Activa el diseño flexbox */
-  align-items: center; /* Alinea verticalmente los elementos al centro */
-  justify-content: center; /* Alinea horizontalmente los elementos al centro */
-  width: 30%; /* Ancho de la tarjeta */
-  background-color: #5c7e98; /* Color de fondo */
-  padding: 20px; /* Espaciado interno */
-  border-radius: 8px; /* Esquinas redondeadas */
-  margin: 50px auto; /* Margen vertical de 50px, margen horizontal automático para centrar */
+  text-align: center;
+  color: #000000;
+  margin-top: 20px;
 }
 
-.profile-left {
-  display: flex; /* Activa el diseño flexbox */
-  flex-direction: column; /* Alinea los elementos en columna */
-  align-items: center; /* Alinea los elementos al centro */
+/* Contenedor principal */
+.profile-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin: 40px auto;
+}
+
+.profile-card {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  background-color: #5c7e98;
+  padding: 50px;
+  border-radius: 15px;
+  width: 80%;
+  max-width: 600px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.profile-left,
+.profile-right {
+  flex: 1 1 45%;
+  text-align: center;
 }
 
 .profile-left img {
-  width: 120px; /* Ancho de la imagen */
-  height: 120px; /* Altura de la imagen */
-  border-radius: 50%; /* Imagen circular */
-  background-color: #666; /* Color de fondo por defecto */
-  object-fit: cover; /* Cubrir la imagen dentro de los límites */
+  width: 120px;
+  height: 120px;
+  border-radius: 70%;
+  object-fit: cover;
+  background-color: #666;
 }
 
-.profile-left h2 {
-  margin: 10px 0; /* Margen vertical */
+.btn-container {
+  margin-top: 10px;
 }
 
-.profile-left .admin-badge {
-  background-color: #1976d2; /* Color de fondo de la insignia */
-  color: white; /* Color del texto de la insignia */
-  padding: 5px 10px; /* Espaciado interno */
-  border-radius: 4px; /* Esquinas redondeadas */
-  margin-bottom: 20px; /* Margen inferior */
-}
-
-.profile-left .account-schedule {
-  background-color: #1565c0; /* Color de fondo del horario */
-  color: white; /* Color del texto del horario */
-  padding: 5px 10px; /* Espaciado interno */
-  border-radius: 4px; /* Esquinas redondeadas */
-}
-
-.profile-right {
-  margin-left: 10%; /* Margen izquierdo */
-  display: flex; /* Activa el diseño flexbox */
-  flex-direction: column; /* Alinea los elementos en columna */
-}
-
-.profile-right div {
-  margin-bottom: 10px; /* Margen inferior */
-}
-
-.profile-right i {
-  margin-right: 10px; /* Margen derecho para los íconos */
-}
-
-.file-input {
-  margin-top: 10px; /* Margen superior */
-}
-
-.profile-container {
-  text-align: center; /* Alinea el texto al centro */
-  margin: 20px; /* Margen alrededor del contenedor */
-}
-
-.profile-image {
-  width: 100px; /* Ancho de la imagen */
-  height: 100px; /* Altura de la imagen */
-  border-radius: 50%; /* Imagen circular */
-  object-fit: cover; /* Cubrir la imagen dentro de los límites */
-  display: block; /* Mostrar como bloque */
-  margin: 0 auto; /* Centra la imagen */
-}
-
-#fileInput {
-  display: none; /* Oculta el input de archivo */
-}
-
-main {
-  width: 30%; /* Ancho del contenedor principal */
-  margin: auto; /* Centra el contenedor */
-  padding: 1em 8vw; /* Espaciado interno */
-  background: white; /* Color de fondo */
-  box-shadow: 0 0 20px #ddd; /* Efecto de sombra */
-}
-
-h1 {
-  text-align: center; /* Alinea el encabezado al centro */
-  color: #333; /* Color del texto del encabezado */
-  border-bottom: 1px solid #C4CBCE; /* Borde inferior */
-  padding-bottom: .2em; /* Espaciado inferior */
-}
-
-form > div {
-  margin-bottom: 20px; /* Margen inferior */
-  display: flex; /* Activa el diseño flexbox */
-  flex-direction: column; /* Alinea los elementos en columna */
-  gap: 3px; /* Espacio entre elementos */
-}
-
-form img {
-  width: 200px; /* Ancho de la imagen */
-  border-radius: 50%; /* Imagen circular */
-  border: 6px solid #AAA; /* Borde alrededor de la imagen */
-}
-
-form div:first-child {
-  align-items: center; /* Alinea al centro el primer hijo */
-}
-
-form div:first-child input {
-  display: none; /* Oculta el input */
-}
-
-form div:first-child label {
-  background: #1F5F74; /* Color de fondo para la etiqueta */
-  color: white; /* Color del texto */
-  padding: 6px 20px; /* Espaciado interno */
-  cursor: pointer; /* Cursor tipo puntero */
-  border-radius: 3px; /* Esquinas redondeadas */
-}
-
-form input {
-  padding: 8px 20px; /* Espaciado interno */
-  border: 1px solid #AAA; /* Color del borde */
-  border-radius: 3px; /* Esquinas redondeadas */
-}
-
-form button {
-  align-items: center;
-  padding: 8px 20px; /* Espaciado interno */
-  border: 1px solid darkgreen; /* Color del borde */
-  width: 50%; /* Ancho del botón */
-  background: #36551F; /* Color de fondo */
-  color: white; /* Color del texto */
-  border-radius: 3px; /* Esquinas redondeadas */
-}
-.profile-container {
-  display: flex; /* Activa el diseño flexbox */
-  flex-wrap: wrap; /* Permite que se envuelvan en varias filas */
-  justify-content: center; /* Centra los elementos */
-  margin: 0 auto; /* Centra el contenedor */
-}
-
-.profile-card {
-  flex: 0 0 40%; /* Ancho del 40% para cada tarjeta */
-  max-width: 600px; /* Ancho máximo */
-  margin: 20px; /* Margen alrededor de cada tarjeta */
-  background-color: #5c7e98; /* Color de fondo */
-  border-radius: 80px; /* Esquinas redondeadas */
-  padding: 20px; /* Espaciado interno */
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); /* Efecto de sombra */
-  color: white; /* Color del texto */
-  transition: transform 0.2s; /* Transición suave al pasar el cursor */
-}
-
-.profile-card:hover {
-  transform: scale(1.05); /* Aumenta el tamaño al pasar el cursor */
-}
-
-@media (max-width: 820px) {
-  .profile-card {
-      flex: 0 0 80%;
-  }
-
-  .profile-right h2 {
-      font-size: 1.2em;
-  }
-
-  h1 {
-      font-size: 1.5em;
-  }
-}
-
-@media (max-width: 400px) {
-  .profile-card {
-      flex: 85%;
-  }
-
-  .profile-right h2 {
-      font-size: 1em;
-  }
-
-  h1 {
-      font-size: 1em;
-  }
-
-  .profile-left img {
-      width: 60px;
-      height: 60px;
-  }
-
-  .profile-left label {
-      padding: 4px 8px;
-  }
-}
-
-.profile-card {
-  /* ... existing styles ... */
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Enhanced shadow */
-  transition: all 0.3s ease-in-out; /* Smoother transitions */
-}
-
-.profile-card:hover {
-  transform: scale(1.05);
-  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
-}
-/* Estilo para el label como botón */
 .btn-foto {
   display: inline-block;
-  padding: 10px 20px;
-  background-color: #527ae6; /* Color de fondo */
-  color: white; /* Color del texto */
-  font-size: 16px;
+  background-color: #527ae6;
+  color: white;
+  padding: 8px 15px;
+  margin-top: 10px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.btn-foto:hover {
+  background-color: #688fff;
+}
+
+.profile-right h2 {
+  margin-bottom: 10px;
+}
+
+button {
+  background-color: #527ae6;
+  color: white;
+  padding: 10px 15px;
+  border: none;
   border-radius: 5px;
   cursor: pointer;
   transition: background-color 0.3s;
 }
 
-.btn-foto:hover {
-  background-color: #405f9d; /* Color al pasar el mouse */
+button:hover {
+  background-color: #688fff;
 }
 
-/* Asegura que el input de archivo esté oculto */
-input[type="file"] {
+/* Estilo del modal */
+.modal {
   display: none;
+  position: fixed;
+  z-index: 1;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: rgba(0, 0, 0, 0.5);
 }
 
+.modal-contenido {
+  background-color: #527ae6;
+  margin: 15% auto;
+  padding: 20px;
+  border-radius: 10px;
+  width: 80%;
+  max-width: 400px;
+  color: white;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+.modal button{
+  background-color: #688fff;
+}
 
+.cerrar {
+  color: white;
+  float: right;
+  font-size: 24px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.cerrar:hover {
+  color: red;
+}
+
+/* Botones de acciones fuera del perfil */
+.action-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+  margin-top: 20px;
+}
+
+.action-buttons form {
+  margin: 0;
+}

@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="/static/Perfil.css">
 </head>
 <body>
-    <h1>EDITAR PERFIL</h1>
+    <h1>Perfil</h1>
     <div class="profile-container">
         <div class="profile-card">
             <div class="profile-left">
@@ -17,50 +17,68 @@
                     {% else %}
                         <p>No hay imagen de perfil disponible.</p>
                     {% endif %}
-                
-                    <!-- Campo para cargar la nueva imagen -->
-                    <input type="file" name="foto" id="foto" style="display:none;" onchange="this.form.submit();">
-                    
-                    <!-- Botón que activa la carga de la imagen -->
-                    <label for="foto" class="btn-foto">Cambiar foto</label>
+                    <div class="btn-container">
+                        <input type="file" name="foto" id="foto" style="display:none;" onchange="this.form.submit();">
+                        <label for="foto" class="btn-foto">Cambiar foto</label>
+                    </div>
                 </form>
-                
             </div>
             <div class="profile-right">
                 <h2>{{ datos.usuario }}</h2>
-                <div><i class="fas fa-envelope"></i> Correo electrónico: {{ datos.correo }}</div>
-                <div class="admin-badge">Rol: {{ datos.rol }}</div>
-                
-                <!-- Formulario para cambiar la contraseña -->
-                <form action="{{ url_for('cambiar_contrasena') }}" method="POST">
-                    <input type="hidden" name="usuario" value="{{ datos['usuario'] }}">
-
-                    <label>Contraseña Actual:</label>
-                    <input type="password" name="contrasena_actual" required><br>
-                    
-                    <label>Nueva Contraseña:</label>
-                    <input type="password" name="nueva_contrasena" required><br>
-                    
-                    <label>Confirmar Nueva Contraseña:</label>
-                    <input type="password" name="confirmar_contrasena" required>
-                    
-                    <button type="submit">Cambiar Contraseña</button>
-                </form>
+                <p><strong>Correo electrónico:</strong> {{ datos.correo }}</p>
+                <p><strong>Rol:</strong> {{ datos.rol }}</p>
+                <button id="abrirModal">Cambiar Contraseña</button>
             </div>
         </div>
     </div>
 
-    <center>
-        <h2>Recuperar Contraseña</h2>
-        <form method="POST" action="/recuperar">
-            <label for="correo">Correo Electrónico:</label>
-            <input type="email" id="correo" name="correo" required>
-            <button type="submit">Recuperar contraseña</button>
-        </form>
-        <form action="{{ url_for('logout') }}" method="post" style="display: inline;">
+    <!-- Modal -->
+    <div id="modalCambiarContrasena" class="modal">
+        <div class="modal-contenido">
+            <span class="cerrar">&times;</span>
+            <h2>Cambiar Contraseña</h2>
+            <form action="{{ url_for('cambiar_contrasena') }}" method="POST">
+                <input type="hidden" name="usuario" value="{{ datos['usuario'] }}">
+                <label>Contraseña Actual:</label>
+                <input type="password" name="contrasena_actual" required><br>
+                <label>Nueva Contraseña:</label>
+                <input type="password" name="nueva_contrasena" required><br>
+                <label>Confirmar Nueva Contraseña:</label>
+                <input type="password" name="confirmar_contrasena" required><br>
+                <button type="submit">Cambiar Contraseña</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Botones de acciones adicionales -->
+    <div class="action-buttons">
+        <form action="{{ url_for('logout') }}" method="post">
             <button type="submit">Cerrar sesión</button>
         </form>
-    </center>
+        <form method="POST" action="/recuperar">
+            <button type="submit">Recuperar contraseña</button>
+        </form>
+    </div>
 
+    <script>
+        // Lógica para el modal
+        const modal = document.getElementById('modalCambiarContrasena');
+        const abrirModal = document.getElementById('abrirModal');
+        const cerrarModal = document.querySelector('.cerrar');
+
+        abrirModal.onclick = function() {
+            modal.style.display = 'block';
+        }
+
+        cerrarModal.onclick = function() {
+            modal.style.display = 'none';
+        }
+
+        window.onclick = function(event) {
+            if (event.target == modal) {
+                modal.style.display = 'none';
+            }
+        }
+    </script>
 </body>
 </html>
