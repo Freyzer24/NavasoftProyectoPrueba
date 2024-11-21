@@ -4,8 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Formulario de Inicio de Sesión</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link rel="stylesheet" href="/static/login.css">  <!-- Asegúrate de que esta ruta sea correcta -->
 </head>
 <body>
@@ -38,23 +36,25 @@
             </div>
             <button type="submit" class="btn btn-primary btn-block">INGRESAR</button>
         </form>
-        <div id="modalCambiarContrasena" class="modal" style="display: none;">
-            <div class="modal-contenido" style="background-color: #698194; color: white; padding: 20px; border-radius: 10px; width: 50%; margin: auto; margin-top: 10%;">
-                <span class="cerrar" style="cursor: pointer; font-size: 20px; float: right;">&times;</span>
-                <h2 style="text-align: center;">Cambiar Contraseña</h2>
-                <form action="{{ url_for('recuperar_contrasena') }}" method="POST">
-                    <label for="usuario" style="display: block; margin-top: 15px;">Usuario:</label>
-                    <input type="text" id="usuario" name="usuario" required style="width: 100%; padding: 10px; border-radius: 5px; margin-bottom: 10px;">
-                    
-                    <label for="correo" style="display: block;">Correo electrónico:</label>
-                    <input type="email" id="correo" name="correo" required style="width: 100%; padding: 10px; border-radius: 5px; margin-bottom: 20px;">
-                    
-                    <button type="submit" style="background-color: #527ae6; color: white; padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer; width: 100%;">
-                        Cambiar Contraseña
-                    </button>
-                </form>
-            </div>
-        </div>
+        <!-- Botón para abrir el modal -->
+
+<div id="modalCambiarContrasena" class="modal" style="display: none; align-items: center;">
+    <div class="modal-contenido">
+        <span class="cerrar">&times;</span>
+        <h2>Cambiar Contraseña</h2>
+        <form action="{{ url_for('recuperar_contrasena') }}" method="POST">
+            <label for="usuario">Usuario:</label>
+            <input type="text" id="usuario" name="usuario" required>
+            
+            <label for="correo">Correo electrónico:</label>
+            <input type="email" id="correo" name="correo" required>
+            
+            <button type="submit">Cambiar Contraseña</button>
+        </form>
+    </div>
+</div>
+
+        
         
         <!-- Botón para abrir el modal -->
         <a id="abrirModal" href="#">
@@ -64,11 +64,7 @@
   
 
     </div>
-    
-    <!-- Scripts de Bootstrap y FontAwesome -->
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
 
     <script>
         const modal = document.getElementById('modalCambiarContrasena');

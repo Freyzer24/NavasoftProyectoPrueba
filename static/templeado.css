@@ -34,7 +34,7 @@ body {
 }
 
 .navbar img {
-    width: 95px; /* Ancho de la imagen del logo */
+    width: 75px; /* Ancho de la imagen del logo */
     transition: transform 0.3s ease; /* Transición suave para el efecto de escalado */
 }
 
