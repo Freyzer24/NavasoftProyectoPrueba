@@ -583,37 +583,39 @@ def actualizar_proyecto(id):
 
         return redirect(url_for('proyectos'))
 
+from werkzeug.security import generate_password_hash
+
 @app.route('/recuperar', methods=['POST'])
 def recuperar_contrasena():
     correo = request.form.get('correo')
-    usuario = Registro.query.filter_by(correo=correo).first()
+    usuario_nombre = request.form.get('usuario')
+
+    # Agregar depuración
+    print(f"Correo: {correo}, Usuario: {usuario_nombre}")
+    
+    # Buscar el usuario en la base de datos
+    usuario = Registro.query.filter_by(correo=correo, usuario=usuario_nombre).first()
 
     if usuario:
-        # Genera una nueva contraseña y la guarda en la base de datos
-        nueva_contrasena = "NavasoftRecuperación123"
-        usuario.password = generate_password_hash(nueva_contrasena)
-        db.session.commit()
+        try:
+            # Generar una nueva contraseña
+            nueva_contrasena = "NavasoftRecuperación123"
+            usuario.password = generate_password_hash(nueva_contrasena)
+            db.session.commit()  # Guardamos los cambios en la base de datos
 
-        # Envía el correo
-        enviar_correo_recuperacion(usuario.nombre, usuario.usuario, correo, nueva_contrasena)
-        flash('Se envió un correo con la nueva contraseña.', 'success')
-
-        # Prepara la imagen del usuario
-        if usuario.imagen:
-            imagen_base64 = base64.b64encode(usuario.imagen).decode('utf-8')
-        else:
-            imagen_base64 = None
-
-        datos = {
-            "nombre": usuario.nombre,
-            "correo": usuario.correo,
-            "imagen": imagen_base64
-        }
+            # Enviar correo con la nueva contraseña
+            enviar_correo_recuperacion(usuario.nombre, usuario.usuario, correo, nueva_contrasena)
+            flash('Se envió un correo con la nueva contraseña.', 'success')
+        except Exception as e:
+            # En caso de error al actualizar la base de datos
+            db.session.rollback()  # Deshacer los cambios
+            print(f"Error al actualizar la contraseña: {e}")
+            flash('No se pudo cambiar la contraseña, por favor inténtelo nuevamente.', 'danger')
     else:
-        flash('No se encontró un usuario con ese correo.', 'danger')
-        datos = None
+        flash('Correo o usuario incorrectos. Por favor, verifica la información.', 'danger')
 
-    return render_template('Perfil.html', datos=datos)
+    return redirect('/')  # Redirigir al inicio de sesión o página principal
+
 
 def enviar_correo_recuperacion(nombre, usuario, correo, nueva_contrasena):
     remitente = "valeriapaolap49@gmail.com"
@@ -625,6 +627,7 @@ def enviar_correo_recuperacion(nombre, usuario, correo, nueva_contrasena):
     mensaje['To'] = destinatario
     mensaje['Subject'] = "Recuperación de contraseña"
 
+    # Asegúrate de que el cuerpo del mensaje esté en UTF-8
     cuerpo = f"""
     Hola {nombre},
 
@@ -636,7 +639,9 @@ def enviar_correo_recuperacion(nombre, usuario, correo, nueva_contrasena):
     Saludos cordiales,
     El equipo de Navasoft
     """
-    mensaje.attach(MIMEText(cuerpo, 'plain'))
+    
+    # Convertir el cuerpo del mensaje a UTF-8
+    mensaje.attach(MIMEText(cuerpo, 'plain', 'utf-8'))
 
     try:
         servidor = smtplib.SMTP('smtp.gmail.com', 587)
