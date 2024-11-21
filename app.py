@@ -583,6 +583,70 @@ def actualizar_proyecto(id):
 
         return redirect(url_for('proyectos'))
 
+@app.route('/recuperar', methods=['POST'])
+def recuperar_contrasena():
+    correo = request.form.get('correo')
+    usuario = Registro.query.filter_by(correo=correo).first()
+
+    if usuario:
+        # Genera una nueva contraseña y la guarda en la base de datos
+        nueva_contrasena = "NavasoftRecuperación123"
+        usuario.password = generate_password_hash(nueva_contrasena)
+        db.session.commit()
+
+        # Envía el correo
+        enviar_correo_recuperacion(usuario.nombre, usuario.usuario, correo, nueva_contrasena)
+        flash('Se envió un correo con la nueva contraseña.', 'success')
+
+        # Prepara la imagen del usuario
+        if usuario.imagen:
+            imagen_base64 = base64.b64encode(usuario.imagen).decode('utf-8')
+        else:
+            imagen_base64 = None
+
+        datos = {
+            "nombre": usuario.nombre,
+            "correo": usuario.correo,
+            "imagen": imagen_base64
+        }
+    else:
+        flash('No se encontró un usuario con ese correo.', 'danger')
+        datos = None
+
+    return render_template('Perfil.html', datos=datos)
+
+def enviar_correo_recuperacion(nombre, usuario, correo, nueva_contrasena):
+    remitente = "valeriapaolap49@gmail.com"
+    contraseña = "syjq cptv tlus wbcp"  # Usa una contraseña de aplicación de Gmail
+    destinatario = correo
+
+    mensaje = MIMEMultipart()
+    mensaje['From'] = remitente
+    mensaje['To'] = destinatario
+    mensaje['Subject'] = "Recuperación de contraseña"
+
+    cuerpo = f"""
+    Hola {nombre},
+
+    Tu usuario: {usuario}
+    Tu nueva contraseña: {nueva_contrasena}
+
+    Por favor, cambia esta contraseña después de iniciar sesión.
+    
+    Saludos cordiales,
+    El equipo de Navasoft
+    """
+    mensaje.attach(MIMEText(cuerpo, 'plain'))
+
+    try:
+        servidor = smtplib.SMTP('smtp.gmail.com', 587)
+        servidor.starttls()
+        servidor.login(remitente, contraseña)
+        servidor.send_message(mensaje)
+        servidor.quit()
+        print("Correo enviado con éxito")
+    except Exception as e:
+        print(f"Error al enviar el correo: {e}")
 
 
 def enviar_confirmacion_correo(nombre, usuario, correo):

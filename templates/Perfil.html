@@ -51,6 +51,12 @@
     </div>
 
     <center>
+        <h2>Recuperar Contraseña</h2>
+        <form method="POST" action="/recuperar">
+            <label for="correo">Correo Electrónico:</label>
+            <input type="email" id="correo" name="correo" required>
+            <button type="submit">Recuperar contraseña</button>
+        </form>
         <form action="{{ url_for('logout') }}" method="post" style="display: inline;">
             <button type="submit">Cerrar sesión</button>
         </form>
