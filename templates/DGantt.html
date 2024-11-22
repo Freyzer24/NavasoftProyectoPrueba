@@ -69,6 +69,38 @@
             border-right: 1px solid #ccc;
         }
 
+        #tooltip {
+    display: none;
+    position: absolute;
+    background: rgba(255, 255, 255, 0.95);
+    color: #333;
+    padding: 10px 15px;
+    border-radius: 8px;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2);
+    border: 1px solid #ddd;
+    font-family: Arial, sans-serif;
+    font-size: 0.9em;
+    max-width: 250px;
+    z-index: 1000;
+    transition: opacity 0.2s ease-in-out;
+}
+
+#tooltip h4 {
+    font-size: 1.2em;
+    margin-bottom: 5px;
+    color: #333;
+}
+
+#tooltip p {
+    margin: 0;
+    line-height: 1.4;
+    color: #555;
+}
+
+#tooltip span {
+    font-weight: bold;
+}
+
 
         /* Estilo general para el modal */
 .modal {
@@ -374,7 +406,7 @@ button[type="submit"]:hover {
 </table>
 
 <!-- Diagrama de Gantt -->
-<div id="timeline">
+<div id="tooltip" id="timeline">
     <!-- Aquí se generará el eje temporal con JavaScript -->
 </div>
 
@@ -634,18 +666,36 @@ function generarEjeTemporal(fechaInicio, fechaFin) {
 
         // Función para mostrar el tooltip
         function mostrarTooltip(event, tarea) {
-            const tooltip = document.getElementById('tooltip');
-            tooltip.innerHTML = `
-                <strong>${tarea.nombre}</strong><br>
+    const tooltip = document.getElementById('tooltip');
+    tooltip.innerHTML = `
+        <div style="text-align: left;">
+            <h4 style="margin: 0; font-size: 1.2em; color: #333;">${tarea.nombre}</h4>
+            <hr style="margin: 5px 0; border: none; border-top: 1px solid #ccc;">
+            <p style="margin: 0; font-size: 0.9em; color: #555;">
                 <strong>Fecha de Inicio:</strong> ${formatDate(tarea.fecha_inicio)}<br>
                 <strong>Fecha de Fin:</strong> ${formatDate(tarea.fecha_fin)}<br>
                 <strong>Encargado:</strong> ${tarea.encargado}<br>
-                <strong>Estado:</strong> ${tarea.estado}
-            `;
-            tooltip.style.display = 'block';
-            tooltip.style.left = event.pageX + 'px';
-            tooltip.style.top = event.pageY + 'px';
-        }
+                <strong>Estado:</strong> 
+                <span style="color: ${getEstadoColor(tarea.estado)};">${tarea.estado}</span>
+            </p>
+        </div>
+    `;
+    tooltip.style.display = 'block';
+    tooltip.style.left = event.pageX + 15 + 'px'; // Offset para evitar que tape el cursor
+    tooltip.style.top = event.pageY + 15 + 'px';
+}
+
+// Función para determinar el color del estado
+function getEstadoColor(estado) {
+    switch (estado.trim().toLowerCase()) {
+        case 'iniciado': return '#007bff';
+        case 'progresando': return '#ffc107';
+        case 'avanzado': return '#17a2b8';
+        case 'completado': return '#28a745';
+        default: return '#555';
+    }
+}
+
 
         // Función para ocultar el tooltip
         function ocultarTooltip() {
