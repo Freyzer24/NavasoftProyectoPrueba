@@ -635,7 +635,6 @@ def enviar_correo_recuperacion(nombre, usuario, correo, nueva_contrasena):
     Tu nueva contraseña: {nueva_contrasena}
 
     Por favor, cambia esta contraseña después de iniciar sesión.
-
     
     Saludos cordiales,
     El equipo de Navasoft
