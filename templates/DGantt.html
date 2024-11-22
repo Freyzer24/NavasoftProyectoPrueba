@@ -447,8 +447,9 @@ async function exportarXLSX() {
     const table = document.getElementById("task-table-body");
     const rows = table.querySelectorAll("tr");
 
-    // Crear un array con los datos
-    const data = [["Nombre", "Fecha de Inicio", "Fecha de Fin", "Encargado"]];
+    // Crear un array con los datos (incluyendo el encabezado)
+    const data = [["Nombre", "Fecha de Inicio", "Fecha de Fin", "Encargado"]]; // Encabezado
+
     rows.forEach(row => {
         const cells = row.querySelectorAll("td");
         data.push([
@@ -459,14 +460,43 @@ async function exportarXLSX() {
         ]);
     });
 
-    // Crear workbook y hoja
+    // Crear el workbook
     const wb = XLSX.utils.book_new();
+
+    // Crear la hoja de trabajo
     const ws = XLSX.utils.aoa_to_sheet(data);
+
+    // Establecer estilo para el encabezado
+    const headerRange = { s: { c: 0, r: 0 }, e: { c: 3, r: 0 } }; // Seleccionamos las primeras 4 columnas del encabezado
+    if (ws['!rows']) ws['!rows'][0] = { hpx: 20 }; // Ajustar la altura de la primera fila si es necesario
+    ws['!merges'] = [{ s: { r: 0, c: 0 }, e: { r: 0, c: 3 } }]; // Fusionar las celdas del encabezado
+
+    // Aplicar color de fondo y color de texto en el encabezado
+    Object.keys(ws).forEach(cell => {
+        if (cell[1] === '0') { // Si es una celda del encabezado (primera fila)
+            ws[cell].s = {
+                fill: {
+                    fgColor: { rgb: "4CAF50" } // Color de fondo (verde)
+                },
+                font: {
+                    bold: true,
+                    color: { rgb: "FFFFFF" } // Color de texto (blanco)
+                },
+                alignment: {
+                    horizontal: "center",
+                    vertical: "center"
+                }
+            };
+        }
+    });
+
+    // Añadir la hoja al libro
     XLSX.utils.book_append_sheet(wb, ws, "Tareas");
 
     // Descargar el archivo
     XLSX.writeFile(wb, "Diagrama_Gantt.xlsx");
 }
+
 
         function formatDate(dateStr) {
             const date = new Date(dateStr);
