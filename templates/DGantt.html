@@ -594,8 +594,8 @@ async function exportarXLSX() {
 
             const fechaInicio = new Date(tarea.fecha_inicio);
             const fechaFin = new Date(tarea.fecha_fin);
-            const duracion = (fechaFin - fechaInicio) / (1000 * 60 * 60 * 24);
-            const offset = ((fechaInicio - fechaMin) / (1000 * 60 * 60 * 24)) * 21;
+            const duracion = (fechaFin - fechaInicio) / (1000 * 60 * 60 * 24)+1;
+            const offset = ((fechaInicio - fechaMin) / (1000 * 60 * 60 * 24)) * 20;
 
             bar.style.width = duracion * 20 + 'px';
             bar.style.marginLeft = offset + 'px';
