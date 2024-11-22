@@ -242,24 +242,29 @@ button[type="submit"]:hover {
     padding-top: 5px;
 }
 
-.gantt-months {
-    display: flex;
-    border-bottom: 1px solid #ccc;
-    justify-content: start; /* Evita la distribución automática del espacio */
-    gap: 0; /* Elimina cualquier separación entre los meses */
+
+#gantt-months {
+    display: flex; /* Flexbox para disposición horizontal */
+    flex-wrap: nowrap; /* Evitar que los elementos se envuelvan */
+    overflow-x: auto; /* Permitir desplazamiento horizontal si es necesario */
+    white-space: nowrap; /* Impedir que los elementos se apilen */
+    width: 3000px;
+}
+#gantt-months span{
+    display: inline-block; /* Asegurar que los spans estén en línea */
+    text-align: center;
+    margin: 0;
+    padding: 5px 0;
 }
 
-.gantt-months span {
-    display: inline-block; /* Asegura que el tamaño sea proporcional */
+
+#gantt-days span {
     text-align: center;
-    border-right: 1px solid #ccc;
-    padding: 1px; /* Reduce el espacio interno */
-    font-weight: bold;
-    margin: 0; /* Elimina márgenes adicionales */
-    background-color: #f9f9f9; /* Fondo para diferenciar meses */
-    width: 20px; /* Define un ancho fijo para cada mes */
-    font-size: 12px; /* Reduce el tamaño del texto */
-    box-sizing: border-box;
+    background-color: #e8e8e8;
+    border: 1px solid #ddd;
+    margin: 0;
+    display: inline-block;
+    line-height: 20px; /* Centrar texto verticalmente */
 }
 
 .gantt-days {
@@ -609,6 +614,7 @@ async function exportarXLSX() {
 function cerrarModal() {
     document.getElementById("modal").style.display = "none";
 }
+
 function generarEjeTemporal(fechaInicio, fechaFin) {
     const monthsContainer = document.getElementById('gantt-months');
     const daysContainer = document.getElementById('gantt-days');
@@ -622,6 +628,7 @@ function generarEjeTemporal(fechaInicio, fechaFin) {
     let monthDays = 0;
     let monthSpan = document.createElement('span');
     monthSpan.textContent = new Intl.DateTimeFormat('es', { month: 'long' }).format(currentDate);
+    monthSpan.style.display = 'inline-block'; // Asegurar que los meses estén en línea
     monthsContainer.appendChild(monthSpan);
 
     while (currentDate <= fechaFin) {
@@ -630,7 +637,7 @@ function generarEjeTemporal(fechaInicio, fechaFin) {
         daySpan.textContent = currentDate.getDate();
 
         // Estilos dinámicos para el ancho de los días
-        daySpan.style.width = '19.25px'; // Ancho fijo para cada día
+        daySpan.style.width = '20px'; // Ajusta el ancho de los días
         daySpan.style.display = 'inline-block'; // Para alinearlos horizontalmente
 
         daysContainer.appendChild(daySpan);
@@ -643,13 +650,15 @@ function generarEjeTemporal(fechaInicio, fechaFin) {
         if (currentDate.getMonth() !== currentMonth || currentDate > fechaFin) {
             // Ajustar el ancho del mes basado en el número de días
             monthSpan.style.flex = monthDays;
-            monthSpan.style.width = (monthDays * 20) + 'px'; // Ancho basado en los días
+            monthSpan.style.width = (monthDays * 24) + 'px'; // Aumentar ancho de los meses (antes era 20px)
+            monthSpan.style.marginRight = '10px'; // Agregar separación entre meses
             monthDays = 0; // Reiniciar contador de días para el nuevo mes
 
             // Crear un nuevo span para el siguiente mes si aún está dentro del rango
             if (currentDate <= fechaFin) {
                 monthSpan = document.createElement('span');
                 monthSpan.textContent = new Intl.DateTimeFormat('es', { month: 'long' }).format(currentDate);
+                monthSpan.style.display = 'inline-block'; // Asegurar que esté en línea
                 monthsContainer.appendChild(monthSpan);
             }
 
@@ -657,9 +666,10 @@ function generarEjeTemporal(fechaInicio, fechaFin) {
         }
     }
 
-    // Asignar ancho total al contenedor de días
-    daysContainer.style.width = ((fechaFin - fechaInicio) / (1000 * 60 * 60 * 24) + 1) * 20 + 'px';
+    // Ajustar ancho total del contenedor de días
+    daysContainer.style.width = ((fechaFin - fechaInicio) / (1000 * 60 * 60 * 24) + 1) * 24 + 'px';
 }
+
 
 
 
