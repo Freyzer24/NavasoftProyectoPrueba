@@ -464,12 +464,16 @@ button[type="submit"]:hover {
 {% endif %}
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+
+
 
     <script>
-       async function exportarPDF() {
+   async function exportarPDF() {
     const { jsPDF } = window.jspdf;
-    const doc = new jsPDF();
-
+    // Crear una instancia del PDF con orientación horizontal (landscape)
+    const doc = new jsPDF("l", "mm", "a4");
+    
     // Agregar título
     doc.text("Lista de Tareas", 10, 10);
 
@@ -485,7 +489,6 @@ button[type="submit"]:hover {
     doc.text("Encargado", 160, y);
     y += 10;
 
-    // Agregar las filas de la tabla
     rows.forEach(row => {
         const cells = row.querySelectorAll("td");
         doc.text(cells[0].textContent, 10, y);
@@ -495,18 +498,36 @@ button[type="submit"]:hover {
         y += 10;
     });
 
-    // Agregar un salto de página antes de incluir el diagrama de Gantt (si es necesario)
+    // Capturar el diagrama de Gantt completo
+    const gantt = document.getElementById("gantt-chart");
+
+    // Cambiar el estilo a visible si es necesario
+    gantt.style.overflow = 'visible';
+
+    // Asegúrate de que el tamaño del contenedor esté bien establecido
+    const canvasGantt = await html2canvas(gantt, {
+        scrollX: 0,  // Capturar todo el contenido horizontal
+        scrollY: 0,  // Capturar todo el contenido vertical
+        useCORS: true, // Permitir imágenes externas
+        width: gantt.scrollWidth,  // Asegura que capture el ancho total
+        height: gantt.scrollHeight, // Asegura que capture la altura total
+        x: 0,  // No desplazarse en el eje X
+        y: 0   // No desplazarse en el eje Y
+    });
+
+    // Convertir la imagen del Gantt a formato Data URL
+    const imgGantt = canvasGantt.toDataURL("image/png");
+
+    // Crear una nueva página en el PDF para el Gantt
     doc.addPage();
     doc.text("Diagrama de Gantt", 10, 10);
-
-    // Aquí puedes agregar una representación visual del diagrama de Gantt si lo deseas.
-    // Por ejemplo, puedes incluir el gráfico o las barras de progreso de las tareas si has generado imágenes con canvas u otros medios.
-
-    // Si tienes un gráfico generado en un canvas, puedes agregarlo al PDF de la siguiente manera:
-    // doc.addImage(canvasElement, 'PNG', 10, 20, 180, 120);
-
-    // Finalmente, se descarga el archivo PDF
-    doc.save("Diagrama_Gantt.pdf");
+     // Ajustar el tamaño de la imagen en el PDF
+     const imgWidth = 270;  // Ancho de la imagen para ajuste en horizontal
+    const imgHeight = (canvasGantt.height * imgWidth) / canvasGantt.width;  // Ajustar la altura proporcional
+    // Agregar la imagen del Gantt al PDF
+    doc.addImage(imgGantt, "PNG", 10, 20, imgWidth, imgHeight);
+     // Descargar el PDF
+     doc.save("Reporte_Tareas_Gantt.pdf");
 }
 
 
