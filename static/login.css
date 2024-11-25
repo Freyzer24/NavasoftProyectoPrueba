@@ -140,48 +140,41 @@ button:hover {
 }
 
 /* Fondo del modal */
+/* Fondo oscuro (opcional) */
 .modal {
+    display: none; /* Ocultar por defecto */
     position: fixed;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    background-color: rgba(0, 0, 0, 0.6); /* Fondo semitransparente */
-    display: flex;
-    justify-content: center; /* Centrado horizontal */
-    align-items: center; /* Centrado vertical */
-    z-index: 1000;
+    background-color: rgba(0, 0, 0, 0.5); /* Fondo semi-transparente */
+    justify-content: center; /* Centrar horizontalmente */
+    align-items: center; /* Centrar verticalmente */
+    z-index: 999; /* Asegurarse de que esté sobre otros elementos */
 }
 
-/* Contenido del modal */
-
+/* Contenedor del contenido del modal */
 .modal-contenido {
-    background-color: #f5f5f5; /* Fondo claro */
-    color: black; /* Texto negro */
-    padding: 25px;
-    border-radius: 10px; /* Bordes redondeados */
-    max-width: 400px;
-    width: 90%;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Sombra suave */
-    position: relative;
+    background-color: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    width: 400px; /* Ancho del modal */
+    max-width: 90%; /* Asegurarse de que se ajuste en pantallas pequeñas */
     text-align: center;
-    animation: aparecer 0.3s ease-in-out; /* Animación al aparecer */
 }
-/* Botón de cierre */
+
+/* Botón cerrar */
 .cerrar {
     position: absolute;
     top: 10px;
-    right: 10px;
+    right: 15px;
     font-size: 20px;
     font-weight: bold;
-    color: black;
     cursor: pointer;
-    transition: color 0.3s ease;
 }
 
-.cerrar:hover {
-    color: #527ae6; /* Azul al pasar el cursor */
-}
 
 /* Títulos */
 h2 {
