@@ -454,14 +454,11 @@ button[type="submit"]:hover {
 </div>
 
 
-{% if rol in ['super_administrador', 'administrador'] %}
+
 <div class="enlaces">
+    {% if rol in ['super_administrador', 'administrador'] %}
     <a href="#" class="enlace rojo" onclick="abrirModal()">+ Añadir Tarea</a>
-    <a href="#" class="enlace azul" onclick="exportarPDF()">+ Exportar como PDF</a>
-    <a href="#" class="enlace verde" onclick="exportarXLSX()">+ Exportar como XLSX o Excel</a>
-</div>
-{% endif %}
-<div class="enlaces">
+    {% endif %}
     <a href="#" class="enlace azul" onclick="exportarPDF()">+ Exportar como PDF</a>
     <a href="#" class="enlace verde" onclick="exportarXLSX()">+ Exportar como XLSX o Excel</a>
 </div>
