@@ -1,0 +1,21 @@
+# Ignorar el entorno virtual
+env/
+.env/
+
+# Ignorar los archivos de Python compilados
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Ignorar node_modules (si usas Node.js)
+node_modules/
+
+# Ignorar archivos temporales de editor (si los usas)
+.vscode/
+.idea/
+*.swp
+
+# Otros archivos que quieras ignorar
+*.log
+.DS_Store
