@@ -1,24 +1,37 @@
+from werkzeug.security import generate_password_hash
 import re
 import smtplib
 import base64
 import jwt
-from flask import jsonify
 from email.mime.multipart import MIMEMultipart
 from datetime import datetime
 from email.mime.text import MIMEText
 from datetime import datetime, timedelta
 from functools import wraps
-from flask import Flask, render_template, request, redirect, url_for, flash, session, jsonify, make_response
+from flask import (
+    Flask,
+    render_template,
+    request,
+    redirect,
+    url_for,
+    flash,
+    jsonify,
+    make_response,
+)
 from flask_sqlalchemy import SQLAlchemy
 from werkzeug.security import generate_password_hash, check_password_hash
+
 app = Flask(__name__)
-app.secret_key = 'super_secret_key' 
+app.secret_key = "super_secret_key"
 
 # Configuración de la conexión a MySQL
-app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+mysqlconnector://practicantes:Ora$sys1@u1268360.onlinehome-server.com/navasoftsoluciones'
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+app.config["SQLALCHEMY_DATABASE_URI"] = (
+    "mysql+mysqlconnector://practicantes:Ora$sys1@u1268360.onlinehome-server.com/navasoftsoluciones"
+)
+app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 
 db = SQLAlchemy(app)
+
 
 class Proyecto(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -39,9 +52,8 @@ class Tarea(db.Model):
     encargado = db.Column(db.String(100), nullable=False)
     estado = db.Column(db.String(50), nullable=False)
 
-    def __init__(self, nombre, proyecto, fecha_inicio, fecha_fin, encargado, estado):
-
-
+    def __init__(self, nombre, proyecto, fecha_inicio,
+                 fecha_fin, encargado, estado):
 
         self.nombre = nombre
         self.proyecto = proyecto
@@ -49,7 +61,6 @@ class Tarea(db.Model):
         self.fecha_fin = fecha_fin
         self.encargado = encargado
         self.estado = estado
-
 
 
 class Registro(db.Model):
@@ -60,17 +71,20 @@ class Registro(db.Model):
     usuario = db.Column(db.String(50), unique=True, nullable=False)
     rol = db.Column(db.String(50), nullable=False)
     password = db.Column(db.String(128), nullable=False)
-    imagen = db.Column(db.LargeBinary, nullable=True)  # Columna para la imagen en binario
+    # Columna para la imagen en binario
+    imagen = db.Column(db.LargeBinary, nullable=True)
 
     def __repr__(self):
-        return f'<Registro {self.nombre}>'
+        return f"<Registro {self.nombre}>"
+
 
 # Crear la base de datos y las tablas
 with app.app_context():
     db.create_all()
 
+
 def obtener_rol_desde_token():
-    token = request.cookies.get('token')
+    token = request.cookies.get("token")
     if not token:
         return None
     try:
@@ -78,76 +92,87 @@ def obtener_rol_desde_token():
         return decoded_token.get("rol")
     except jwt.ExpiredSignatureError:
         flash("La sesión ha expirado, por favor inicia sesión nuevamente.")
-        return redirect(url_for('login'))
+        return redirect(url_for("login"))
     except jwt.InvalidTokenError:
         flash("Token inválido, por favor inicia sesión nuevamente.")
-        return redirect(url_for('login'))
-    
+        return redirect(url_for("login"))
+
+
 def token_requerido(f):
     @wraps(f)
     def decorador(*args, **kwargs):
-        token = request.cookies.get('token')  # Obtiene el token de la cookie
+        token = request.cookies.get("token")  # Obtiene el token de la cookie
 
         if not token:
             return jsonify({"mensaje": "Token es necesario"}), 403
 
         # Verifica si el token ha sido revocado
         if TokenRevocado.query.filter_by(token=token).first():
-            return jsonify({"mensaje": "Token revocado. Debes iniciar sesión nuevamente."}), 401
+            return (
+                jsonify(
+                    {"mensaje": "Token revocado. Debes iniciar sesión nuevamente."}
+                ),
+                401,
+            )
 
         try:
             data = jwt.decode(token, SECRET_KEY, algorithms=["HS256"])
-            current_user = data['usuario']
+            current_user = data["usuario"]
         except jwt.ExpiredSignatureError:
             return jsonify({"mensaje": "El token ha expirado"}), 401
         except jwt.InvalidTokenError:
             return jsonify({"mensaje": "Token inválido"}), 403
 
         return f(current_user, *args, **kwargs)
-    
+
     return decorador
 
-@app.route('/subir_imagen', methods=['POST'])
-def subir_imagen():
-    if 'imagen' not in request.files:
-        return 'No se ha subido ninguna imagen', 400
 
-    imagen = request.files['imagen']
-    if imagen.filename != '':
+@app.route("/subir_imagen", methods=["POST"])
+def subir_imagen():
+    if "imagen" not in request.files:
+        return "No se ha subido ninguna imagen", 400
+
+    imagen = request.files["imagen"]
+    if imagen.filename != "":
         img_data = imagen.read()  # Leer la imagen como datos binarios
         registro = Registro(
-            nombre=request.form['nombre'],
-            telefono=request.form['telefono'],
-            correo=request.form['correo'],
-            usuario=request.form['usuario'],
-            rol=request.form['rol'],
-            password=request.form['password'],
-            imagen=img_data  # Guardar los datos binarios de la imagen
+            nombre=request.form["nombre"],
+            telefono=request.form["telefono"],
+            correo=request.form["correo"],
+            usuario=request.form["usuario"],
+            rol=request.form["rol"],
+            password=request.form["password"],
+            imagen=img_data,  # Guardar los datos binarios de la imagen
         )
         db.session.add(registro)
         db.session.commit()
 
-    return 'Imagen subida con éxito', 200   
-    
-#Pantalla que se muestra con /
-@app.route('/')
+    return "Imagen subida con éxito", 200
+
+
+# Pantalla que se muestra con /
+
+
+@app.route("/")
 def index():
-    return render_template('login.html')
+    return render_template("login.html")
 
 
 SECRET_KEY = "tu_clave_secreta"  # Cámbiala por una clave segura
 
-@app.route('/login', methods=['POST'])
+
+@app.route("/login", methods=["POST"])
 def login():
-    usuario = request.form['usuario'].strip()
-    password = request.form['password'].strip()
+    usuario = request.form["usuario"].strip()
+    password = request.form["password"].strip()
 
     # Verifica si el usuario existe en la base de datos
     registro = Registro.query.filter_by(usuario=usuario).first()
-    
+
     if registro:
         is_correct = check_password_hash(registro.password, password)
-        
+
         if is_correct:
             # Genera el token con una expiración de 1 hora
             token = jwt.encode(
@@ -155,23 +180,29 @@ def login():
                     "usuario": registro.usuario,
                     "correo": registro.correo,
                     "rol": registro.rol,
-                    "exp": datetime.utcnow() + timedelta(hours=1)
+                    "exp": datetime.utcnow() + timedelta(hours=1),
                 },
                 SECRET_KEY,
-                algorithm="HS256"
+                algorithm="HS256",
             )
 
             # Crear la respuesta de inicio de sesión
-            response = make_response(redirect(url_for('menuAdmin') if registro.rol in ['administrador', 'super_administrador'] else url_for('menuEmpleado')))
-            response.set_cookie('token', token, httponly=True) 
-            flash('Inicio de sesión exitoso')
+            response = make_response(
+                redirect(
+                    url_for("menuAdmin")
+                    if registro.rol in ["administrador", "super_administrador"]
+                    else url_for("menuEmpleado")
+                )
+            )
+            response.set_cookie("token", token, httponly=True)
+            flash("Inicio de sesión exitoso")
             return response
         else:
-            flash('Contraseña incorrecta. Por favor, inténtalo de nuevo.')
+            flash("Contraseña incorrecta. Por favor, inténtalo de nuevo.")
     else:
-        flash('Usuario no encontrado. Verifica tus datos e intenta de nuevo.')
+        flash("Usuario no encontrado. Verifica tus datos e intenta de nuevo.")
 
-    return redirect(url_for('index'))
+    return redirect(url_for("index"))
 
 
 class TokenRevocado(db.Model):
@@ -179,27 +210,28 @@ class TokenRevocado(db.Model):
     token = db.Column(db.String(500), unique=True, nullable=False)
     fecha_revocacion = db.Column(db.DateTime, default=datetime.utcnow)
 
-@app.route('/gantt/<string:nombre_proyecto>')
+
+@app.route("/gantt/<string:nombre_proyecto>")
 def Gantt(nombre_proyecto):
     rol = obtener_rol_desde_token()
     if rol is None:
-        return redirect(url_for('login'))
-    
+        return redirect(url_for("login"))
+
     tareas = Tarea.query.filter_by(proyecto=nombre_proyecto).all()
     encargados = Registro.query.all()
-    encargados_dict = {encargado.nombre: encargado.nombre for encargado in encargados}
+    encargados_dict = {
+        encargado.nombre: encargado.nombre for encargado in encargados}
     proyectos = Proyecto.query.all()
     proyectos_dict = {proyecto.nombre: proyecto.id for proyecto in proyectos}
 
     return render_template(
-        'DGantt.html', 
-        tareas=tareas, 
+        "DGantt.html",
+        tareas=tareas,
         encargados_dict=encargados_dict,
         proyectos_dict=proyectos_dict,
-        nombre_proyecto=nombre_proyecto, 
-        rol=rol
+        nombre_proyecto=nombre_proyecto,
+        rol=rol,
     )
-
 
 
 @app.route("/tareas/<string:nombre_proyecto>")
@@ -207,385 +239,426 @@ def Gantt(nombre_proyecto):
 def obtener_tareas_por_proyecto(current_user, nombre_proyecto):
     # Filtra las tareas según el nombre del proyecto
     tareas = Tarea.query.filter_by(proyecto=nombre_proyecto).all()
-    
+
     # Convierte las tareas a JSON
     tareas_json = [
         {
-            'nombre': tarea.nombre,
-            'fecha_inicio': tarea.fecha_inicio.strftime('%Y-%m-%d'),
-            'fecha_fin': tarea.fecha_fin.strftime('%Y-%m-%d'),
-            'encargado': tarea.encargado,
-            'estado': tarea.estado,
-            'proyecto': tarea.proyecto  
+            "nombre": tarea.nombre,
+            "fecha_inicio": tarea.fecha_inicio.strftime("%Y-%m-%d"),
+            "fecha_fin": tarea.fecha_fin.strftime("%Y-%m-%d"),
+            "encargado": tarea.encargado,
+            "estado": tarea.estado,
+            "proyecto": tarea.proyecto,
         }
         for tarea in tareas
     ]
-    
+
     return jsonify(tareas_json)
 
 
-
-
-    
-@app.route('/menuAdmin')
+@app.route("/menuAdmin")
 @token_requerido
 def menuAdmin(current_user):
     rol = obtener_rol_desde_token()
     if rol is None:
-        return redirect(url_for('login'))
-    return render_template('indexadmin.html')
-@app.route('/admin')
+        return redirect(url_for("login"))
+    return render_template("indexadmin.html")
+
+
+@app.route("/admin")
 @token_requerido
 def Admin(current_user):
     rol = obtener_rol_desde_token()
     if rol is None:
-        return redirect(url_for('login'))
-    return render_template('menuAdmin.html')
-@app.route('/Empleado')
+        return redirect(url_for("login"))
+    return render_template("menuAdmin.html")
+
+
+@app.route("/Empleado")
 @token_requerido
 def Empleado(current_user):
     rol = obtener_rol_desde_token()
     if rol is None:
-        return redirect(url_for('login'))
-    return render_template('menuEmpleado.html')
-@app.route('/Gtareas')#Gestión tareas
+        return redirect(url_for("login"))
+    return render_template("menuEmpleado.html")
+
+
+@app.route("/Gtareas")  # Gestión tareas
 @token_requerido
 def Gtareas(current_user):
     rol = obtener_rol_desde_token()
     if rol is None:
-        return redirect(url_for('login'))
+        return redirect(url_for("login"))
     tareas = Tarea.query.all()
-    return render_template('Gestión_tareas.html', tareas=tareas, rol=rol)
+    return render_template("Gestión_tareas.html", tareas=tareas, rol=rol)
 
-@app.route('/menuEmpleado')
+
+@app.route("/menuEmpleado")
 @token_requerido
 def menuEmpleado(current_user):
     rol = obtener_rol_desde_token()
     if rol is None:
-        return redirect(url_for('login'))
-    return render_template('indexempleado.html')  
-@app.route('/templeado')
+        return redirect(url_for("login"))
+    return render_template("indexempleado.html")
+
+
+@app.route("/templeado")
 @token_requerido
 def templeado(current_user):
     rol = obtener_rol_desde_token()
     if rol is None:
-        return redirect(url_for('login'))
-    return render_template('templeado.html')
-@app.route('/nuevo_usuario')
+        return redirect(url_for("login"))
+    return render_template("templeado.html")
+
+
+@app.route("/nuevo_usuario")
 @token_requerido
 def nuevo_usuario(current_user):
     rol = obtener_rol_desde_token()
     if rol is None:
-        return redirect(url_for('login'))
-    return render_template('añadir_usuario.html')
-import base64
+        return redirect(url_for("login"))
+    return render_template("añadir_usuario.html")
 
-@app.route('/perfil', methods=['GET', 'POST'])
+
+@app.route("/perfil", methods=["GET", "POST"])
 def perfil():
     # Obtener el token de la cookie
-    token = request.cookies.get('token')
+    token = request.cookies.get("token")
 
     if not token:
-        flash('Debes iniciar sesión primero.')
-        return redirect(url_for('login'))  
+        flash("Debes iniciar sesión primero.")
+        return redirect(url_for("login"))
 
     try:
         # Decodificar el token
         payload = jwt.decode(token, SECRET_KEY, algorithms=["HS256"])
 
         # Extraer el nombre de usuario desde el token
-        usuario = payload.get('usuario')
+        usuario = payload.get("usuario")
 
         # Buscar el registro del usuario en la base de datos
         registro = Registro.query.filter_by(usuario=usuario).first()
 
         if not registro:
-            flash('Usuario no encontrado.')
-            return redirect(url_for('login'))
+            flash("Usuario no encontrado.")
+            return redirect(url_for("login"))
 
         # Convertir la imagen binaria a base64 si existe
         imagen_base64 = None
         if registro.imagen:
-            imagen_base64 = base64.b64encode(registro.imagen).decode('utf-8')
+            imagen_base64 = base64.b64encode(registro.imagen).decode("utf-8")
 
         # Preparar los datos del usuario para la plantilla
         datos_usuario = {
-            'usuario': registro.usuario,
-            'correo': registro.correo,
-            'rol': registro.rol,
-            'imagen': imagen_base64  # Imagen en base64 para mostrar en HTML
+            "usuario": registro.usuario,
+            "correo": registro.correo,
+            "rol": registro.rol,
+            "imagen": imagen_base64,  # Imagen en base64 para mostrar en HTML
         }
     except jwt.ExpiredSignatureError:
-        flash('Tu sesión ha expirado. Por favor, inicia sesión nuevamente.')
-        return redirect(url_for('login'))
+        flash("Tu sesión ha expirado. Por favor, inicia sesión nuevamente.")
+        return redirect(url_for("login"))
     except jwt.InvalidTokenError:
-        flash('Token inválido. Por favor, inicia sesión nuevamente.')
-        return redirect(url_for('login'))
+        flash("Token inválido. Por favor, inicia sesión nuevamente.")
+        return redirect(url_for("login"))
 
-    return render_template('Perfil.html', datos=datos_usuario)
+    return render_template("Perfil.html", datos=datos_usuario)
 
-@app.route('/cambiar_contrasena', methods=['POST'])
+
+@app.route("/cambiar_contrasena", methods=["POST"])
 def cambiar_contrasena():
     # Obtener datos del formulario
-    usuario = request.form.get('usuario')
-    contrasena_actual = request.form['contrasena_actual']
-    nueva_contrasena = request.form['nueva_contrasena']
-    confirmar_contrasena = request.form['confirmar_contrasena']
+    usuario = request.form.get("usuario")
+    contrasena_actual = request.form["contrasena_actual"]
+    nueva_contrasena = request.form["nueva_contrasena"]
+    confirmar_contrasena = request.form["confirmar_contrasena"]
 
     # Buscar al usuario en la base de datos
     usuario = Registro.query.filter_by(usuario=usuario).first()
     if not usuario:
-        flash('Usuario no encontrado.')
-        return redirect(url_for('perfil'))
+        flash("Usuario no encontrado.")
+        return redirect(url_for("perfil"))
 
     # Verificar la contraseña actual
     if not check_password_hash(usuario.password, contrasena_actual):
-        flash('La contraseña actual es incorrecta.')
-        return redirect(url_for('perfil'))
+        flash("La contraseña actual es incorrecta.")
+        return redirect(url_for("perfil"))
 
     # Validar la nueva contraseña
     if nueva_contrasena != confirmar_contrasena:
-        flash('Las contraseñas no coinciden.')
-        return redirect(url_for('perfil'))
+        flash("Las contraseñas no coinciden.")
+        return redirect(url_for("perfil"))
     if not validar_contrasena(nueva_contrasena):
-        flash('La nueva contraseña debe tener al menos 8 caracteres, una letra mayúscula, una letra minúscula, un número y un carácter especial.')
-        return redirect(url_for('perfil'))
+        flash(
+            "La nueva contraseña debe tener al menos 8 caracteres, una letra mayúscula, una letra minúscula, un número y un carácter especial."
+        )
+        return redirect(url_for("perfil"))
 
     # Encriptar y actualizar la nueva contraseña
     usuario.password = generate_password_hash(nueva_contrasena)
     db.session.commit()
 
-    flash('Contraseña actualizada con éxito.')
-    return redirect(url_for('perfil'))
+    flash("Contraseña actualizada con éxito.")
+    return redirect(url_for("perfil"))
 
-@app.route('/editar_tarea/<int:id>', methods=['GET', 'POST'])
+
+@app.route("/editar_tarea/<int:id>", methods=["GET", "POST"])
 def editar_tarea(id):
     rol = obtener_rol_desde_token()
     if rol is None:
-        return redirect(url_for('login'))
+        return redirect(url_for("login"))
 
     tarea = Tarea.query.get_or_404(id)
     proyectos = Proyecto.query.all()
     encargados = Registro.query.all()
 
-    if request.method == 'GET':
-        return render_template('editar_tarea.html', tarea=tarea, encargados=encargados, rol=rol, proyectos=proyectos)
+    if request.method == "GET":
+        return render_template(
+            "editar_tarea.html",
+            tarea=tarea,
+            encargados=encargados,
+            rol=rol,
+            proyectos=proyectos,
+        )
 
-    if request.method == 'POST':
+    if request.method == "POST":
         # Obtener los datos del formulario
-        nombre = request.form['nombre']
-        proyecto_nombre = request.form['proyecto']
-        encargado_nombre = request.form['encargado']
-        estado = request.form['estado']
-        fecha_inicio = request.form['fecha_inicio']
-        fecha_fin = request.form['fecha_fin']
+        nombre = request.form["nombre"]
+        proyecto_nombre = request.form["proyecto"]
+        encargado_nombre = request.form["encargado"]
+        estado = request.form["estado"]
+        fecha_inicio = request.form["fecha_inicio"]
+        fecha_fin = request.form["fecha_fin"]
 
         # Buscar el proyecto y encargado por su nombre
         proyecto = Proyecto.query.filter_by(nombre=proyecto_nombre).first()
         encargado = Registro.query.filter_by(nombre=encargado_nombre).first()
 
         if not proyecto or not encargado:
-            flash('Proyecto o encargado no válidos.', 'danger')
-            return redirect(url_for('editar_tarea', id=id))
+            flash("Proyecto o encargado no válidos.", "danger")
+            return redirect(url_for("editar_tarea", id=id))
 
         # Actualizar tarea
         tarea.nombre = nombre
         tarea.proyecto = proyecto.nombre  # Se guarda el nombre
         tarea.encargado = encargado.nombre  # Se guarda el nombre
         tarea.estado = estado
-        tarea.fecha_inicio = datetime.strptime(fecha_inicio, '%Y-%m-%d')
-        tarea.fecha_fin = datetime.strptime(fecha_fin, '%Y-%m-%d')
+        tarea.fecha_inicio = datetime.strptime(fecha_inicio, "%Y-%m-%d")
+        tarea.fecha_fin = datetime.strptime(fecha_fin, "%Y-%m-%d")
 
         # Guardar en la base de datos
         try:
             db.session.commit()
-            flash('Tarea actualizada exitosamente', 'success')
+            flash("Tarea actualizada exitosamente", "success")
         except Exception as e:
             db.session.rollback()
             print("Error al guardar en la base de datos:", e)
-            flash('Ocurrió un error al actualizar la tarea.', 'danger')
+            flash("Ocurrió un error al actualizar la tarea.", "danger")
 
-        return redirect(url_for('Gtareas'))
+        return redirect(url_for("Gtareas"))
 
 
-@app.route('/cambiarfoto', methods=['POST'])
+@app.route("/cambiarfoto", methods=["POST"])
 def cambiarfoto():
     # Obtener el token de la cookie
-    token = request.cookies.get('token')
+    token = request.cookies.get("token")
 
     if not token:
-        flash('Debes iniciar sesión primero.')
-        return redirect(url_for('login'))  # Redirige a login si no hay token
+        flash("Debes iniciar sesión primero.")
+        return redirect(url_for("login"))  # Redirige a login si no hay token
 
     try:
         # Decodificar el token
         payload = jwt.decode(token, SECRET_KEY, algorithms=["HS256"])
 
         # Extraer el nombre de usuario desde el token
-        usuario = payload.get('usuario')
+        usuario = payload.get("usuario")
 
         # Buscar el registro del usuario en la base de datos
         registro = Registro.query.filter_by(usuario=usuario).first()
 
         if not registro:
-            flash('Usuario no encontrado.')
-            return redirect(url_for('login'))
+            flash("Usuario no encontrado.")
+            return redirect(url_for("login"))
 
         # Verificar si se subió una nueva imagen
-        if 'foto' in request.files:
-            foto = request.files['foto']
+        if "foto" in request.files:
+            foto = request.files["foto"]
             if foto:
                 # Validar que el archivo sea una imagen (por extensión)
                 filename = foto.filename
-                if filename.lower().endswith(('png', 'jpg', 'jpeg')):
-                    # Leer el archivo de la imagen y almacenarlo en la base de datos
+                if filename.lower().endswith(("png", "jpg", "jpeg")):
+                    # Leer el archivo de la imagen y almacenarlo en la base de
+                    # datos
                     img_bytes = foto.read()
                     registro.imagen = img_bytes
                     db.session.commit()  # Guardar los cambios en la base de datos
-                    flash('Imagen de perfil actualizada con éxito.')
-                    # Convertir la imagen a base64 para mostrarla inmediatamente
-                    imagen_base64 = base64.b64encode(img_bytes).decode('utf-8')
-                    return redirect(url_for('perfil'))  # Redirigir al perfil para mostrar la imagen actualizada
+                    flash("Imagen de perfil actualizada con éxito.")
+                    # Convertir la imagen a base64 para mostrarla
+                    # inmediatamente
+                    imagen_base64 = base64.b64encode(img_bytes).decode("utf-8")
+                    # Redirigir al perfil para mostrar la imagen actualizada
+                    return redirect(url_for("perfil"))
 
-        flash('No se ha seleccionado ninguna imagen.')
-        return redirect(url_for('perfil'))  # Si no hay imagen seleccionada
+        flash("No se ha seleccionado ninguna imagen.")
+        return redirect(url_for("perfil"))  # Si no hay imagen seleccionada
 
     except jwt.ExpiredSignatureError:
-        flash('Tu sesión ha expirado. Por favor, inicia sesión nuevamente.')
-        return redirect(url_for('login'))
+        flash("Tu sesión ha expirado. Por favor, inicia sesión nuevamente.")
+        return redirect(url_for("login"))
     except jwt.InvalidTokenError:
-        flash('Token inválido. Por favor, inicia sesión nuevamente.')
-        return redirect(url_for('login'))
+        flash("Token inválido. Por favor, inicia sesión nuevamente.")
+        return redirect(url_for("login"))
 
 
-
-@app.route('/eliminar_tarea/<int:id>', methods=['POST'])
+@app.route("/eliminar_tarea/<int:id>", methods=["POST"])
 def eliminar_tarea(id):
-        tarea = Tarea.query.get(id)
-        if tarea:
-            db.session.delete(tarea)
-            db.session.commit()
-            flash('Tarea eliminada exitosamente.')
-        else:
-            flash('Tarea no encontrada.')
-    
-        return redirect(url_for('Gtareas'))
+    tarea = Tarea.query.get(id)
+    if tarea:
+        db.session.delete(tarea)
+        db.session.commit()
+        flash("Tarea eliminada exitosamente.")
+    else:
+        flash("Tarea no encontrada.")
 
-@app.route('/tAdmin')
+    return redirect(url_for("Gtareas"))
+
+
+@app.route("/tAdmin")
 @token_requerido
 def tAdmin(current_user):
-    return render_template('tAdmin.html')
-@app.route('/logout', methods=['POST'])
+    return render_template("tAdmin.html")
+
+
+@app.route("/logout", methods=["POST"])
 def logout():
     # Crear la respuesta de logout
-    response = make_response(redirect(url_for('index')))
-    response.set_cookie('token', '', expires=0)  # Borra la cookie configurando su expiración a 0
+    response = make_response(redirect(url_for("index")))
+    # Borra la cookie configurando su expiración a 0
+    response.set_cookie("token", "", expires=0)
 
     flash("Has cerrado sesión correctamente.")
     return response
 
 
 # Ruta para ver todos los proyectos
-@app.route('/proyectos')
+@app.route("/proyectos")
 def proyectos():
     rol = obtener_rol_desde_token()
     if rol is None:
-        return redirect(url_for('login'))
+        return redirect(url_for("login"))
     proyectos = Proyecto.query.all()
-    encargados_dict = {encargado.id: encargado.nombre for encargado in Registro.query.all()}
-    proyectos_dict = {proyecto.id: proyecto.nombre for proyecto in proyectos}  # Diccionario de proyectos
-    return render_template('Proyectos.html', proyectos=proyectos, encargados_dict=encargados_dict, proyectos_dict=proyectos_dict,rol=rol)
-
-
+    encargados_dict = {
+        encargado.id: encargado.nombre for encargado in Registro.query.all()
+    }
+    # Diccionario de proyectos
+    proyectos_dict = {proyecto.id: proyecto.nombre for proyecto in proyectos}
+    return render_template(
+        "Proyectos.html",
+        proyectos=proyectos,
+        encargados_dict=encargados_dict,
+        proyectos_dict=proyectos_dict,
+        rol=rol,
+    )
 
 
 # Ruta para agregar un nuevo proyecto
-@app.route('/agregar_proyecto', methods=['POST'])
+@app.route("/agregar_proyecto", methods=["POST"])
 def agregar_proyecto():
-        nombre = request.form['nombre']
-        encargado = request.form['encargado']
-        
-        nuevo_proyecto = Proyecto(nombre=nombre, encargado=encargado)
-        db.session.add(nuevo_proyecto)
-        db.session.commit()
-        
-        flash('Proyecto agregado exitosamente.')
-        return redirect(url_for('proyectos'))
+    nombre = request.form["nombre"]
+    encargado = request.form["encargado"]
 
-@app.route('/eliminar_proyecto/<int:id>', methods=['POST'])
+    nuevo_proyecto = Proyecto(nombre=nombre, encargado=encargado)
+    db.session.add(nuevo_proyecto)
+    db.session.commit()
+
+    flash("Proyecto agregado exitosamente.")
+    return redirect(url_for("proyectos"))
+
+
+@app.route("/eliminar_proyecto/<int:id>", methods=["POST"])
 def eliminar_proyecto(id):
     proyecto = Proyecto.query.get(id)
-    
+
     if proyecto:
         try:
             # Buscar y eliminar todas las tareas asociadas al proyecto
-            tareas_asociadas = Tarea.query.filter_by(proyecto=proyecto.nombre).all()
+            tareas_asociadas = Tarea.query.filter_by(
+                proyecto=proyecto.nombre).all()
             for tarea in tareas_asociadas:
                 db.session.delete(tarea)
 
             # Eliminar el proyecto
             db.session.delete(proyecto)
             db.session.commit()
-            
-            flash('Proyecto y sus tareas asociadas eliminados correctamente.', 'success')
+
+            flash(
+                "Proyecto y sus tareas asociadas eliminados correctamente.", "success"
+            )
         except Exception as e:
             db.session.rollback()
             print("Error al eliminar el proyecto y tareas asociadas:", e)
-            flash('Ocurrió un error al eliminar el proyecto.', 'danger')
+            flash("Ocurrió un error al eliminar el proyecto.", "danger")
     else:
-        flash('Proyecto no encontrado.', 'error')
+        flash("Proyecto no encontrado.", "error")
 
-    return redirect(url_for('proyectos'))
+    return redirect(url_for("proyectos"))
 
 
-@app.route('/editar_proyecto/<int:id>', methods=['GET'])
+@app.route("/editar_proyecto/<int:id>", methods=["GET"])
 def editar_proyecto(id):
-        proyecto = Proyecto.query.get(id)
-        
-        if proyecto:
-            encargados = Registro.query.all()  # Obtener todos los encargados
-            return render_template('editar_proyecto.html', proyecto=proyecto, encargados=encargados)
-        else:
-            flash('Proyecto no encontrado.', 'error')  # Mensaje único de error si el proyecto no se encuentra
-            return redirect(url_for('proyectos'))  # Redirigir a la vista de proyectos si no se encuentra el proyecto
-    
+    proyecto = Proyecto.query.get(id)
+
+    if proyecto:
+        encargados = Registro.query.all()  # Obtener todos los encargados
+        return render_template(
+            "editar_proyecto.html", proyecto=proyecto, encargados=encargados
+        )
+    else:
+        # Mensaje único de error si el proyecto no se encuentra
+        flash("Proyecto no encontrado.", "error")
+        # Redirigir a la vista de proyectos si no se encuentra el proyecto
+        return redirect(url_for("proyectos"))
+
 
 # Ruta para actualizar un proyecto
-@app.route('/actualizar_proyecto/<int:id>', methods=['POST'])
+@app.route("/actualizar_proyecto/<int:id>", methods=["POST"])
 def actualizar_proyecto(id):
-        proyecto = Proyecto.query.get(id)
-        if proyecto:
-            proyecto.nombre = request.form['nombre']
-            encargado_id = request.form['encargado']
+    proyecto = Proyecto.query.get(id)
+    if proyecto:
+        proyecto.nombre = request.form["nombre"]
+        encargado_id = request.form["encargado"]
 
-            # Si se selecciona un encargado, actualizar el ID del encargado
-            if encargado_id:
-                encargado = Registro.query.get(encargado_id)
-                if encargado:
-                    proyecto.encargado = encargado.id  # Guardamos el ID del encargado, no el nombre
-                else:
-                    flash('El encargado seleccionado no existe.')
-                    return redirect(url_for('editar_proyecto', id=id))
+        # Si se selecciona un encargado, actualizar el ID del encargado
+        if encargado_id:
+            encargado = Registro.query.get(encargado_id)
+            if encargado:
+                proyecto.encargado = (
+                    encargado.id
+                )  # Guardamos el ID del encargado, no el nombre
+            else:
+                flash("El encargado seleccionado no existe.")
+                return redirect(url_for("editar_proyecto", id=id))
 
-            db.session.commit()
-            flash('Proyecto actualizado correctamente.')
-        else:
-            flash('Proyecto no encontrado.')
+        db.session.commit()
+        flash("Proyecto actualizado correctamente.")
+    else:
+        flash("Proyecto no encontrado.")
 
-        return redirect(url_for('proyectos'))
+    return redirect(url_for("proyectos"))
 
-from werkzeug.security import generate_password_hash
 
-@app.route('/recuperar', methods=['POST'])
+@app.route("/recuperar", methods=["POST"])
 def recuperar_contrasena():
-    correo = request.form.get('correo')
-    usuario_nombre = request.form.get('usuario')
+    correo = request.form.get("correo")
+    usuario_nombre = request.form.get("usuario")
 
     # Agregar depuración
     print(f"Correo: {correo}, Usuario: {usuario_nombre}")
-    
+
     # Buscar el usuario en la base de datos
-    usuario = Registro.query.filter_by(correo=correo, usuario=usuario_nombre).first()
+    usuario = Registro.query.filter_by(
+        correo=correo, usuario=usuario_nombre).first()
 
     if usuario:
         try:
@@ -595,17 +668,25 @@ def recuperar_contrasena():
             db.session.commit()  # Guardamos los cambios en la base de datos
 
             # Enviar correo con la nueva contraseña
-            enviar_correo_recuperacion(usuario.nombre, usuario.usuario, correo, nueva_contrasena)
-            flash('Se envió un correo con la nueva contraseña.', 'success')
+            enviar_correo_recuperacion(
+                usuario.nombre, usuario.usuario, correo, nueva_contrasena
+            )
+            flash("Se envió un correo con la nueva contraseña.", "success")
         except Exception as e:
             # En caso de error al actualizar la base de datos
             db.session.rollback()  # Deshacer los cambios
             print(f"Error al actualizar la contraseña: {e}")
-            flash('No se pudo cambiar la contraseña, por favor inténtelo nuevamente.', 'danger')
+            flash(
+                "No se pudo cambiar la contraseña, por favor inténtelo nuevamente.",
+                "danger",
+            )
     else:
-        flash('Correo o usuario incorrectos. Por favor, verifica la información.', 'danger')
+        flash(
+            "Correo o usuario incorrectos. Por favor, verifica la información.",
+            "danger",
+        )
 
-    return redirect('/')  # Redirigir al inicio de sesión o página principal
+    return redirect("/")  # Redirigir al inicio de sesión o página principal
 
 
 def enviar_correo_recuperacion(nombre, usuario, correo, nueva_contrasena):
@@ -614,9 +695,9 @@ def enviar_correo_recuperacion(nombre, usuario, correo, nueva_contrasena):
     destinatario = correo
 
     mensaje = MIMEMultipart()
-    mensaje['From'] = remitente
-    mensaje['To'] = destinatario
-    mensaje['Subject'] = "Recuperación de contraseña"
+    mensaje["From"] = remitente
+    mensaje["To"] = destinatario
+    mensaje["Subject"] = "Recuperación de contraseña"
 
     # Asegúrate de que el cuerpo del mensaje esté en UTF-8
     cuerpo = f"""
@@ -626,16 +707,16 @@ def enviar_correo_recuperacion(nombre, usuario, correo, nueva_contrasena):
     Tu nueva contraseña: {nueva_contrasena}
 
     Por favor, cambia esta contraseña después de iniciar sesión.
-    
+
     Saludos cordiales,
     El equipo de Navasoft
     """
-    
+
     # Convertir el cuerpo del mensaje a UTF-8
-    mensaje.attach(MIMEText(cuerpo, 'plain', 'utf-8'))
+    mensaje.attach(MIMEText(cuerpo, "plain", "utf-8"))
 
     try:
-        servidor = smtplib.SMTP('smtp.gmail.com', 587)
+        servidor = smtplib.SMTP("smtp.gmail.com", 587)
         servidor.starttls()
         servidor.login(remitente, contraseña)
         servidor.send_message(mensaje)
@@ -647,13 +728,13 @@ def enviar_correo_recuperacion(nombre, usuario, correo, nueva_contrasena):
 
 def enviar_confirmacion_correo(nombre, usuario, correo):
     remitente = "valeriapaolap49@gmail.com"
-    contraseña = "syjq cptv tlus wbcp" 
+    contraseña = "syjq cptv tlus wbcp"
     destinatario = correo
 
     mensaje = MIMEMultipart()
-    mensaje['From'] = remitente
-    mensaje['To'] = destinatario
-    mensaje['Subject'] = "Confirmación de creación de usuario"
+    mensaje["From"] = remitente
+    mensaje["To"] = destinatario
+    mensaje["Subject"] = "Confirmación de creación de usuario"
 
     # Cuerpo del mensaje en HTML
     cuerpo_html = f"""
@@ -668,12 +749,11 @@ def enviar_confirmacion_correo(nombre, usuario, correo):
         </body>
     </html>
     """
-    mensaje.attach(MIMEText(cuerpo_html, 'html'))
-
+    mensaje.attach(MIMEText(cuerpo_html, "html"))
 
     # Envío del correo
     try:
-        servidor = smtplib.SMTP('smtp.gmail.com', 587)
+        servidor = smtplib.SMTP("smtp.gmail.com", 587)
         servidor.starttls()
         servidor.login(remitente, contraseña)
         servidor.sendmail(remitente, destinatario, mensaje.as_string())
@@ -682,52 +762,63 @@ def enviar_confirmacion_correo(nombre, usuario, correo):
     except Exception as e:
         print(f"Error al enviar el correo: {e}")
 
-#mostrar
-@app.route('/mostrar')
+
+# mostrar
+
+
+@app.route("/mostrar")
 @token_requerido
 def mostrar(current_user):
     rol = obtener_rol_desde_token()
     if rol is None:
-        return redirect(url_for('login'))
+        return redirect(url_for("login"))
     registros = Registro.query.all()
-    return render_template('Gestión_usuario.html', registros=registros, rol=rol)
+    return render_template("Gestión_usuario.html",
+                           registros=registros, rol=rol)
+
 
 def validar_contrasena(contrasena):
-    if (len(contrasena) < 8 or 
-        not re.search(r"[A-Z]", contrasena) or
-        not re.search(r"[a-z]", contrasena) or
-        not re.search(r"[0-9]", contrasena) or
-        not re.search(r"[!@#$%^&*(),.?\":{}|<>]", contrasena)):
+    if (
+        len(contrasena) < 8
+        or not re.search(r"[A-Z]", contrasena)
+        or not re.search(r"[a-z]", contrasena)
+        or not re.search(r"[0-9]", contrasena)
+        or not re.search(r"[!@#$%^&*(),.?\":{}|<>]", contrasena)
+    ):
         return False
     return True
-    
+
+
 # Ruta para agregar un nuevo registro
 
-@app.route('/guardar', methods=['POST'])
+
+@app.route("/guardar", methods=["POST"])
 def guardar():
-    nombre = request.form['nombre']
-    telefono = request.form['telefono']
-    correo = request.form['correo']
-    usuario = request.form['usuario']
-    rol = request.form['rol']
-    password = request.form['password'] or 'Navasoft$0'
+    nombre = request.form["nombre"]
+    telefono = request.form["telefono"]
+    correo = request.form["correo"]
+    usuario = request.form["usuario"]
+    rol = request.form["rol"]
+    password = request.form["password"] or "Navasoft$0"
 
     # Validar la contraseña
-    if password != 'Navasoft$0' and not validar_contrasena(password):
-        flash('La contraseña debe tener al menos 8 caracteres, una letra mayúscula, una letra minúscula, un número y un carácter especial.')
-        return redirect(url_for('nuevo_usuario'))
+    if password != "Navasoft$0" and not validar_contrasena(password):
+        flash(
+            "La contraseña debe tener al menos 8 caracteres, una letra mayúscula, una letra minúscula, un número y un carácter especial."
+        )
+        return redirect(url_for("nuevo_usuario"))
 
     # Verificar si el usuario ya existe
     usuario_existente = Registro.query.filter_by(usuario=usuario).first()
     if usuario_existente:
-        flash('El nombre de usuario ya existe. Por favor, elige otro.')
-        return redirect(url_for('nuevo_usuario'))
+        flash("El nombre de usuario ya existe. Por favor, elige otro.")
+        return redirect(url_for("nuevo_usuario"))
 
     # Hashear la contraseña antes de guardarla
     hashed_password = generate_password_hash(password)
 
     # Leer el archivo de imagen en formato binario
-    imagen = request.files['imagen']
+    imagen = request.files["imagen"]
     imagen_binaria = None
     if imagen:
         imagen_binaria = imagen.read()  # Lee el archivo y guarda su contenido binario
@@ -740,7 +831,7 @@ def guardar():
         usuario=usuario,
         rol=rol,
         password=hashed_password,
-        imagen=imagen_binaria  # Guarda el contenido binario de la imagen
+        imagen=imagen_binaria,  # Guarda el contenido binario de la imagen
     )
 
     db.session.add(nuevo_registro)
@@ -749,48 +840,57 @@ def guardar():
     # Enviar el correo de confirmación
     enviar_confirmacion_correo(nombre, usuario, correo)
 
-    flash('Registro guardado con éxito')
-    return redirect(url_for('mostrar'))
+    flash("Registro guardado con éxito")
+    return redirect(url_for("mostrar"))
 
 
 # Nueva ruta para obtener detalles del usuario
-@app.route('/detalles_usuario/<int:id>')
+@app.route("/detalles_usuario/<int:id>")
 def detalles_usuario(id):
     registro = Registro.query.get_or_404(id)
-    return render_template('detalles_modal.html', registro=registro)
-# Ruta para editar un registro
-@app.route('/editar_usuario/<int:id>', methods=['GET', 'POST'])
-def editar_usuario(id):
-    registro = Registro.query.get_or_404(id)  
+    return render_template("detalles_modal.html", registro=registro)
 
-    if request.method == 'POST':
+
+# Ruta para editar un registro
+
+
+@app.route("/editar_usuario/<int:id>", methods=["GET", "POST"])
+def editar_usuario(id):
+    registro = Registro.query.get_or_404(id)
+
+    if request.method == "POST":
         # Manejar la presentación del formulario
-        registro.nombre = request.form['nombre']
-        registro.telefono = request.form['telefono']
-        registro.correo = request.form['correo']
-        registro.usuario = request.form['usuario']
-        registro.rol = request.form['rol']
-        password = request.form['password']
+        registro.nombre = request.form["nombre"]
+        registro.telefono = request.form["telefono"]
+        registro.correo = request.form["correo"]
+        registro.usuario = request.form["usuario"]
+        registro.rol = request.form["rol"]
+        password = request.form["password"]
 
         # Si se proporciona una nueva contraseña, se actualiza el hash
         if password:
-            registro.password = generate_password_hash(password)  # Hashea la nueva contraseña
-        
+            registro.password = generate_password_hash(
+                password
+            )  # Hashea la nueva contraseña
+
         # Manejar la imagen
-        imagen = request.files.get('imagen')
+        imagen = request.files.get("imagen")
         if imagen:
-            registro.imagen = imagen.read()  # Guardar la imagen como binario en la base de datos
+            # Guardar la imagen como binario en la base de datos
+            registro.imagen = imagen.read()
 
         db.session.commit()  # Guarda los cambios en la base de datos
 
-        flash('Registro actualizado con éxito')
-        return redirect(url_for('mostrar'))  # Redirigir a la vista de mostrar registros
+        flash("Registro actualizado con éxito")
+        # Redirigir a la vista de mostrar registros
+        return redirect(url_for("mostrar"))
 
     # Manejar la solicitud GET para mostrar el formulario
-    return render_template('editar_usuario.html', registro=registro)  # Asegúrate de tener esta plantilla
+    # Asegúrate de tener esta plantilla
+    return render_template("editar_usuario.html", registro=registro)
 
 
-@app.route('/eliminar/<int:id>', methods=['GET'])
+@app.route("/eliminar/<int:id>", methods=["GET"])
 def eliminar_usuario(id):
 
     # Buscar el registro por ID
@@ -806,31 +906,34 @@ def eliminar_usuario(id):
     db.session.commit()
 
     # Mensaje de éxito
-    flash('Registro eliminado con éxito', 'success')
+    flash("Registro eliminado con éxito", "success")
 
     # Redirigir a la vista principal
-    return redirect(url_for('mostrar'))
-
+    return redirect(url_for("mostrar"))
 
 
 # Ruta para mostrar una lista de usuarios específicos
-@app.route('/usuarios')
+@app.route("/usuarios")
 def lista_usuarios():
-    registros = Registro.query.with_entities(Registro.nombre, Registro.rol, Registro.telefono).all()
-    return render_template('usuarios.html', usuarios=registros)
+    registros = Registro.query.with_entities(
+        Registro.nombre, Registro.rol, Registro.telefono
+    ).all()
+    return render_template("usuarios.html", usuarios=registros)
 
-@app.route('/guardar_tarea', methods=['POST'])
+
+@app.route("/guardar_tarea", methods=["POST"])
 def guardar_tarea():
 
-    
     # Obtener los datos del formulario
-    nombre = request.form['nombre']
-    proyecto = request.form['proyecto']
-    fecha_inicio = datetime.strptime(request.form['fecha_inicio'], '%Y-%m-%d').date()
-    fecha_fin = datetime.strptime(request.form['fecha_fin'], '%Y-%m-%d').date()
-    encargado = request.form['encargado']
-    estado = request.form['estado']
-    
+    nombre = request.form["nombre"]
+    proyecto = request.form["proyecto"]
+    fecha_inicio = datetime.strptime(
+        request.form["fecha_inicio"],
+        "%Y-%m-%d").date()
+    fecha_fin = datetime.strptime(request.form["fecha_fin"], "%Y-%m-%d").date()
+    encargado = request.form["encargado"]
+    estado = request.form["estado"]
+
     # Crear una nueva instancia de Tarea
     nueva_tarea = Tarea(
         nombre=nombre,
@@ -838,19 +941,20 @@ def guardar_tarea():
         fecha_inicio=fecha_inicio,
         fecha_fin=fecha_fin,
         encargado=encargado,
-        estado=estado
+        estado=estado,
     )
-    
+
     # Guardar la nueva tarea en la base de datos
     db.session.add(nueva_tarea)
     db.session.commit()
-    
-    flash('Tarea registrada exitosamente.')
-    nombre_proyecto = request.form.get('proyecto')  # Asumiendo que el campo en el formulario es 'nombre_proyecto'
-    return redirect(url_for('Gantt', nombre_proyecto=nombre_proyecto))
+
+    flash("Tarea registrada exitosamente.")
+    # Asumiendo que el campo en el formulario es 'nombre_proyecto'
+    nombre_proyecto = request.form.get("proyecto")
+    return redirect(url_for("Gantt", nombre_proyecto=nombre_proyecto))
 
 
-@app.route('/tareas')
+@app.route("/tareas")
 def obtener_tareas():
     tareas = Tarea.query.all()
     tareas_json = [
@@ -861,10 +965,12 @@ def obtener_tareas():
             "fecha_inicio": tarea.fecha_inicio.strftime("%Y-%m-%d"),
             "fecha_fin": tarea.fecha_fin.strftime("%Y-%m-%d"),
             "encargado": tarea.encargado,
-            "estado": tarea.estado
+            "estado": tarea.estado,
         }
         for tarea in tareas
     ]
     return jsonify(tareas_json)
-if __name__ == '__main__':
+
+
+if __name__ == "__main__":
     app.run(debug=True)
