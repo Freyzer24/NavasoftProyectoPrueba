@@ -22,7 +22,6 @@
 </head>
 
 <body>
-    <!-- Contenedor principal -->
     <div class="user-management-container">
         <h1>GESTIÓN DE TAREAS</h1>
         <table>
@@ -36,7 +35,7 @@
                     <th> Estado</th>
         
                     {% if rol in ['super_administrador', 'administrador', 'empleado'] %}
-                    <th><i class="fa fa-cogs"></i> Acciones</th> <!-- Icono de acciones -->
+                    <th><i class="fa fa-cogs"></i> Acciones</th> 
                     {% endif %}
                 </tr>
             </thead>
@@ -75,7 +74,6 @@
         </table>
     </div>
 
-    <!-- Modal de Edición -->
     <div id="editModal" class="modal">
         <div class="modal-content">
             <span class="close" onclick="cerrarModal()">&times;</span>
@@ -112,7 +110,6 @@
 
     <script>
         function abrirModal(tarea) {
-            // Cargar datos en el modal
             document.getElementById('tarea_id').value = tarea.id;
             document.getElementById('nombre').value = tarea.nombre;
             document.getElementById('proyecto').value = tarea.proyecto;
@@ -120,8 +117,6 @@
             document.getElementById('fecha_fin').value = tarea.fecha_fin;
             document.getElementById('encargado').value = tarea.encargado;
             document.getElementById('estado').value = tarea.estado;
-
-            // Mostrar el modal
             document.getElementById('editModal').style.display = 'block';
         }
 

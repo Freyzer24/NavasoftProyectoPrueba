@@ -32,7 +32,6 @@
         </div>
     </div>
 
-    <!-- Modal -->
     <div id="modalCambiarContrasena" class="modal">
         <div class="modal-contenido">
             <span class="cerrar">&times;</span>
@@ -50,7 +49,6 @@
         </div>
     </div>
 
-    <!-- Botones de acciones adicionales -->
     <div class="action-buttons">
         <form action="{{ url_for('logout') }}" method="post">
             <button type="submit">Cerrar sesión</button>
@@ -58,7 +56,6 @@
     </div>
 
     <script>
-        // Lógica para el modal
         const modal = document.getElementById('modalCambiarContrasena');
         const abrirModal = document.getElementById('abrirModal');
         const cerrarModal = document.querySelector('.cerrar');

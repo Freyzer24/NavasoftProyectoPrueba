@@ -5,13 +5,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Gestión de Proyectos</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <link rel="stylesheet" href="/static/Gestión_proyectos.css"> <!-- Asegúrate de que la ruta sea correcta -->
+    <link rel="stylesheet" href="/static/Gestión_proyectos.css"> 
 </head>
 <body>
     <div class="user-management-container">
     <h1>PROYECTOS</h1>
 
-    <!-- Modal -->
+   
     <div id="modalForm" class="modal">
         <div class="modal-content">
             <span class="close" onclick="cerrarModal()">&times;</span>
@@ -49,7 +49,7 @@
             {% for proyecto in proyectos %}
             <tr>
                 <td>{{ proyecto.nombre }}</td>
-                <td>{{ encargados_dict[proyecto.encargado] }}</td>  <!-- Muestra el nombre del encargado usando el diccionario -->
+                <td>{{ encargados_dict[proyecto.encargado] }}</td> 
                 <td>
                     <div class="icon-container">
                         <a href="{{ url_for('Gantt', nombre_proyecto=proyecto.nombre) }}" class="icon-link">
@@ -77,7 +77,6 @@
     </table>
     {% if rol == 'super_administrador' %}
         <div class="Ingreso">
-            <!-- Enlace para abrir el modal -->
             <a href="#" onclick="abrirModal()">+ Añadir Proyecto</a>
         </div>
     {% endif %}

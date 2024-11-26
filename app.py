@@ -163,8 +163,7 @@ def login():
 
             # Crear la respuesta de inicio de sesión
             response = make_response(redirect(url_for('menuAdmin') if registro.rol in ['administrador', 'super_administrador'] else url_for('menuEmpleado')))
-            response.set_cookie('token', token, httponly=True)  # Configura el token como una cookie segura y accesible solo por el servidor (httponly)
-            
+            response.set_cookie('token', token, httponly=True) 
             flash('Inicio de sesión exitoso')
             return response
         else:
@@ -197,7 +196,7 @@ def Gantt(nombre_proyecto):
         tareas=tareas, 
         encargados_dict=encargados_dict,
         proyectos_dict=proyectos_dict,
-        nombre_proyecto=nombre_proyecto,  # Asegúrate de que esta variable sea pasada
+        nombre_proyecto=nombre_proyecto, 
         rol=rol
     )
 
@@ -217,7 +216,7 @@ def obtener_tareas_por_proyecto(current_user, nombre_proyecto):
             'fecha_fin': tarea.fecha_fin.strftime('%Y-%m-%d'),
             'encargado': tarea.encargado,
             'estado': tarea.estado,
-            'proyecto': tarea.proyecto  # Asegúrate de que esté presente para el filtrado en JS
+            'proyecto': tarea.proyecto  
         }
         for tarea in tareas
     ]
@@ -264,7 +263,7 @@ def menuEmpleado(current_user):
     rol = obtener_rol_desde_token()
     if rol is None:
         return redirect(url_for('login'))
-    return render_template('indexempleado.html')  # Asegúrate de tener esta plantilla creada
+    return render_template('indexempleado.html')  
 @app.route('/templeado')
 @token_requerido
 def templeado(current_user):
@@ -288,7 +287,7 @@ def perfil():
 
     if not token:
         flash('Debes iniciar sesión primero.')
-        return redirect(url_for('login'))  # Redirige a login si no hay token
+        return redirect(url_for('login'))  
 
     try:
         # Decodificar el token
@@ -503,7 +502,6 @@ def proyectos():
 # Ruta para agregar un nuevo proyecto
 @app.route('/agregar_proyecto', methods=['POST'])
 def agregar_proyecto():
-    # Verifica si el usuario tiene el rol de 'super_administrador' o 'administrador'
         nombre = request.form['nombre']
         encargado = request.form['encargado']
         
@@ -514,13 +512,8 @@ def agregar_proyecto():
         flash('Proyecto agregado exitosamente.')
         return redirect(url_for('proyectos'))
 
-
-# Ruta para eliminar un proyecto
-from flask import flash, redirect, url_for, session
-
 @app.route('/eliminar_proyecto/<int:id>', methods=['POST'])
 def eliminar_proyecto(id):
-    # Verifica si el usuario tiene el rol de 'super_administrador'
     proyecto = Proyecto.query.get(id)
     
     if proyecto:
@@ -560,8 +553,6 @@ def editar_proyecto(id):
 # Ruta para actualizar un proyecto
 @app.route('/actualizar_proyecto/<int:id>', methods=['POST'])
 def actualizar_proyecto(id):
-    # Verifica si el usuario tiene el rol de 'super_administrador' o 'administrador'
-   
         proyecto = Proyecto.query.get(id)
         if proyecto:
             proyecto.nombre = request.form['nombre']
@@ -656,7 +647,7 @@ def enviar_correo_recuperacion(nombre, usuario, correo, nueva_contrasena):
 
 def enviar_confirmacion_correo(nombre, usuario, correo):
     remitente = "valeriapaolap49@gmail.com"
-    contraseña = "syjq cptv tlus wbcp"  # Sustitúyela con la contraseña de aplicación de Gmail
+    contraseña = "syjq cptv tlus wbcp" 
     destinatario = correo
 
     mensaje = MIMEMultipart()
@@ -770,7 +761,7 @@ def detalles_usuario(id):
 # Ruta para editar un registro
 @app.route('/editar_usuario/<int:id>', methods=['GET', 'POST'])
 def editar_usuario(id):
-    registro = Registro.query.get_or_404(id)  # Obtiene el registro o devuelve un error 404
+    registro = Registro.query.get_or_404(id)  
 
     if request.method == 'POST':
         # Manejar la presentación del formulario
@@ -877,14 +868,3 @@ def obtener_tareas():
     return jsonify(tareas_json)
 if __name__ == '__main__':
     app.run(debug=True)
-    
-# Definir el color de la barra basado en el porcentaje
-def obtener_color_barra(porcentaje):
-    if porcentaje == 100:
-        return 'blue'
-    elif porcentaje >= 65:
-        return 'green'
-    elif porcentaje >= 34:
-        return 'yellow'
-    else:
-        return 'red'

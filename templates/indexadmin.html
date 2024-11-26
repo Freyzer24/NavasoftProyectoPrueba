@@ -6,12 +6,11 @@
     <title>Document</title>
 
     {% if token == "@token_requerido" %}
-    <!-- Mostrar solo el frame de central ocupando toda la pantalla -->
+
     <frameset rows="100%" border="0">
         <frame name="central" src="{{ url_for('Admin') }}" scrolling="yes">
     </frameset>
     {% else %}
-        <!-- Mostrar ambos frames cuando el token es válido -->
         <frameset rows="18%,82%" border="0">
             <frame name="alto" src="{{ url_for('tAdmin') }}" scrolling="no">
             <frame name="central" src="{{ url_for('Admin') }}" scrolling="yes">

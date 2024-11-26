@@ -6,6 +6,11 @@
     <title>Gestión de Usuarios</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link rel="stylesheet" href="/static/Gestión_proyectos.css">
+    <style>
+        .icon-link {
+            text-decoration: none; /* Quita el subrayado */
+        }
+    </style>
 </head>
 <body>
     <div class="user-management-container">
@@ -27,9 +32,7 @@
                     <td>{{ registro.rol }}</td>
                     <td>{{ registro.usuario }}</td>
                     <td>
-                        <!-- Enlace para mostrar el modal -->
-                    <!-- Enlace para mostrar el modal -->
-                    <!-- Aplica la clase 'icon-link' a los enlaces -->
+
                     {% if rol == 'super_administrador' %}
                     <a href="#modal-{{ registro.id }}" class="icon-link" onclick="document.getElementById('modal-{{ registro.id }}').style.display='block'; return false;">
                         <i class="fa fa-info-circle" style="color: blue;"></i>
@@ -49,17 +52,7 @@
                         <i class="fa fa-edit" style="color: darkgreen;"></i>
                     </a>
                     {% endif %}
-
-<!-- Agrega este CSS en tu archivo de estilos o dentro de una etiqueta <style> -->
-<style>
-    .icon-link {
-        text-decoration: none; /* Quita el subrayado */
-    }
-</style>
-
-
-
-                    </td>
+             </td>
                 </tr>
 
                 <!-- Modal para cada usuario -->
@@ -67,7 +60,7 @@
                     <div class="modal-content">
                         <span class="close" onclick="document.getElementById('modal-{{ registro.id }}').style.display='none'">&times;</span>
                         <h2>Detalles del Registro</h2>
-                        <div class="modal-columns"> <!-- Agregada la clase para columnas -->
+                        <div class="modal-columns">
                             <div class="column">
                                 <p><strong>Nombre:</strong> {{ registro.nombre }}</p>
                                 <p><strong>Usuario:</strong> {{ registro.usuario }}</p>
